@@ -7,6 +7,8 @@ import '../../documents/pages/documents_page.dart';
 import '../../main.dart';
 import '../../util/widgets/spacer.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ProfilePage extends StatelessWidget {
   static const route = '/profile';
   const ProfilePage({
@@ -23,17 +25,17 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("Profil", style: Theme.of(context).textTheme.titleLarge),
+              Text(AppLocalizations.of(context)!.profile , style: Theme.of(context).textTheme.titleLarge),
               const EOSpacer(40),
-              const EOSectionHeader(title: "Meine Wohnung"),
+               EOSectionHeader(title: AppLocalizations.of(context)!.myApartment),
               const Spacer(),
               ElevatedButton(
                 onPressed: () => navigatorKey.currentState?.pushNamed(DocumentsPage.route),
-                child: const Text("Meine Dokumente"),
+                child:  Text(AppLocalizations.of(context)!.myDocuments),
               ),
-              const OutlinedButton(
+               OutlinedButton(
                 onPressed: null,
-                child: Text("App-Einstellungen"),
+                child: Text(AppLocalizations.of(context)!.appSettings),
               ),
             ],
           ),

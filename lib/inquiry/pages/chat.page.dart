@@ -5,6 +5,7 @@ import 'package:estate_ops_tenant/inquiry/widgets/chat.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../util/widgets/divider.dart';
@@ -22,21 +23,23 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final formKey = GlobalKey<FormBuilderState>();
 
-  final _defaultMessage = InquiryMessageModel(
-    id: "INVALID",
-    content: "Hallo!\nWie kann ich Ihnen helfen?",
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-    authorLabel: "EstateOps AI",
-    showLeft: false,
-    isAIGenerated: true,
-  );
+  defaultMessage() {
+    return InquiryMessageModel(
+      id: "INVALID",
+      content: AppLocalizations.of(context)!.helloHowCanIHelpYou,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      authorLabel: "EstateOps AI",
+      showLeft: false,
+      isAIGenerated: true,
+    );
+  }
 
   sendMessage() {
     if (!formKey.currentState!.saveAndValidate()) return;
     List<InquiryMessageModel> messagesToSend = [];
     if (context.read<InquiryBloc>().state.current == null) {
-      messagesToSend.add(_defaultMessage);
+      messagesToSend.add(defaultMessage());
     }
 
     messagesToSend.add(InquiryMessageModel(
@@ -59,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
         title: InquiryType.question.toLocalString(),
         child: BlocBuilder<InquiryBloc, InquiryState>(
           builder: (context, state) {
-            final msgs = state.current?.messages ?? [_defaultMessage];
+            final msgs = state.current?.messages ?? [defaultMessage()];
             return FormBuilder(
               key: formKey,
               child: Column(
@@ -78,7 +81,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildInput() {
     return FormBuilderTextField(
       decoration: InputDecoration(
-        hintText: "Nachricht",
+        hintText: AppLocalizations.of(context)!.message,
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
           onPressed: sendMessage,

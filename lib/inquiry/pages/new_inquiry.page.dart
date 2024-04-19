@@ -4,6 +4,7 @@ import 'package:estate_ops_tenant/dashboard/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../api/outputs/swagger.swagger.dart';
 import '../../documents/repositories/documents_repository.dart';
@@ -37,9 +38,10 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
 
     final description = formKey.currentState?.value['description'];
     final date = formKey.currentState?.value['date'];
-    final attachments = (formKey.currentState?.value['attachments'] as List<dynamic>? ?? [])
-        .map<XFile>((a) => a as XFile)
-        .toList();
+    final attachments =
+        (formKey.currentState?.value['attachments'] as List<dynamic>? ?? [])
+            .map<XFile>((a) => a as XFile)
+            .toList();
 
     //TODO: dont use
     final dto = CreateInquiryDto(type: CreateInquiryDtoType.damage, messages: [
@@ -55,13 +57,13 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
 
     // avoiding bloc to accurately display loading state
     try {
-      final inquiry = await context.read<InquiryRepository>().createInquiry(dto);
+      final inquiry =
+          await context.read<InquiryRepository>().createInquiry(dto);
 
       if (attachments.isNotEmpty) {
         // ignore: use_build_context_synchronously
-        await context
-            .read<DocumentsRepository>()
-            .uploadAttachments(inquiry != null ? [inquiry.messages[0].id] : [], attachments);
+        await context.read<DocumentsRepository>().uploadAttachments(
+            inquiry != null ? [inquiry.messages[0].id] : [], attachments);
       }
       setState(() => isDone = true);
     } catch (e) {
@@ -72,7 +74,8 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedType = ModalRoute.of(context)!.settings.arguments as InquiryType;
+    final selectedType =
+        ModalRoute.of(context)!.settings.arguments as InquiryType;
 
     return EOPage(
       hideBackButton: false,
@@ -86,7 +89,7 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
             if (!isDone && !isLoading)
               ElevatedButton(
                 onPressed: _onSubmit,
-                child: const Text('Schaden melden'),
+                child: Text(AppLocalizations.of(context)!.reportDamage),
               ),
           ],
         ),
@@ -97,11 +100,11 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
   String _buildTitle(InquiryType type) {
     switch (type) {
       case InquiryType.complaint:
-        return 'Beschwerde einreichen';
+        return AppLocalizations.of(context)!.reportComplaint;
       case InquiryType.damage:
-        return 'Schaden melden';
+        return AppLocalizations.of(context)!.reportDamage;
       case InquiryType.other:
-        return 'Sonstiges';
+        return AppLocalizations.of(context)!.other;
       default:
         throw Exception('Unknown InquiryType');
     }
@@ -135,16 +138,17 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 30),
-                child: Icon(Icons.check_rounded, color: Constants.success, size: 40),
+                child: Icon(Icons.check_rounded,
+                    color: Constants.success, size: 40),
               ),
               Text(
-                'Schaden gemeldet',
+                AppLocalizations.of(context)!.damageReported,
                 style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 20),
               Text(
-                'Vielen Dank. Wir prüfen nun deinen Schaden und leiten weitere Schritte ein. \n \nWenn es etwas Neues gibt, benachrichtigen wir dich.',
+                AppLocalizations.of(context)!.damageReportedText,
                 style: Theme.of(context).textTheme.displayMedium,
               ),
             ],
@@ -152,8 +156,9 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
         ),
         const Spacer(),
         ElevatedButton(
-          onPressed: () => Navigator.of(context).popUntil(ModalRoute.withName(DashboardPage.route)),
-          child: const Text('Zurück zum Dashboard'),
+          onPressed: () => Navigator.of(context)
+              .popUntil(ModalRoute.withName(DashboardPage.route)),
+          child: Text(AppLocalizations.of(context)!.backToDashboard),
         ),
       ],
     );

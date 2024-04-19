@@ -1,6 +1,7 @@
 import 'package:estate_ops_tenant/inquiry/models/inquiry.type.enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/date_helper.dart';
 import '../bloc/inquiry_bloc.dart';
@@ -26,7 +27,7 @@ class _MyInquirysPageState extends State<MyInquirysPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meine Anfragen'),
+        title: Text(AppLocalizations.of(context)!.myRequests),
       ),
       body: BlocBuilder<InquiryBloc, InquiryState>(builder: (context, state) {
         return state.isLoading

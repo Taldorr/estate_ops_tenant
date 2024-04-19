@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,6 +31,7 @@ import 'mailbox/bloc/mailbox_bloc.dart';
 import 'mailbox/repositories/mailbox_repository.dart';
 import 'util/api_service.dart';
 import 'util/constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,10 +105,13 @@ class MyApp extends StatelessWidget {
             create: (ctx) => InquiryBloc(ctx.read<InquiryRepository>()),
           ),
           BlocProvider(
-            create: (ctx) => AuthBloc(ctx.read<AuthRepository>())..add(const InitAuthEvent()),
+            create: (ctx) => AuthBloc(ctx.read<AuthRepository>())
+              ..add(const InitAuthEvent()),
             lazy: false,
           ),
-          BlocProvider(create: (ctx) => NotificationsBloc(ctx.read<NotificationsRepository>())),
+          BlocProvider(
+              create: (ctx) =>
+                  NotificationsBloc(ctx.read<NotificationsRepository>())),
         ],
         child: MaterialApp(
           theme: ThemeData(
@@ -140,7 +145,8 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               ),
             ),
             outlinedButtonTheme: OutlinedButtonThemeData(
@@ -157,7 +163,8 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               ),
             ),
             textButtonTheme: TextButtonThemeData(
@@ -172,7 +179,8 @@ class MyApp extends StatelessWidget {
                   side: const BorderSide(width: 1, color: Color(0x4C1C1C1C)),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
             ),
             cardTheme: CardTheme(
@@ -235,6 +243,9 @@ class MyApp extends StatelessWidget {
             InquiryDetailsPage.route: (_) => const InquiryDetailsPage(),
             ChatPage.route: (_) => const ChatPage(),
           },
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('de'),
         ),
       ),
     );

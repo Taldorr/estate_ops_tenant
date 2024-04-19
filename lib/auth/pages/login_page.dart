@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -17,7 +19,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(onPressed: () => _onSubmit(context), child: const Text("Login")),
+        child: ElevatedButton(onPressed: () => _onSubmit(context), child:  Text(AppLocalizations.of(context)!.login)),
       ),
     );
   }

@@ -18,7 +18,7 @@ dependencies:
   equatable: ^2.0.5
   chopper: ^7.1.1+1
   json_annotation: ^4.8.1
-  intl: ^0.18.1
+  intl: any
   flutter_form_builder: ^9.1.1
   form_builder_validators: ^9.1.0
   form_builder_image_picker: ^4.0.0
@@ -31,6 +31,8 @@ dependencies:
   #     path: packages/pdfx
   firebase_core: ^2.25.5
   firebase_messaging: ^14.7.17
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -44,3 +46,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true

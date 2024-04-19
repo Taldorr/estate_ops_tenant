@@ -1,6 +1,7 @@
 import 'package:estate_ops_tenant/mailbox/bloc/mailbox_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../auth/pages/profile_page.dart';
 import '../../dashboard/pages/dashboard_page.dart';
@@ -37,15 +38,14 @@ class EONavbar extends StatelessWidget {
           }
         },
         destinations: [
-          const NavigationDestination(
-            icon: Icon(Icons.account_circle_outlined),
-            label: "Profil",
+          NavigationDestination(
+            icon: const Icon(Icons.account_circle_outlined),
+            label: AppLocalizations.of(context)!.profile,
             enabled: false,
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            label: "Dashboard",
-          ),
+          NavigationDestination(
+              icon: const Icon(Icons.home_outlined),
+              label: AppLocalizations.of(context)!.dashboard),
           NavigationDestination(
             icon: BlocBuilder<MailboxBloc, MailboxState>(
               builder: (context, state) {
@@ -56,7 +56,7 @@ class EONavbar extends StatelessWidget {
                 );
               },
             ),
-            label: "Briefkasten",
+            label: AppLocalizations.of(context)!.mailbox,
           ),
         ],
       ),

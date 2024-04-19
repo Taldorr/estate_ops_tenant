@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import '../../inquiry/pages/select_inquirytype.page.dart';
 import '../../main.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class MailboxPage extends StatefulWidget {
   static const route = '/mailbox';
 
@@ -26,18 +28,18 @@ class _MailboxPageState extends State<MailboxPage> {
   @override
   Widget build(BuildContext context) {
     return EOPage(
-      title: "Briefkasten",
+      title: AppLocalizations.of(context)!.mailbox,
       navIndex: 2,
       child: BlocBuilder<MailboxBloc, MailboxState>(builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const EOSectionHeader(title: "Letzte Nachrichten"),
+             EOSectionHeader(title: AppLocalizations.of(context)!.lastMessages),
             const EOMailboxOverview(),
             const Spacer(),
             ElevatedButton(
               onPressed: () => navigatorKey.currentState?.pushNamed(SelectInquiryTypePage.route),
-              child: const Text("Anliegen melden"),
+              child:  Text(AppLocalizations.of(context)!.reportConcern),
             ),
           ],
         );

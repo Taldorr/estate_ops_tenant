@@ -8,6 +8,8 @@ import '../bloc/documents_bloc.dart';
 import '../models/document.model.dart';
 import '../widgets/file_view.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class DocumentsPage extends StatefulWidget {
   const DocumentsPage({super.key});
 
@@ -59,7 +61,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dokumentencenter'),
+        title:  Text(AppLocalizations.of(context)!.documentCenter),
       ),
       body: BlocBuilder<DocumentsBloc, DocumentsState>(
         builder: (context, state) {

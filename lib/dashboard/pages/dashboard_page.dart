@@ -10,6 +10,8 @@ import '../../mailbox/bloc/mailbox_bloc.dart';
 import '../../mailbox/widgets/mailbox_overview.dart';
 import '../../main.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class DashboardPage extends StatefulWidget {
   static const route = '/dashboard';
 
@@ -30,23 +32,23 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return EOPage(
-      title: "Dashboard",
+      title: AppLocalizations.of(context)!.dashboard,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const EOSectionHeader(title: "Aktuelles"),
+           EOSectionHeader(title: AppLocalizations.of(context)!.currentEvents),
           const EOMailboxOverview(
             limit: 3,
           ),
           const Spacer(),
           ElevatedButton(
             onPressed: () => navigatorKey.currentState?.pushNamed(SelectInquiryTypePage.route),
-            child: const Text("Anliegen melden"),
+            child:  Text(AppLocalizations.of(context)!.reportConcern),
           ),
           OutlinedButton(
             onPressed: () => navigatorKey.currentState?.pushNamed(DocumentsPage.route),
-            child: const Text("Meine Dokumente"),
+            child: Text(AppLocalizations.of(context)!.myDocuments),
           ),
         ],
       ),

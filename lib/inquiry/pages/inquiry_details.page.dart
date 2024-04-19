@@ -2,6 +2,7 @@ import 'package:estate_ops_tenant/inquiry/models/inquiry.status.enum.dart';
 import 'package:estate_ops_tenant/inquiry/models/inquiry.type.enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/date_helper.dart';
 import '../../util/widgets/card.dart';
@@ -20,21 +21,26 @@ class InquiryDetailsPage extends StatelessWidget {
     final inquiryId = ModalRoute.of(context)!.settings.arguments as String;
     return BlocBuilder<InquiryBloc, InquiryState>(
       builder: (context, state) {
-        final inquiry = state.inquirys.firstWhere((element) => element.id == inquiryId);
+        final inquiry =
+            state.inquirys.firstWhere((element) => element.id == inquiryId);
         return EOPage(
-          title: '${inquiry.type.toLocalString()} - ${DateHelper.format(inquiry.createdAt)}',
+          title:
+              '${inquiry.type.toLocalString()} - ${DateHelper.format(inquiry.createdAt)}',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('erstellt am: ${DateHelper.format(inquiry.createdAt)}'),
-                  Text('Status: ${inquiry.status.toLocalString()}'),
+                  Text(
+                      '${AppLocalizations.of(context)!.createdAt}: ${DateHelper.format(inquiry.createdAt)}'),
+                  Text(
+                      '${AppLocalizations.of(context)!.status}: ${inquiry.status.toLocalString()}'),
                 ],
               ),
               const Divider(),
-              for (final message in inquiry.messages) _buildMessage(message),
+              for (final message in inquiry.messages)
+                _buildMessage(context, message),
             ],
           ),
         );
@@ -42,7 +48,7 @@ class InquiryDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMessage(InquiryMessageModel message) {
+  Widget _buildMessage(BuildContext context, InquiryMessageModel message) {
     return Row(
       children: [
         const Spacer(),
@@ -55,8 +61,10 @@ class InquiryDetailsPage extends StatelessWidget {
                 Text(message.content ?? ''),
                 Row(
                   children: [
-                    Text('Anhänge: ${message.documents.length}'),
-                    ...message.documents.map((e) => Text(e.name.substring(0, 20))),
+                    Text(
+                        '${AppLocalizations.of(context)!.status}: ${message.documents.length}'),
+                    ...message.documents
+                        .map((e) => Text(e.name.substring(0, 20))),
                   ],
                 ),
                 const SizedBox(height: 10),

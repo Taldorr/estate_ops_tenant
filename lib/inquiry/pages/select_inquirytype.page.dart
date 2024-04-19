@@ -5,6 +5,7 @@ import 'package:estate_ops_tenant/main.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/constants.dart';
 import '../models/inquiry.type.enum.dart';
@@ -28,7 +29,8 @@ class _SelectInquiryTypePageState extends State<SelectInquiryTypePage> {
 
   void _filterOptions(String value) {
     final filtered = allOptions
-        .where((element) => element.toLocalString().toLowerCase().contains(value))
+        .where(
+            (element) => element.toLocalString().toLowerCase().contains(value))
         .toList();
     filtered.sort((a, b) => a.toLocalString().compareTo(b.toLocalString()));
     setState(() {
@@ -57,13 +59,13 @@ class _SelectInquiryTypePageState extends State<SelectInquiryTypePage> {
   @override
   Widget build(BuildContext context) {
     return EOPage(
-      title: 'Anliegen auswählen',
+      title: AppLocalizations.of(context)!.selectConcern,
       child: Column(
         children: [
           TextField(
-            decoration: const InputDecoration(
-              hintText: 'Anliegen suchen',
-              prefixIcon: Icon(Icons.search_rounded),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.searchConcern,
+              prefixIcon: const Icon(Icons.search_rounded),
             ),
             onChanged: _filterOptions,
           ),

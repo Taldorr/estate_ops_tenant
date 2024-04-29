@@ -202,9 +202,22 @@ abstract class Swagger extends ChopperService {
       {@Body() required UpdateTenantDto? body});
 
   ///
-  Future<chopper.Response<List<TenantDto>>> tenantsFindPost(
+  Future<chopper.Response<TenantProfileDto>> tenantsProfileGet() {
+    generatedMapping.putIfAbsent(
+        TenantProfileDto, () => TenantProfileDto.fromJsonFactory);
+
+    return _tenantsProfileGet();
+  }
+
+  ///
+  @Get(path: '/tenants/profile')
+  Future<chopper.Response<TenantProfileDto>> _tenantsProfileGet();
+
+  ///
+  Future<chopper.Response<List<ResolvedTenantDto>>> tenantsFindPost(
       {required FindTenantDto? body}) {
-    generatedMapping.putIfAbsent(TenantDto, () => TenantDto.fromJsonFactory);
+    generatedMapping.putIfAbsent(
+        ResolvedTenantDto, () => ResolvedTenantDto.fromJsonFactory);
 
     return _tenantsFindPost(body: body);
   }
@@ -214,7 +227,7 @@ abstract class Swagger extends ChopperService {
     path: '/tenants/find',
     optionalBody: true,
   )
-  Future<chopper.Response<List<TenantDto>>> _tenantsFindPost(
+  Future<chopper.Response<List<ResolvedTenantDto>>> _tenantsFindPost(
       {@Body() required FindTenantDto? body});
 
   ///
@@ -734,6 +747,20 @@ abstract class Swagger extends ChopperService {
       {@Body() required UpdateStatusTaskDto? body});
 
   ///
+  Future<chopper.Response> inquiryDocumentPost(
+      {required DocumentRequestDto? body}) {
+    return _inquiryDocumentPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/inquiry/document',
+    optionalBody: true,
+  )
+  Future<chopper.Response> _inquiryDocumentPost(
+      {@Body() required DocumentRequestDto? body});
+
+  ///
   Future<chopper.Response<InquiryDto>> inquiryPost(
       {required CreateInquiryDto? body}) {
     generatedMapping.putIfAbsent(InquiryDto, () => InquiryDto.fromJsonFactory);
@@ -846,7 +873,7 @@ class CreateBugDto {
   static const fromJsonFactory = _$CreateBugDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateBugDto &&
             (identical(other.description, description) ||
@@ -909,7 +936,7 @@ class AddressDto {
   static const fromJsonFactory = _$AddressDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AddressDto &&
             (identical(other.id, id) ||
@@ -1015,7 +1042,7 @@ class AttachmentDto {
   static const fromJsonFactory = _$AttachmentDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AttachmentDto &&
             (identical(other.id, id) ||
@@ -1119,7 +1146,7 @@ class InquiryMessageDto {
   static const fromJsonFactory = _$InquiryMessageDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is InquiryMessageDto &&
             (identical(other.id, id) ||
@@ -1246,7 +1273,7 @@ class InquiryDto {
   static const fromJsonFactory = _$InquiryDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is InquiryDto &&
             (identical(other.id, id) ||
@@ -1341,6 +1368,7 @@ class TenantDto {
     this.email,
     this.phone,
     this.notes,
+    this.contactMethod,
     this.leases,
     this.attachments,
     this.inquirys,
@@ -1368,6 +1396,12 @@ class TenantDto {
   final String? phone;
   @JsonKey(name: 'notes')
   final String? notes;
+  @JsonKey(
+    name: 'contactMethod',
+    toJson: tenantDtoContactMethodNullableToJson,
+    fromJson: tenantDtoContactMethodNullableFromJson,
+  )
+  final enums.TenantDtoContactMethod? contactMethod;
   @JsonKey(name: 'leases', defaultValue: <LeaseDto>[])
   final List<LeaseDto>? leases;
   @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
@@ -1381,7 +1415,7 @@ class TenantDto {
   static const fromJsonFactory = _$TenantDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is TenantDto &&
             (identical(other.id, id) ||
@@ -1401,6 +1435,9 @@ class TenantDto {
                 const DeepCollectionEquality().equals(other.phone, phone)) &&
             (identical(other.notes, notes) ||
                 const DeepCollectionEquality().equals(other.notes, notes)) &&
+            (identical(other.contactMethod, contactMethod) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactMethod, contactMethod)) &&
             (identical(other.leases, leases) ||
                 const DeepCollectionEquality().equals(other.leases, leases)) &&
             (identical(other.attachments, attachments) ||
@@ -1429,6 +1466,7 @@ class TenantDto {
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(phone) ^
       const DeepCollectionEquality().hash(notes) ^
+      const DeepCollectionEquality().hash(contactMethod) ^
       const DeepCollectionEquality().hash(leases) ^
       const DeepCollectionEquality().hash(attachments) ^
       const DeepCollectionEquality().hash(inquirys) ^
@@ -1446,6 +1484,7 @@ extension $TenantDtoExtension on TenantDto {
       String? email,
       String? phone,
       String? notes,
+      enums.TenantDtoContactMethod? contactMethod,
       List<LeaseDto>? leases,
       List<AttachmentDto>? attachments,
       List<InquiryDto>? inquirys,
@@ -1459,6 +1498,7 @@ extension $TenantDtoExtension on TenantDto {
         email: email ?? this.email,
         phone: phone ?? this.phone,
         notes: notes ?? this.notes,
+        contactMethod: contactMethod ?? this.contactMethod,
         leases: leases ?? this.leases,
         attachments: attachments ?? this.attachments,
         inquirys: inquirys ?? this.inquirys,
@@ -1474,6 +1514,7 @@ extension $TenantDtoExtension on TenantDto {
       Wrapped<String?>? email,
       Wrapped<String?>? phone,
       Wrapped<String?>? notes,
+      Wrapped<enums.TenantDtoContactMethod?>? contactMethod,
       Wrapped<List<LeaseDto>?>? leases,
       Wrapped<List<AttachmentDto>?>? attachments,
       Wrapped<List<InquiryDto>?>? inquirys,
@@ -1487,6 +1528,8 @@ extension $TenantDtoExtension on TenantDto {
         email: (email != null ? email.value : this.email),
         phone: (phone != null ? phone.value : this.phone),
         notes: (notes != null ? notes.value : this.notes),
+        contactMethod:
+            (contactMethod != null ? contactMethod.value : this.contactMethod),
         leases: (leases != null ? leases.value : this.leases),
         attachments:
             (attachments != null ? attachments.value : this.attachments),
@@ -1550,7 +1593,7 @@ class UnitDto {
   static const fromJsonFactory = _$UnitDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UnitDto &&
             (identical(other.id, id) ||
@@ -1703,7 +1746,7 @@ class LeaseDto {
   static const fromJsonFactory = _$LeaseDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is LeaseDto &&
             (identical(other.id, id) ||
@@ -1797,7 +1840,7 @@ class QueryDto {
   static const fromJsonFactory = _$QueryDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is QueryDto &&
             (identical(other.queryString, queryString) ||
@@ -1851,7 +1894,7 @@ class CreateAddressDto {
   static const fromJsonFactory = _$CreateAddressDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateAddressDto &&
             (identical(other.street, street) ||
@@ -1922,7 +1965,7 @@ class CreateUnitDto {
   static const fromJsonFactory = _$CreateUnitDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateUnitDto &&
             (identical(other.buildingId, buildingId) ||
@@ -1988,7 +2031,7 @@ class UpdateUnitDto {
   static const fromJsonFactory = _$UpdateUnitDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateUnitDto &&
             (identical(other.id, id) ||
@@ -2042,7 +2085,7 @@ class AccountInfoDto {
   static const fromJsonFactory = _$AccountInfoDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AccountInfoDto &&
             (identical(other.id, id) ||
@@ -2064,6 +2107,187 @@ extension $AccountInfoDtoExtension on AccountInfoDto {
 
   AccountInfoDto copyWithWrapped({Wrapped<String>? id}) {
     return AccountInfoDto(id: (id != null ? id.value : this.id));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TenantProfileDto {
+  const TenantProfileDto({
+    required this.tenantId,
+    required this.tenantDisplayId,
+    this.unitId,
+    this.unitDisplayId,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phone,
+    this.contactMethod,
+    this.street,
+    this.zip,
+    this.city,
+    this.country,
+  });
+
+  factory TenantProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$TenantProfileDtoFromJson(json);
+
+  static const toJsonFactory = _$TenantProfileDtoToJson;
+  Map<String, dynamic> toJson() => _$TenantProfileDtoToJson(this);
+
+  @JsonKey(name: 'tenantId')
+  final String tenantId;
+  @JsonKey(name: 'tenantDisplayId')
+  final String tenantDisplayId;
+  @JsonKey(name: 'unitId')
+  final String? unitId;
+  @JsonKey(name: 'unitDisplayId')
+  final String? unitDisplayId;
+  @JsonKey(name: 'firstName')
+  final String? firstName;
+  @JsonKey(name: 'lastName')
+  final String? lastName;
+  @JsonKey(name: 'email')
+  final String? email;
+  @JsonKey(name: 'phone')
+  final String? phone;
+  @JsonKey(
+    name: 'contactMethod',
+    toJson: tenantProfileDtoContactMethodNullableToJson,
+    fromJson: tenantProfileDtoContactMethodNullableFromJson,
+  )
+  final enums.TenantProfileDtoContactMethod? contactMethod;
+  @JsonKey(name: 'street')
+  final String? street;
+  @JsonKey(name: 'zip')
+  final String? zip;
+  @JsonKey(name: 'city')
+  final String? city;
+  @JsonKey(name: 'country')
+  final String? country;
+  static const fromJsonFactory = _$TenantProfileDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TenantProfileDto &&
+            (identical(other.tenantId, tenantId) ||
+                const DeepCollectionEquality()
+                    .equals(other.tenantId, tenantId)) &&
+            (identical(other.tenantDisplayId, tenantDisplayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.tenantDisplayId, tenantDisplayId)) &&
+            (identical(other.unitId, unitId) ||
+                const DeepCollectionEquality().equals(other.unitId, unitId)) &&
+            (identical(other.unitDisplayId, unitDisplayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.unitDisplayId, unitDisplayId)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.phone, phone) ||
+                const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.contactMethod, contactMethod) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactMethod, contactMethod)) &&
+            (identical(other.street, street) ||
+                const DeepCollectionEquality().equals(other.street, street)) &&
+            (identical(other.zip, zip) ||
+                const DeepCollectionEquality().equals(other.zip, zip)) &&
+            (identical(other.city, city) ||
+                const DeepCollectionEquality().equals(other.city, city)) &&
+            (identical(other.country, country) ||
+                const DeepCollectionEquality().equals(other.country, country)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(tenantId) ^
+      const DeepCollectionEquality().hash(tenantDisplayId) ^
+      const DeepCollectionEquality().hash(unitId) ^
+      const DeepCollectionEquality().hash(unitDisplayId) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(contactMethod) ^
+      const DeepCollectionEquality().hash(street) ^
+      const DeepCollectionEquality().hash(zip) ^
+      const DeepCollectionEquality().hash(city) ^
+      const DeepCollectionEquality().hash(country) ^
+      runtimeType.hashCode;
+}
+
+extension $TenantProfileDtoExtension on TenantProfileDto {
+  TenantProfileDto copyWith(
+      {String? tenantId,
+      String? tenantDisplayId,
+      String? unitId,
+      String? unitDisplayId,
+      String? firstName,
+      String? lastName,
+      String? email,
+      String? phone,
+      enums.TenantProfileDtoContactMethod? contactMethod,
+      String? street,
+      String? zip,
+      String? city,
+      String? country}) {
+    return TenantProfileDto(
+        tenantId: tenantId ?? this.tenantId,
+        tenantDisplayId: tenantDisplayId ?? this.tenantDisplayId,
+        unitId: unitId ?? this.unitId,
+        unitDisplayId: unitDisplayId ?? this.unitDisplayId,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        contactMethod: contactMethod ?? this.contactMethod,
+        street: street ?? this.street,
+        zip: zip ?? this.zip,
+        city: city ?? this.city,
+        country: country ?? this.country);
+  }
+
+  TenantProfileDto copyWithWrapped(
+      {Wrapped<String>? tenantId,
+      Wrapped<String>? tenantDisplayId,
+      Wrapped<String?>? unitId,
+      Wrapped<String?>? unitDisplayId,
+      Wrapped<String?>? firstName,
+      Wrapped<String?>? lastName,
+      Wrapped<String?>? email,
+      Wrapped<String?>? phone,
+      Wrapped<enums.TenantProfileDtoContactMethod?>? contactMethod,
+      Wrapped<String?>? street,
+      Wrapped<String?>? zip,
+      Wrapped<String?>? city,
+      Wrapped<String?>? country}) {
+    return TenantProfileDto(
+        tenantId: (tenantId != null ? tenantId.value : this.tenantId),
+        tenantDisplayId: (tenantDisplayId != null
+            ? tenantDisplayId.value
+            : this.tenantDisplayId),
+        unitId: (unitId != null ? unitId.value : this.unitId),
+        unitDisplayId:
+            (unitDisplayId != null ? unitDisplayId.value : this.unitDisplayId),
+        firstName: (firstName != null ? firstName.value : this.firstName),
+        lastName: (lastName != null ? lastName.value : this.lastName),
+        email: (email != null ? email.value : this.email),
+        phone: (phone != null ? phone.value : this.phone),
+        contactMethod:
+            (contactMethod != null ? contactMethod.value : this.contactMethod),
+        street: (street != null ? street.value : this.street),
+        zip: (zip != null ? zip.value : this.zip),
+        city: (city != null ? city.value : this.city),
+        country: (country != null ? country.value : this.country));
   }
 }
 
@@ -2090,7 +2314,7 @@ class FindTenantDto {
   static const fromJsonFactory = _$FindTenantDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is FindTenantDto &&
             (identical(other.unitIds, unitIds) ||
@@ -2139,6 +2363,127 @@ extension $FindTenantDtoExtension on FindTenantDto {
 }
 
 @JsonSerializable(explicitToJson: true)
+class ResolvedTenantDto {
+  const ResolvedTenantDto({
+    required this.id,
+    required this.displayId,
+    this.firstName,
+    this.lastName,
+    this.contactMethod,
+    required this.buildingString,
+    required this.complexString,
+  });
+
+  factory ResolvedTenantDto.fromJson(Map<String, dynamic> json) =>
+      _$ResolvedTenantDtoFromJson(json);
+
+  static const toJsonFactory = _$ResolvedTenantDtoToJson;
+  Map<String, dynamic> toJson() => _$ResolvedTenantDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'displayId')
+  final String displayId;
+  @JsonKey(name: 'firstName')
+  final String? firstName;
+  @JsonKey(name: 'lastName')
+  final String? lastName;
+  @JsonKey(
+    name: 'contactMethod',
+    toJson: resolvedTenantDtoContactMethodNullableToJson,
+    fromJson: resolvedTenantDtoContactMethodNullableFromJson,
+  )
+  final enums.ResolvedTenantDtoContactMethod? contactMethod;
+  @JsonKey(name: 'buildingString')
+  final String buildingString;
+  @JsonKey(name: 'complexString')
+  final String complexString;
+  static const fromJsonFactory = _$ResolvedTenantDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ResolvedTenantDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.displayId, displayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayId, displayId)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)) &&
+            (identical(other.contactMethod, contactMethod) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactMethod, contactMethod)) &&
+            (identical(other.buildingString, buildingString) ||
+                const DeepCollectionEquality()
+                    .equals(other.buildingString, buildingString)) &&
+            (identical(other.complexString, complexString) ||
+                const DeepCollectionEquality()
+                    .equals(other.complexString, complexString)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(displayId) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName) ^
+      const DeepCollectionEquality().hash(contactMethod) ^
+      const DeepCollectionEquality().hash(buildingString) ^
+      const DeepCollectionEquality().hash(complexString) ^
+      runtimeType.hashCode;
+}
+
+extension $ResolvedTenantDtoExtension on ResolvedTenantDto {
+  ResolvedTenantDto copyWith(
+      {String? id,
+      String? displayId,
+      String? firstName,
+      String? lastName,
+      enums.ResolvedTenantDtoContactMethod? contactMethod,
+      String? buildingString,
+      String? complexString}) {
+    return ResolvedTenantDto(
+        id: id ?? this.id,
+        displayId: displayId ?? this.displayId,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        contactMethod: contactMethod ?? this.contactMethod,
+        buildingString: buildingString ?? this.buildingString,
+        complexString: complexString ?? this.complexString);
+  }
+
+  ResolvedTenantDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? displayId,
+      Wrapped<String?>? firstName,
+      Wrapped<String?>? lastName,
+      Wrapped<enums.ResolvedTenantDtoContactMethod?>? contactMethod,
+      Wrapped<String>? buildingString,
+      Wrapped<String>? complexString}) {
+    return ResolvedTenantDto(
+        id: (id != null ? id.value : this.id),
+        displayId: (displayId != null ? displayId.value : this.displayId),
+        firstName: (firstName != null ? firstName.value : this.firstName),
+        lastName: (lastName != null ? lastName.value : this.lastName),
+        contactMethod:
+            (contactMethod != null ? contactMethod.value : this.contactMethod),
+        buildingString: (buildingString != null
+            ? buildingString.value
+            : this.buildingString),
+        complexString:
+            (complexString != null ? complexString.value : this.complexString));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class CreateTenantDto {
   const CreateTenantDto({
     this.firstName,
@@ -2167,7 +2512,7 @@ class CreateTenantDto {
   static const fromJsonFactory = _$CreateTenantDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateTenantDto &&
             (identical(other.firstName, firstName) ||
@@ -2259,7 +2604,7 @@ class UpdateTenantDto {
   static const fromJsonFactory = _$UpdateTenantDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateTenantDto &&
             (identical(other.id, id) ||
@@ -2370,7 +2715,7 @@ class BuildingDto {
   static const fromJsonFactory = _$BuildingDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is BuildingDto &&
             (identical(other.id, id) ||
@@ -2478,7 +2823,6 @@ class ComplexDto {
     required this.displayId,
     required this.name,
     required this.buildings,
-    required this.address,
     required this.notes,
     this.attachments,
     required this.createdAt,
@@ -2499,8 +2843,6 @@ class ComplexDto {
   final String name;
   @JsonKey(name: 'buildings', defaultValue: <BuildingDto>[])
   final List<BuildingDto> buildings;
-  @JsonKey(name: 'address')
-  final AddressDto address;
   @JsonKey(name: 'notes')
   final String notes;
   @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
@@ -2512,7 +2854,7 @@ class ComplexDto {
   static const fromJsonFactory = _$ComplexDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ComplexDto &&
             (identical(other.id, id) ||
@@ -2525,9 +2867,6 @@ class ComplexDto {
             (identical(other.buildings, buildings) ||
                 const DeepCollectionEquality()
                     .equals(other.buildings, buildings)) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality()
-                    .equals(other.address, address)) &&
             (identical(other.notes, notes) ||
                 const DeepCollectionEquality().equals(other.notes, notes)) &&
             (identical(other.attachments, attachments) ||
@@ -2550,7 +2889,6 @@ class ComplexDto {
       const DeepCollectionEquality().hash(displayId) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(buildings) ^
-      const DeepCollectionEquality().hash(address) ^
       const DeepCollectionEquality().hash(notes) ^
       const DeepCollectionEquality().hash(attachments) ^
       const DeepCollectionEquality().hash(createdAt) ^
@@ -2564,7 +2902,6 @@ extension $ComplexDtoExtension on ComplexDto {
       String? displayId,
       String? name,
       List<BuildingDto>? buildings,
-      AddressDto? address,
       String? notes,
       List<AttachmentDto>? attachments,
       DateTime? createdAt,
@@ -2574,7 +2911,6 @@ extension $ComplexDtoExtension on ComplexDto {
         displayId: displayId ?? this.displayId,
         name: name ?? this.name,
         buildings: buildings ?? this.buildings,
-        address: address ?? this.address,
         notes: notes ?? this.notes,
         attachments: attachments ?? this.attachments,
         createdAt: createdAt ?? this.createdAt,
@@ -2586,7 +2922,6 @@ extension $ComplexDtoExtension on ComplexDto {
       Wrapped<String>? displayId,
       Wrapped<String>? name,
       Wrapped<List<BuildingDto>>? buildings,
-      Wrapped<AddressDto>? address,
       Wrapped<String>? notes,
       Wrapped<List<AttachmentDto>?>? attachments,
       Wrapped<DateTime>? createdAt,
@@ -2596,7 +2931,6 @@ extension $ComplexDtoExtension on ComplexDto {
         displayId: (displayId != null ? displayId.value : this.displayId),
         name: (name != null ? name.value : this.name),
         buildings: (buildings != null ? buildings.value : this.buildings),
-        address: (address != null ? address.value : this.address),
         notes: (notes != null ? notes.value : this.notes),
         attachments:
             (attachments != null ? attachments.value : this.attachments),
@@ -2622,7 +2956,7 @@ class CreateComplexDto {
   static const fromJsonFactory = _$CreateComplexDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateComplexDto &&
             (identical(other.name, name) ||
@@ -2670,7 +3004,7 @@ class UpdateComplexDto {
   static const fromJsonFactory = _$UpdateComplexDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateComplexDto &&
             (identical(other.id, id) ||
@@ -2730,7 +3064,7 @@ class CreateBuildingDto {
   static const fromJsonFactory = _$CreateBuildingDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateBuildingDto &&
             (identical(other.address, address) ||
@@ -2797,7 +3131,7 @@ class UpdateBuildingDto {
   static const fromJsonFactory = _$UpdateBuildingDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateBuildingDto &&
             (identical(other.id, id) ||
@@ -2851,7 +3185,7 @@ class AddUnitBuildingDto {
   static const fromJsonFactory = _$AddUnitBuildingDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AddUnitBuildingDto &&
             (identical(other.unitId, unitId) ||
@@ -2903,7 +3237,7 @@ class CreateLeaseDto {
   static const fromJsonFactory = _$CreateLeaseDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateLeaseDto &&
             (identical(other.tenantId, tenantId) ||
@@ -2985,7 +3319,7 @@ class UpdateLeaseDto {
   static const fromJsonFactory = _$UpdateLeaseDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateLeaseDto &&
             (identical(other.id, id) ||
@@ -3077,7 +3411,7 @@ class CreateAttachmentDto {
   static const fromJsonFactory = _$CreateAttachmentDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateAttachmentDto &&
             (identical(other.tenantIds, tenantIds) ||
@@ -3186,7 +3520,7 @@ class DeleteAttachmentDto {
   static const fromJsonFactory = _$DeleteAttachmentDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is DeleteAttachmentDto &&
             (identical(other.attachmentId, attachmentId) ||
@@ -3289,7 +3623,7 @@ class KpiDto {
   static const fromJsonFactory = _$KpiDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is KpiDto &&
             (identical(other.openTasks, openTasks) ||
@@ -3372,7 +3706,7 @@ class AddTeamMemberDto {
   static const fromJsonFactory = _$AddTeamMemberDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AddTeamMemberDto &&
             (identical(other.firstName, firstName) ||
@@ -3467,7 +3801,7 @@ class MemberDto {
   static const fromJsonFactory = _$MemberDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is MemberDto &&
             (identical(other.id, id) ||
@@ -3602,7 +3936,7 @@ class TeamDto {
   static const fromJsonFactory = _$TeamDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is TeamDto &&
             (identical(other.id, id) ||
@@ -3730,7 +4064,7 @@ class MemberProxyDto {
   static const fromJsonFactory = _$MemberProxyDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is MemberProxyDto &&
             (identical(other.entityId, entityId) ||
@@ -3795,7 +4129,7 @@ class GenericProxyDto {
   static const fromJsonFactory = _$GenericProxyDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is GenericProxyDto &&
             (identical(other.entityId, entityId) ||
@@ -3863,7 +4197,7 @@ class TaskCommentDto {
   static const fromJsonFactory = _$TaskCommentDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is TaskCommentDto &&
             (identical(other.id, id) ||
@@ -4000,7 +4334,7 @@ class TaskDto {
   static const fromJsonFactory = _$TaskDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is TaskDto &&
             (identical(other.id, id) ||
@@ -4197,7 +4531,7 @@ class CreateTaskDto {
   static const fromJsonFactory = _$CreateTaskDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateTaskDto &&
             (identical(other.title, title) ||
@@ -4295,7 +4629,7 @@ class CreateTaskCommentDto {
   static const fromJsonFactory = _$CreateTaskCommentDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateTaskCommentDto &&
             (identical(other.taskId, taskId) ||
@@ -4352,7 +4686,7 @@ class UpdateStatusTaskDto {
   static const fromJsonFactory = _$UpdateStatusTaskDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateStatusTaskDto &&
             (identical(other.id, id) ||
@@ -4434,7 +4768,7 @@ class UpdateTaskDto {
   static const fromJsonFactory = _$UpdateTaskDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateTaskDto &&
             (identical(other.id, id) ||
@@ -4538,6 +4872,67 @@ extension $UpdateTaskDtoExtension on UpdateTaskDto {
 }
 
 @JsonSerializable(explicitToJson: true)
+class DocumentRequestDto {
+  const DocumentRequestDto({
+    required this.documentType,
+    this.notes,
+  });
+
+  factory DocumentRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$DocumentRequestDtoFromJson(json);
+
+  static const toJsonFactory = _$DocumentRequestDtoToJson;
+  Map<String, dynamic> toJson() => _$DocumentRequestDtoToJson(this);
+
+  @JsonKey(
+    name: 'documentType',
+    toJson: documentTypeToJson,
+    fromJson: documentTypeFromJson,
+  )
+  final enums.DocumentType documentType;
+  @JsonKey(name: 'notes')
+  final String? notes;
+  static const fromJsonFactory = _$DocumentRequestDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is DocumentRequestDto &&
+            (identical(other.documentType, documentType) ||
+                const DeepCollectionEquality()
+                    .equals(other.documentType, documentType)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(documentType) ^
+      const DeepCollectionEquality().hash(notes) ^
+      runtimeType.hashCode;
+}
+
+extension $DocumentRequestDtoExtension on DocumentRequestDto {
+  DocumentRequestDto copyWith(
+      {enums.DocumentType? documentType, String? notes}) {
+    return DocumentRequestDto(
+        documentType: documentType ?? this.documentType,
+        notes: notes ?? this.notes);
+  }
+
+  DocumentRequestDto copyWithWrapped(
+      {Wrapped<enums.DocumentType>? documentType, Wrapped<String?>? notes}) {
+    return DocumentRequestDto(
+        documentType:
+            (documentType != null ? documentType.value : this.documentType),
+        notes: (notes != null ? notes.value : this.notes));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class CreateInquiryMessageDto {
   const CreateInquiryMessageDto({
     required this.inquiryId,
@@ -4569,7 +4964,7 @@ class CreateInquiryMessageDto {
   static const fromJsonFactory = _$CreateInquiryMessageDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateInquiryMessageDto &&
             (identical(other.inquiryId, inquiryId) ||
@@ -4668,7 +5063,7 @@ class CreateInquiryDto {
   static const fromJsonFactory = _$CreateInquiryDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateInquiryDto &&
             (identical(other.messages, messages) ||
@@ -4737,7 +5132,7 @@ class SendMessageDto {
   static const fromJsonFactory = _$SendMessageDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is SendMessageDto &&
             (identical(other.tenantIds, tenantIds) ||
@@ -4822,7 +5217,7 @@ class UpdateFCMTokenDto {
   static const fromJsonFactory = _$UpdateFCMTokenDtoFromJson;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UpdateFCMTokenDto &&
             (identical(other.fcmToken, fcmToken) ||
@@ -5049,6 +5444,230 @@ List<enums.InquiryDtoStatus>? inquiryDtoStatusNullableListFromJson(
 
   return inquiryDtoStatus
       .map((e) => inquiryDtoStatusFromJson(e.toString()))
+      .toList();
+}
+
+String? tenantDtoContactMethodNullableToJson(
+    enums.TenantDtoContactMethod? tenantDtoContactMethod) {
+  return tenantDtoContactMethod?.value;
+}
+
+String? tenantDtoContactMethodToJson(
+    enums.TenantDtoContactMethod tenantDtoContactMethod) {
+  return tenantDtoContactMethod.value;
+}
+
+enums.TenantDtoContactMethod tenantDtoContactMethodFromJson(
+  Object? tenantDtoContactMethod, [
+  enums.TenantDtoContactMethod? defaultValue,
+]) {
+  return enums.TenantDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == tenantDtoContactMethod) ??
+      defaultValue ??
+      enums.TenantDtoContactMethod.swaggerGeneratedUnknown;
+}
+
+enums.TenantDtoContactMethod? tenantDtoContactMethodNullableFromJson(
+  Object? tenantDtoContactMethod, [
+  enums.TenantDtoContactMethod? defaultValue,
+]) {
+  if (tenantDtoContactMethod == null) {
+    return null;
+  }
+  return enums.TenantDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == tenantDtoContactMethod) ??
+      defaultValue;
+}
+
+String tenantDtoContactMethodExplodedListToJson(
+    List<enums.TenantDtoContactMethod>? tenantDtoContactMethod) {
+  return tenantDtoContactMethod?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> tenantDtoContactMethodListToJson(
+    List<enums.TenantDtoContactMethod>? tenantDtoContactMethod) {
+  if (tenantDtoContactMethod == null) {
+    return [];
+  }
+
+  return tenantDtoContactMethod.map((e) => e.value!).toList();
+}
+
+List<enums.TenantDtoContactMethod> tenantDtoContactMethodListFromJson(
+  List? tenantDtoContactMethod, [
+  List<enums.TenantDtoContactMethod>? defaultValue,
+]) {
+  if (tenantDtoContactMethod == null) {
+    return defaultValue ?? [];
+  }
+
+  return tenantDtoContactMethod
+      .map((e) => tenantDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+List<enums.TenantDtoContactMethod>? tenantDtoContactMethodNullableListFromJson(
+  List? tenantDtoContactMethod, [
+  List<enums.TenantDtoContactMethod>? defaultValue,
+]) {
+  if (tenantDtoContactMethod == null) {
+    return defaultValue;
+  }
+
+  return tenantDtoContactMethod
+      .map((e) => tenantDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+String? tenantProfileDtoContactMethodNullableToJson(
+    enums.TenantProfileDtoContactMethod? tenantProfileDtoContactMethod) {
+  return tenantProfileDtoContactMethod?.value;
+}
+
+String? tenantProfileDtoContactMethodToJson(
+    enums.TenantProfileDtoContactMethod tenantProfileDtoContactMethod) {
+  return tenantProfileDtoContactMethod.value;
+}
+
+enums.TenantProfileDtoContactMethod tenantProfileDtoContactMethodFromJson(
+  Object? tenantProfileDtoContactMethod, [
+  enums.TenantProfileDtoContactMethod? defaultValue,
+]) {
+  return enums.TenantProfileDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == tenantProfileDtoContactMethod) ??
+      defaultValue ??
+      enums.TenantProfileDtoContactMethod.swaggerGeneratedUnknown;
+}
+
+enums.TenantProfileDtoContactMethod?
+    tenantProfileDtoContactMethodNullableFromJson(
+  Object? tenantProfileDtoContactMethod, [
+  enums.TenantProfileDtoContactMethod? defaultValue,
+]) {
+  if (tenantProfileDtoContactMethod == null) {
+    return null;
+  }
+  return enums.TenantProfileDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == tenantProfileDtoContactMethod) ??
+      defaultValue;
+}
+
+String tenantProfileDtoContactMethodExplodedListToJson(
+    List<enums.TenantProfileDtoContactMethod>? tenantProfileDtoContactMethod) {
+  return tenantProfileDtoContactMethod?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> tenantProfileDtoContactMethodListToJson(
+    List<enums.TenantProfileDtoContactMethod>? tenantProfileDtoContactMethod) {
+  if (tenantProfileDtoContactMethod == null) {
+    return [];
+  }
+
+  return tenantProfileDtoContactMethod.map((e) => e.value!).toList();
+}
+
+List<enums.TenantProfileDtoContactMethod>
+    tenantProfileDtoContactMethodListFromJson(
+  List? tenantProfileDtoContactMethod, [
+  List<enums.TenantProfileDtoContactMethod>? defaultValue,
+]) {
+  if (tenantProfileDtoContactMethod == null) {
+    return defaultValue ?? [];
+  }
+
+  return tenantProfileDtoContactMethod
+      .map((e) => tenantProfileDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+List<enums.TenantProfileDtoContactMethod>?
+    tenantProfileDtoContactMethodNullableListFromJson(
+  List? tenantProfileDtoContactMethod, [
+  List<enums.TenantProfileDtoContactMethod>? defaultValue,
+]) {
+  if (tenantProfileDtoContactMethod == null) {
+    return defaultValue;
+  }
+
+  return tenantProfileDtoContactMethod
+      .map((e) => tenantProfileDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+String? resolvedTenantDtoContactMethodNullableToJson(
+    enums.ResolvedTenantDtoContactMethod? resolvedTenantDtoContactMethod) {
+  return resolvedTenantDtoContactMethod?.value;
+}
+
+String? resolvedTenantDtoContactMethodToJson(
+    enums.ResolvedTenantDtoContactMethod resolvedTenantDtoContactMethod) {
+  return resolvedTenantDtoContactMethod.value;
+}
+
+enums.ResolvedTenantDtoContactMethod resolvedTenantDtoContactMethodFromJson(
+  Object? resolvedTenantDtoContactMethod, [
+  enums.ResolvedTenantDtoContactMethod? defaultValue,
+]) {
+  return enums.ResolvedTenantDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == resolvedTenantDtoContactMethod) ??
+      defaultValue ??
+      enums.ResolvedTenantDtoContactMethod.swaggerGeneratedUnknown;
+}
+
+enums.ResolvedTenantDtoContactMethod?
+    resolvedTenantDtoContactMethodNullableFromJson(
+  Object? resolvedTenantDtoContactMethod, [
+  enums.ResolvedTenantDtoContactMethod? defaultValue,
+]) {
+  if (resolvedTenantDtoContactMethod == null) {
+    return null;
+  }
+  return enums.ResolvedTenantDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == resolvedTenantDtoContactMethod) ??
+      defaultValue;
+}
+
+String resolvedTenantDtoContactMethodExplodedListToJson(
+    List<enums.ResolvedTenantDtoContactMethod>?
+        resolvedTenantDtoContactMethod) {
+  return resolvedTenantDtoContactMethod?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> resolvedTenantDtoContactMethodListToJson(
+    List<enums.ResolvedTenantDtoContactMethod>?
+        resolvedTenantDtoContactMethod) {
+  if (resolvedTenantDtoContactMethod == null) {
+    return [];
+  }
+
+  return resolvedTenantDtoContactMethod.map((e) => e.value!).toList();
+}
+
+List<enums.ResolvedTenantDtoContactMethod>
+    resolvedTenantDtoContactMethodListFromJson(
+  List? resolvedTenantDtoContactMethod, [
+  List<enums.ResolvedTenantDtoContactMethod>? defaultValue,
+]) {
+  if (resolvedTenantDtoContactMethod == null) {
+    return defaultValue ?? [];
+  }
+
+  return resolvedTenantDtoContactMethod
+      .map((e) => resolvedTenantDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+List<enums.ResolvedTenantDtoContactMethod>?
+    resolvedTenantDtoContactMethodNullableListFromJson(
+  List? resolvedTenantDtoContactMethod, [
+  List<enums.ResolvedTenantDtoContactMethod>? defaultValue,
+]) {
+  if (resolvedTenantDtoContactMethod == null) {
+    return defaultValue;
+  }
+
+  return resolvedTenantDtoContactMethod
+      .map((e) => resolvedTenantDtoContactMethodFromJson(e.toString()))
       .toList();
 }
 
@@ -5329,6 +5948,70 @@ List<enums.UpdateTaskDtoStatus>? updateTaskDtoStatusNullableListFromJson(
   return updateTaskDtoStatus
       .map((e) => updateTaskDtoStatusFromJson(e.toString()))
       .toList();
+}
+
+String? documentTypeNullableToJson(enums.DocumentType? documentType) {
+  return documentType?.value;
+}
+
+String? documentTypeToJson(enums.DocumentType documentType) {
+  return documentType.value;
+}
+
+enums.DocumentType documentTypeFromJson(
+  Object? documentType, [
+  enums.DocumentType? defaultValue,
+]) {
+  return enums.DocumentType.values
+          .firstWhereOrNull((e) => e.value == documentType) ??
+      defaultValue ??
+      enums.DocumentType.swaggerGeneratedUnknown;
+}
+
+enums.DocumentType? documentTypeNullableFromJson(
+  Object? documentType, [
+  enums.DocumentType? defaultValue,
+]) {
+  if (documentType == null) {
+    return null;
+  }
+  return enums.DocumentType.values
+          .firstWhereOrNull((e) => e.value == documentType) ??
+      defaultValue;
+}
+
+String documentTypeExplodedListToJson(List<enums.DocumentType>? documentType) {
+  return documentType?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> documentTypeListToJson(List<enums.DocumentType>? documentType) {
+  if (documentType == null) {
+    return [];
+  }
+
+  return documentType.map((e) => e.value!).toList();
+}
+
+List<enums.DocumentType> documentTypeListFromJson(
+  List? documentType, [
+  List<enums.DocumentType>? defaultValue,
+]) {
+  if (documentType == null) {
+    return defaultValue ?? [];
+  }
+
+  return documentType.map((e) => documentTypeFromJson(e.toString())).toList();
+}
+
+List<enums.DocumentType>? documentTypeNullableListFromJson(
+  List? documentType, [
+  List<enums.DocumentType>? defaultValue,
+]) {
+  if (documentType == null) {
+    return defaultValue;
+  }
+
+  return documentType.map((e) => documentTypeFromJson(e.toString())).toList();
 }
 
 String? createInquiryDtoTypeNullableToJson(

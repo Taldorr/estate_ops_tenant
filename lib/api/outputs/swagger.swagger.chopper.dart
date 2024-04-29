@@ -163,7 +163,18 @@ final class _$Swagger extends Swagger {
   }
 
   @override
-  Future<Response<List<TenantDto>>> _tenantsFindPost(
+  Future<Response<TenantProfileDto>> _tenantsProfileGet() {
+    final Uri $url = Uri.parse('/tenants/profile');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<TenantProfileDto, TenantProfileDto>($request);
+  }
+
+  @override
+  Future<Response<List<ResolvedTenantDto>>> _tenantsFindPost(
       {required FindTenantDto? body}) {
     final Uri $url = Uri.parse('/tenants/find');
     final $body = body;
@@ -173,7 +184,7 @@ final class _$Swagger extends Swagger {
       client.baseUrl,
       body: $body,
     );
-    return client.send<List<TenantDto>, TenantDto>($request);
+    return client.send<List<ResolvedTenantDto>, ResolvedTenantDto>($request);
   }
 
   @override
@@ -647,6 +658,20 @@ final class _$Swagger extends Swagger {
       body: $body,
     );
     return client.send<TaskDto, TaskDto>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> _inquiryDocumentPost(
+      {required DocumentRequestDto? body}) {
+    final Uri $url = Uri.parse('/inquiry/document');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override

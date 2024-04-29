@@ -5,14 +5,14 @@ enum Status {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
 
-  @JsonValue('VACANT')
-  vacant('VACANT'),
-  @JsonValue('RENTED')
-  rented('RENTED'),
-  @JsonValue('CANCELLATION_PENDING')
-  cancellationPending('CANCELLATION_PENDING'),
-  @JsonValue('TENANT_CHANGING')
-  tenantChanging('TENANT_CHANGING');
+  @JsonValue('OPEN')
+  open('OPEN'),
+  @JsonValue('IN_PROGRESS')
+  inProgress('IN_PROGRESS'),
+  @JsonValue('WAITING')
+  waiting('WAITING'),
+  @JsonValue('COMPLETE')
+  complete('COMPLETE');
 
   final String? value;
 
@@ -51,6 +51,54 @@ enum InquiryDtoStatus {
   final String? value;
 
   const InquiryDtoStatus(this.value);
+}
+
+enum TenantDtoContactMethod {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('APP')
+  app('APP'),
+  @JsonValue('MAIL')
+  mail('MAIL'),
+  @JsonValue('EMAIL')
+  email('EMAIL');
+
+  final String? value;
+
+  const TenantDtoContactMethod(this.value);
+}
+
+enum TenantProfileDtoContactMethod {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('APP')
+  app('APP'),
+  @JsonValue('MAIL')
+  mail('MAIL'),
+  @JsonValue('EMAIL')
+  email('EMAIL');
+
+  final String? value;
+
+  const TenantProfileDtoContactMethod(this.value);
+}
+
+enum ResolvedTenantDtoContactMethod {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('APP')
+  app('APP'),
+  @JsonValue('MAIL')
+  mail('MAIL'),
+  @JsonValue('EMAIL')
+  email('EMAIL');
+
+  final String? value;
+
+  const ResolvedTenantDtoContactMethod(this.value);
 }
 
 enum Role {
@@ -119,6 +167,22 @@ enum UpdateTaskDtoStatus {
   final String? value;
 
   const UpdateTaskDtoStatus(this.value);
+}
+
+enum DocumentType {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('RENTING_AGREEMENT')
+  rentingAgreement('RENTING_AGREEMENT'),
+  @JsonValue('LANDLORD_CERTIFICATE')
+  landlordCertificate('LANDLORD_CERTIFICATE'),
+  @JsonValue('OTHER')
+  other('OTHER');
+
+  final String? value;
+
+  const DocumentType(this.value);
 }
 
 enum CreateInquiryDtoType {

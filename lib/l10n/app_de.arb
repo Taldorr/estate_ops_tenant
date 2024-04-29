@@ -28,5 +28,21 @@
   "searchConcern": "Anliegen suchen",
   "date": "Datum",
   "description": "Beschreibung",
-  "descriptionDamagePlaceholder": "Beschreibung des Schadens"
+  "descriptionDamagePlaceholder": "Beschreibung des Schadens",
+  "logout": "Logout",
+  "personalData": "Persönliche Daten",
+  "name": "Name",
+  "email": "E-Mail",
+  "phone": "Telefon",
+  "searchDocuments": "Dokument suchen",
+  "requestDocument": "Dokument anfordern",
+  "requestDocumentHint": "Hast du noch Anmerkungen? Oder es gibt es dein Dokument nicht in der Auswahl? Schreibe es hier rein.",
+  "renting_agreement": "Mietvertrag",
+  "landlord_certifictate": "Vermietungsbescheinigung",
+  "selectDocument": "Dokument auswählen",
+  "documentRequested": "Dokument angefordert",
+  "documentRequestedText": "Vielen Dank. Wir prüfen deine Anfrage und werden dir das gewünschte Dokumente bald hier in der App und ggf. per Mail zur Verfügung stellen.",
+  "backToDocuments": "Zurück zum Dokumentencenter",
+  "requestAnotherDocument": "Weiteres Dokument anfordern",
+  "appLanguage": "App-Sprache"
 }

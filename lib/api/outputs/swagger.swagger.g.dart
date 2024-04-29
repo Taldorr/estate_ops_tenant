@@ -118,6 +118,8 @@ TenantDto _$TenantDtoFromJson(Map<String, dynamic> json) => TenantDto(
       email: json['email'] as String?,
       phone: json['phone'] as String?,
       notes: json['notes'] as String?,
+      contactMethod:
+          tenantDtoContactMethodNullableFromJson(json['contactMethod']),
       leases: (json['leases'] as List<dynamic>?)
               ?.map((e) => LeaseDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -142,6 +144,8 @@ Map<String, dynamic> _$TenantDtoToJson(TenantDto instance) => <String, dynamic>{
       'email': instance.email,
       'phone': instance.phone,
       'notes': instance.notes,
+      'contactMethod':
+          tenantDtoContactMethodNullableToJson(instance.contactMethod),
       'leases': instance.leases?.map((e) => e.toJson()).toList(),
       'attachments': instance.attachments?.map((e) => e.toJson()).toList(),
       'inquirys': instance.inquirys?.map((e) => e.toJson()).toList(),
@@ -274,6 +278,42 @@ Map<String, dynamic> _$AccountInfoDtoToJson(AccountInfoDto instance) =>
       'id': instance.id,
     };
 
+TenantProfileDto _$TenantProfileDtoFromJson(Map<String, dynamic> json) =>
+    TenantProfileDto(
+      tenantId: json['tenantId'] as String,
+      tenantDisplayId: json['tenantDisplayId'] as String,
+      unitId: json['unitId'] as String?,
+      unitDisplayId: json['unitDisplayId'] as String?,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      contactMethod:
+          tenantProfileDtoContactMethodNullableFromJson(json['contactMethod']),
+      street: json['street'] as String?,
+      zip: json['zip'] as String?,
+      city: json['city'] as String?,
+      country: json['country'] as String?,
+    );
+
+Map<String, dynamic> _$TenantProfileDtoToJson(TenantProfileDto instance) =>
+    <String, dynamic>{
+      'tenantId': instance.tenantId,
+      'tenantDisplayId': instance.tenantDisplayId,
+      'unitId': instance.unitId,
+      'unitDisplayId': instance.unitDisplayId,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'email': instance.email,
+      'phone': instance.phone,
+      'contactMethod':
+          tenantProfileDtoContactMethodNullableToJson(instance.contactMethod),
+      'street': instance.street,
+      'zip': instance.zip,
+      'city': instance.city,
+      'country': instance.country,
+    };
+
 FindTenantDto _$FindTenantDtoFromJson(Map<String, dynamic> json) =>
     FindTenantDto(
       unitIds: (json['unitIds'] as List<dynamic>?)
@@ -295,6 +335,30 @@ Map<String, dynamic> _$FindTenantDtoToJson(FindTenantDto instance) =>
       'unitIds': instance.unitIds,
       'buildingIds': instance.buildingIds,
       'complexIds': instance.complexIds,
+    };
+
+ResolvedTenantDto _$ResolvedTenantDtoFromJson(Map<String, dynamic> json) =>
+    ResolvedTenantDto(
+      id: json['id'] as String,
+      displayId: json['displayId'] as String,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+      contactMethod:
+          resolvedTenantDtoContactMethodNullableFromJson(json['contactMethod']),
+      buildingString: json['buildingString'] as String,
+      complexString: json['complexString'] as String,
+    );
+
+Map<String, dynamic> _$ResolvedTenantDtoToJson(ResolvedTenantDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'displayId': instance.displayId,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'contactMethod':
+          resolvedTenantDtoContactMethodNullableToJson(instance.contactMethod),
+      'buildingString': instance.buildingString,
+      'complexString': instance.complexString,
     };
 
 CreateTenantDto _$CreateTenantDtoFromJson(Map<String, dynamic> json) =>
@@ -376,7 +440,6 @@ ComplexDto _$ComplexDtoFromJson(Map<String, dynamic> json) => ComplexDto(
               ?.map((e) => BuildingDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      address: AddressDto.fromJson(json['address'] as Map<String, dynamic>),
       notes: json['notes'] as String,
       attachments: (json['attachments'] as List<dynamic>?)
               ?.map((e) => AttachmentDto.fromJson(e as Map<String, dynamic>))
@@ -392,7 +455,6 @@ Map<String, dynamic> _$ComplexDtoToJson(ComplexDto instance) =>
       'displayId': instance.displayId,
       'name': instance.name,
       'buildings': instance.buildings.map((e) => e.toJson()).toList(),
-      'address': instance.address.toJson(),
       'notes': instance.notes,
       'attachments': instance.attachments?.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt.toIso8601String(),
@@ -854,6 +916,18 @@ Map<String, dynamic> _$UpdateTaskDtoToJson(UpdateTaskDto instance) =>
       'buildingIds': instance.buildingIds,
       'complexIds': instance.complexIds,
       'taskIds': instance.taskIds,
+    };
+
+DocumentRequestDto _$DocumentRequestDtoFromJson(Map<String, dynamic> json) =>
+    DocumentRequestDto(
+      documentType: documentTypeFromJson(json['documentType']),
+      notes: json['notes'] as String?,
+    );
+
+Map<String, dynamic> _$DocumentRequestDtoToJson(DocumentRequestDto instance) =>
+    <String, dynamic>{
+      'documentType': documentTypeToJson(instance.documentType),
+      'notes': instance.notes,
     };
 
 CreateInquiryMessageDto _$CreateInquiryMessageDtoFromJson(

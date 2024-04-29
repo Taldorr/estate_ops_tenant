@@ -31,13 +31,23 @@ class AuthRepository {
     return null;
   }
 
+  Future<TenantProfileDto> getProfile() async {
+    final response =
+        await ApiService.getInstance().apiClient.tenantsProfileGet();
+    if (response.isSuccessful) {
+      return response.body!;
+    }
+    throw Exception("Failed to get profile");
+  }
+
   Future<void> logOut() async {
     await auth0Client.credentialsManager.clearCredentials();
     return auth0Client.webAuthentication().logout();
   }
 
   Future<Credentials?> getCredentials() async {
-    final hasCredentials = await auth0Client.credentialsManager.hasValidCredentials();
+    final hasCredentials =
+        await auth0Client.credentialsManager.hasValidCredentials();
     if (!hasCredentials) {
       return null;
     }

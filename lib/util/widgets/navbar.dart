@@ -41,7 +41,6 @@ class EONavbar extends StatelessWidget {
           NavigationDestination(
             icon: const Icon(Icons.account_circle_outlined),
             label: AppLocalizations.of(context)!.profile,
-            enabled: false,
           ),
           NavigationDestination(
               icon: const Icon(Icons.home_outlined),

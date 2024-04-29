@@ -19,9 +19,11 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
     on<CreateInquiryEvent>(_onCreateInquiryEvent);
     on<LoadInquirysEvent>(_onLoadInquirysEvent);
     on<UnselectCurrentEvent>(_onUnselectCurrentEvent);
+    on<RequestDocumentEvent>(_onRequestDocumentEvent);
   }
 
-  Future<void> _onCreateMessageEvent(CreateMessagesEvent event, Emitter<InquiryState> emit) async {
+  Future<void> _onCreateMessageEvent(
+      CreateMessagesEvent event, Emitter<InquiryState> emit) async {
     final messages = event.messages
         .map(
           (m) => CreateInquiryMessageDto(
@@ -46,10 +48,11 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
       try {
         emit(state.copyWith(isLoading: true));
 
-        final newMessages =
-            await Future.wait(messages.map((m) => _inquiryRepository.addMessage(m)));
+        final newMessages = await Future.wait(
+            messages.map((m) => _inquiryRepository.addMessage(m)));
 
-        final msgModels = newMessages.map((m) => InquiryMessageModel.fromDto(m!)).toList();
+        final msgModels =
+            newMessages.map((m) => InquiryMessageModel.fromDto(m!)).toList();
         final inquirys = state.inquirys.map((i) {
           if (i.id == state.current!.id) {
             i.messages = [...i.messages, ...msgModels];
@@ -68,7 +71,8 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
     }
   }
 
-  Future<void> _onCreateInquiryEvent(CreateInquiryEvent event, Emitter<InquiryState> emit) async {
+  Future<void> _onCreateInquiryEvent(
+      CreateInquiryEvent event, Emitter<InquiryState> emit) async {
     try {
       final newInquiry = await _inquiryRepository.createInquiry(event.dto);
       if (newInquiry != null) {
@@ -80,7 +84,8 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
     }
   }
 
-  Future<void> _onLoadInquirysEvent(LoadInquirysEvent event, Emitter<InquiryState> emit) async {
+  Future<void> _onLoadInquirysEvent(
+      LoadInquirysEvent event, Emitter<InquiryState> emit) async {
     try {
       emit(state.copyWith(isLoading: true));
       final inquirys = await _inquiryRepository.loadAll();
@@ -96,5 +101,15 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
   Future<void> _onUnselectCurrentEvent(
       UnselectCurrentEvent event, Emitter<InquiryState> emit) async {
     emit(state.copyWith(current: null));
+  }
+
+  Future<void> _onRequestDocumentEvent(
+      RequestDocumentEvent event, Emitter<InquiryState> emit) async {
+    await _inquiryRepository.requestDocument(
+      DocumentRequestDto(
+        documentType: event.documentType,
+        notes: event.notes,
+      ),
+    );
   }
 }

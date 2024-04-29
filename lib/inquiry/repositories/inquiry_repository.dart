@@ -4,7 +4,8 @@ import '../../util/api_service.dart';
 class InquiryRepository {
   Future<InquiryDto?> createInquiry(CreateInquiryDto dto) async {
     try {
-      final response = await ApiService.getInstance().apiClient.inquiryPost(body: dto);
+      final response =
+          await ApiService.getInstance().apiClient.inquiryPost(body: dto);
       if (response.isSuccessful) {
         return response.body;
       }
@@ -16,7 +17,9 @@ class InquiryRepository {
 
   Future<InquiryMessageDto?> addMessage(CreateInquiryMessageDto dto) async {
     try {
-      final response = await ApiService.getInstance().apiClient.inquiryMessagePost(body: dto);
+      final response = await ApiService.getInstance()
+          .apiClient
+          .inquiryMessagePost(body: dto);
       if (response.isSuccessful) {
         return response.body;
       }
@@ -33,6 +36,16 @@ class InquiryRepository {
     } catch (e) {
       print("error: $e");
       return [];
+    }
+  }
+
+  Future<void> requestDocument(DocumentRequestDto dto) async {
+    try {
+      await ApiService.getInstance().apiClient.inquiryDocumentPost(body: dto);
+      return;
+    } catch (e) {
+      print("error: $e");
+      return;
     }
   }
 }

@@ -35,3 +35,12 @@ class CreateMessagesEvent extends InquiryEvent {
   @override
   List<Object> get props => [messages];
 }
+
+class RequestDocumentEvent extends InquiryEvent {
+  final DocumentType documentType;
+  final String? notes;
+  const RequestDocumentEvent(this.documentType, this.notes);
+
+  @override
+  List<Object?> get props => [documentType, notes];
+}

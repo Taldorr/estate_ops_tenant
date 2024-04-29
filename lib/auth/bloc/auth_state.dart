@@ -3,32 +3,57 @@
 part of 'auth_bloc.dart';
 
 class AuthState extends Equatable {
-  const AuthState({this.credentials, this.accountId});
+  const AuthState({
+    this.credentials,
+    this.accountId,
+    this.profile,
+    this.locale,
+  });
 
   final Credentials? credentials;
   final String? accountId;
+  final TenantProfileDto? profile;
+  final Locale? locale;
 
   @override
-  List<Object?> get props => [credentials, accountId];
+  List<Object?> get props => [credentials, accountId, profile, locale];
 
-  AuthState copyWith({Credentials? credentials, String? accountId}) {
+  AuthState copyWith({
+    Credentials? credentials,
+    String? accountId,
+    TenantProfileDto? profile,
+    Locale? locale,
+  }) {
     return AuthState(
       credentials: credentials ?? this.credentials,
       accountId: accountId ?? this.accountId,
+      profile: profile ?? this.profile,
+      locale: locale ?? this.locale,
     );
   }
 
   factory AuthState.fromJson(Map<String, dynamic> json) {
     return AuthState(
-      credentials: json['credentials'] != null ? Credentials.fromMap(json['credentials']) : null,
       accountId: json['accountId'],
+      profile: json['profile'] != null
+          ? TenantProfileDto.fromJson(json['profile'])
+          : null,
+      locale: json['locale'] != null
+          ? Locale(json['locale']['languageCode'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'credentials': credentials?.toMap(),
       'accountId': accountId,
+      'profile': profile?.toJson(),
+      'locale': locale != null
+          ? {
+              'languageCode': locale!.languageCode,
+              'countryCode': locale!.countryCode,
+            }
+          : null,
     };
   }
 }

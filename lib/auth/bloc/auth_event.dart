@@ -26,3 +26,18 @@ class LogoutAuthEvent extends AuthEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetProfileEvent extends AuthEvent {
+  const GetProfileEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ChangeLanguageEvent extends AuthEvent {
+  final Locale locale;
+  const ChangeLanguageEvent(this.locale);
+
+  @override
+  List<Object> get props => [locale];
+}

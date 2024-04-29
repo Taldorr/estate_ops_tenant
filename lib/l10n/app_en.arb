@@ -28,5 +28,21 @@
   "searchConcern": "Search concern",
   "date": "Date",
   "description": "Description",
-  "descriptionDamagePlaceholder": "Description of the damage"
+  "descriptionDamagePlaceholder": "Description of the damage",
+  "logout": "Logout",
+  "personalData": "Personal data",
+  "name": "Name",
+  "email": "Email",
+  "phone": "Telephone",
+  "searchDocuments": "Search document",
+  "requestDocument": "Request document",
+  "requestDocumentHint": "Do you have any comments? Or is your document not in the selection? Write it here.",
+  "renting_agreement": "Rental agreement",
+  "landlord_certifictate": "Rental certificate",
+  "selectDocument": "Select document",
+  "documentRequested": "Document requested",
+  "documentRequestedText": "Thank you. We will check your request and will soon provide you with the requested document here in the app and, if necessary, by e-mail.",
+  "backToDocuments": "Back to the document centre",
+  "requestAnotherDocument": "Request another document",
+  "appLanguage": "App language"
 }

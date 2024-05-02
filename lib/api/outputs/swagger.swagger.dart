@@ -829,6 +829,17 @@ abstract class Swagger extends ChopperService {
   Future<chopper.Response> _chatbotQueryPost();
 
   ///
+  Future<chopper.Response<List<MessageDto>>> messagesGet() {
+    generatedMapping.putIfAbsent(MessageDto, () => MessageDto.fromJsonFactory);
+
+    return _messagesGet();
+  }
+
+  ///
+  @Get(path: '/messages')
+  Future<chopper.Response<List<MessageDto>>> _messagesGet();
+
+  ///
   Future<chopper.Response> messagesSendPost({required SendMessageDto? body}) {
     return _messagesSendPost(body: body);
   }
@@ -5097,6 +5108,96 @@ extension $CreateInquiryDtoExtension on CreateInquiryDto {
     return CreateInquiryDto(
         messages: (messages != null ? messages.value : this.messages),
         type: (type != null ? type.value : this.type));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MessageDto {
+  const MessageDto({
+    required this.id,
+    required this.title,
+    required this.content,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory MessageDto.fromJson(Map<String, dynamic> json) =>
+      _$MessageDtoFromJson(json);
+
+  static const toJsonFactory = _$MessageDtoToJson;
+  Map<String, dynamic> toJson() => _$MessageDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'title')
+  final String title;
+  @JsonKey(name: 'content')
+  final String content;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$MessageDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is MessageDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.title, title) ||
+                const DeepCollectionEquality().equals(other.title, title)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $MessageDtoExtension on MessageDto {
+  MessageDto copyWith(
+      {String? id,
+      String? title,
+      String? content,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return MessageDto(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  MessageDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? title,
+      Wrapped<String>? content,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return MessageDto(
+        id: (id != null ? id.value : this.id),
+        title: (title != null ? title.value : this.title),
+        content: (content != null ? content.value : this.content),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
 }
 

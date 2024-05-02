@@ -33,6 +33,7 @@ import 'inquiry/pages/my_inquirys.page.dart';
 import 'inquiry/pages/new_inquiry.page.dart';
 import 'inquiry/repositories/inquiry_repository.dart';
 import 'mailbox/bloc/mailbox_bloc.dart';
+import 'mailbox/pages/message_details.page.dart';
 import 'mailbox/repositories/mailbox_repository.dart';
 import 'util/api_service.dart';
 import 'util/constants.dart';
@@ -245,6 +246,7 @@ class MyApp extends StatelessWidget {
                 DocumentsPage.route: (_) => const DocumentsPage(),
                 MyInquirysPage.route: (_) => const MyInquirysPage(),
                 MailboxPage.route: (_) => const MailboxPage(),
+                MessageDetailsPage.route: (_) => const MessageDetailsPage(),
                 ProfilePage.route: (_) => const ProfilePage(),
                 SettingsPage.route: (_) => const SettingsPage(),
                 SelectInquiryTypePage.route: (_) =>

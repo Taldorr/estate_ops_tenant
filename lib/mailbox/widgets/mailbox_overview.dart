@@ -6,6 +6,7 @@ import '../../util/constants.dart';
 import '../../util/date_helper.dart';
 import '../bloc/bloc.dart';
 import '../models/mailbox_message.dart';
+import '../pages/message_details.page.dart';
 
 class EOMailboxOverview extends StatelessWidget {
   final int? limit;
@@ -14,11 +15,14 @@ class EOMailboxOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailboxBloc, MailboxState>(builder: (context, state) {
-      final itemCount = limit != null ? min(state.messages.length, limit!) : state.messages.length;
+      final itemCount = limit != null
+          ? min(state.messages.length, limit!)
+          : state.messages.length;
       return ListView.separated(
         shrinkWrap: true,
         itemCount: itemCount,
-        itemBuilder: (context, index) => _buildListElement(context, state.messages[index]),
+        itemBuilder: (context, index) =>
+            _buildListElement(context, state.messages[index]),
         separatorBuilder: (context, index) => Divider(
           color: Constants.blackey.withOpacity(0.3),
         ),
@@ -26,9 +30,13 @@ class EOMailboxOverview extends StatelessWidget {
     });
   }
 
-  Widget _buildListElement(BuildContext context, MailboxMessage message) => ListTile(
+  Widget _buildListElement(BuildContext context, MailboxMessage message) =>
+      ListTile(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => MessageDetailsPage(message: message))),
         contentPadding: EdgeInsets.zero,
-        title: Text(message.title, style: Theme.of(context).textTheme.bodyMedium),
+        title:
+            Text(message.title, style: Theme.of(context).textTheme.bodyMedium),
         trailing: Text(
           DateHelper.format(message.createdAt),
           style: Theme.of(context)

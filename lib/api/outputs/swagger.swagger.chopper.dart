@@ -735,6 +735,17 @@ final class _$Swagger extends Swagger {
   }
 
   @override
+  Future<Response<List<MessageDto>>> _messagesGet() {
+    final Uri $url = Uri.parse('/messages');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<MessageDto>, MessageDto>($request);
+  }
+
+  @override
   Future<Response<dynamic>> _messagesSendPost({required SendMessageDto? body}) {
     final Uri $url = Uri.parse('/messages/send');
     final $body = body;

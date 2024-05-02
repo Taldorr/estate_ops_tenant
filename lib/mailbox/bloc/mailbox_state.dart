@@ -17,20 +17,19 @@ class MailboxState extends Equatable {
   }
 
   factory MailboxState.fromJson(Map<String, dynamic> json) {
-    return MailboxState(
-      messages: json['messages'] != null
-          ? (json['messages'] as List).map((m) => MailboxMessage.fromJson(m)).toList()
-          : [],
+    return const MailboxState(
+      messages: [],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'messages': messages.map((m) => m.toJson()).toList(),
+      'messages': [],
     };
   }
 
-  List<MailboxMessage> get unreadMessages => messages.where((m) => m.readAt == null).toList();
+  List<MailboxMessage> get unreadMessages =>
+      messages.where((m) => m.readAt == null).toList();
 }
 
 /// The initial state of MailboxState

@@ -50,5 +50,10 @@
   "onboarding3": "Mietvertrag, Nebenkostenabrechnung und Grundriss immer dabei. Behalte den Überblick über alle deine Dokumente oder fordere aktuelle Bescheinigungen an.",
   "onboarding4": "Du hast Fragen zu deinem Mietvertrag, möchtest etwas melden oder deiner Hausverwaltung Feedback geben?\nErledige alles hier.",
   "skip": "Überspringen",
-  "toAPP": "Zur App"
+  "toAPP": "Zur App",
+  "downloadFailed": "Download fehlgeschlagen",
+  "imprint": "Impressum",
+  "privacyPolicy": "Datenschutz",
+  "general": "Allgemein",
+  "save": "Speichern"
 }

@@ -2587,10 +2587,10 @@ extension $CreateTenantDtoExtension on CreateTenantDto {
 class UpdateTenantDto {
   const UpdateTenantDto({
     required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.phone,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phone,
     this.notes,
   });
 
@@ -2603,13 +2603,13 @@ class UpdateTenantDto {
   @JsonKey(name: 'id')
   final String id;
   @JsonKey(name: 'firstName')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'lastName')
-  final String lastName;
+  final String? lastName;
   @JsonKey(name: 'email')
-  final String email;
+  final String? email;
   @JsonKey(name: 'phone')
-  final String phone;
+  final String? phone;
   @JsonKey(name: 'notes')
   final String? notes;
   static const fromJsonFactory = _$UpdateTenantDtoFromJson;
@@ -2667,10 +2667,10 @@ extension $UpdateTenantDtoExtension on UpdateTenantDto {
 
   UpdateTenantDto copyWithWrapped(
       {Wrapped<String>? id,
-      Wrapped<String>? firstName,
-      Wrapped<String>? lastName,
-      Wrapped<String>? email,
-      Wrapped<String>? phone,
+      Wrapped<String?>? firstName,
+      Wrapped<String?>? lastName,
+      Wrapped<String?>? email,
+      Wrapped<String?>? phone,
       Wrapped<String?>? notes}) {
     return UpdateTenantDto(
         id: (id != null ? id.value : this.id),

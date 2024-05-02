@@ -6,6 +6,7 @@ import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsOption {
   String title;
@@ -21,8 +22,16 @@ class SettingsPage extends StatelessWidget {
 
   List<SettingsOption> options(BuildContext context) => [
         SettingsOption(AppLocalizations.of(context)!.appLanguage, _onLanguage),
+        SettingsOption(AppLocalizations.of(context)!.privacyPolicy,
+            () => _launchUrl("https://www.estate-ops.de/datenschutz-app")),
+        SettingsOption(AppLocalizations.of(context)!.imprint,
+            () => _launchUrl("https://www.estate-ops.de/impressum-app")),
         SettingsOption(AppLocalizations.of(context)!.logout, _onLogout),
       ];
+
+  Future<void> _launchUrl(String url) async {
+    await launchUrlString(url);
+  }
 
   Future<void> _onLogout(BuildContext context) async {
     context.read<AuthBloc>().add(const LogoutAuthEvent());

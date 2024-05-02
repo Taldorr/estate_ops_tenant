@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../documents/pages/documents_page.dart';
 import '../../main.dart';
 import '../../util/widgets/spacer.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   static const route = '/profile';
@@ -36,7 +37,10 @@ class ProfilePage extends StatelessWidget {
                     '${state.profile?.street}, ${state.profile?.zip} ${state.profile?.city}'),
                 const EOSpacer(40),
                 EOSectionHeader(
-                    title: AppLocalizations.of(context)!.personalData),
+                  title: AppLocalizations.of(context)!.personalData,
+                  onTap: () => navigatorKey.currentState
+                      ?.pushNamed(EditProfilePage.route),
+                ),
                 const EOSpacer(20),
                 Text(
                     '${AppLocalizations.of(context)!.name}: ${state.profile?.firstName} ${state.profile?.lastName}'),

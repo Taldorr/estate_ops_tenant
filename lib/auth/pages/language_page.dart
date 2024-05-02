@@ -17,11 +17,16 @@ class LanguagePage extends StatelessWidget {
   const LanguagePage({super.key});
 
   List<LanguageOption> options(BuildContext context) => [
-        LanguageOption("Deutsch", "assets/icons/de.png", const Locale('de')),
-        LanguageOption("English", "assets/icons/en.png", const Locale('en')),
-        LanguageOption("Español", "assets/icons/es.png", const Locale('es')),
-        LanguageOption("Polski", "assets/icons/pl.png", const Locale('pl')),
-        LanguageOption("Українська", "assets/icons/ua.png", const Locale('ua')),
+        LanguageOption(
+            "🇩🇪 Deutsch", "assets/icons/de.png", const Locale('de')),
+        LanguageOption(
+            "🇬🇧 English", "assets/icons/en.png", const Locale('en')),
+        LanguageOption(
+            "🇪🇸 Español", "assets/icons/es.png", const Locale('es')),
+        LanguageOption(
+            "🇵🇱 Polski", "assets/icons/pl.png", const Locale('pl')),
+        LanguageOption(
+            "🇺🇦 Українська", "assets/icons/ua.png", const Locale('ua')),
       ];
 
   void _onLanguage(BuildContext context, LanguageOption option) {

@@ -48,3 +48,12 @@ class OnboardingCompletedEvent extends AuthEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateProfileEvent extends AuthEvent {
+  final String? email;
+  final String? phone;
+  const UpdateProfileEvent(this.email, this.phone);
+
+  @override
+  List<Object?> get props => [email, phone];
+}

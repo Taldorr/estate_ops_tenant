@@ -382,10 +382,10 @@ Map<String, dynamic> _$CreateTenantDtoToJson(CreateTenantDto instance) =>
 UpdateTenantDto _$UpdateTenantDtoFromJson(Map<String, dynamic> json) =>
     UpdateTenantDto(
       id: json['id'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
       notes: json['notes'] as String?,
     );
 

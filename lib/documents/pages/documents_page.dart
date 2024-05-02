@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:estate_ops_tenant/main.dart';
+import 'package:estate_ops_tenant/util/widgets/page.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,50 +32,32 @@ class _DocumentsPageState extends State<DocumentsPage> {
     super.initState();
   }
 
-  void _downloadDocument(DocumentModel doc) {
-    //TODO actually download the file
-    setState(() {
-      displayDocument = doc;
-    });
-  }
-
-  void _previewDocument(DocumentModel doc) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: Stack(
-            children: [
-              Center(child: _buildPreview(doc)),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+  Future<void> _downloadDocument(DocumentModel doc) async {
+    try {
+      final m = MimeType.values.firstWhere((e) => e.type == doc.mimeType);
+      await FileSaver.instance.saveFile(
+        name: doc.name,
+        mimeType: m,
+        bytes: await context.read<DocumentsBloc>().downloadDocument(doc.id),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.downloadFailed),
+        ),
+      );
+      return;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.documentCenter),
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: displayDocument != null
-                ? _buildPreview(displayDocument!)
-                : _buildListView(),
-          ),
-        ));
+    return EOPage(
+      title: AppLocalizations.of(context)!.documentCenter,
+      child: displayDocument != null
+          ? _buildPreview(displayDocument!)
+          : _buildListView(),
+    );
   }
 
   List<DocumentModel> _filterOptions(List<DocumentModel> all, String value) {
@@ -104,6 +88,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
     return BlocBuilder<DocumentsBloc, DocumentsState>(
         builder: (context, state) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextField(
               decoration: InputDecoration(
@@ -154,10 +139,10 @@ class _DocumentsPageState extends State<DocumentsPage> {
                 onPressed: () => _downloadDocument(doc),
                 icon: const Icon(Icons.arrow_circle_down_outlined),
               ),
-              IconButton(
-                onPressed: () => _previewDocument(doc),
-                icon: const Icon(Icons.remove_red_eye_outlined),
-              ),
+              // IconButton(
+              //   onPressed: () => _previewDocument(doc),
+              //   icon: const Icon(Icons.remove_red_eye_outlined),
+              // ),
             ],
           ),
         ],

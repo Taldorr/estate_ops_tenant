@@ -53,4 +53,9 @@ class AuthRepository {
     }
     return auth0Client.credentialsManager.credentials();
   }
+
+  Future<void> updateProfile(String tenantId, String? email, String? phone) {
+    final dto = UpdateTenantDto(id: tenantId, email: email, phone: phone);
+    return ApiService.getInstance().apiClient.tenantsPut(body: dto);
+  }
 }

@@ -23,6 +23,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     on<GetProfileEvent>(_onGetProfileEvent);
     on<ChangeLanguageEvent>(_onChangeLanguageEvent);
     on<OnboardingCompletedEvent>(_onOnboardingCompletedEvent);
+    on<UpdateProfileEvent>(_onUpdateProfileEvent);
   }
 
   Future<void> _onInitAuthEvent(
@@ -73,6 +74,17 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   void _onOnboardingCompletedEvent(
       OnboardingCompletedEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(onboardingCompleted: true));
+  }
+
+  void _onUpdateProfileEvent(
+      UpdateProfileEvent event, Emitter<AuthState> emit) async {
+    if (state.profile == null) return;
+    await _authRepository.updateProfile(
+      state.profile!.tenantId,
+      event.email,
+      event.phone,
+    );
+    add(const GetProfileEvent());
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:estate_ops_tenant/auth/pages/edit_profile_page.dart';
 import 'package:estate_ops_tenant/auth/pages/language_page.dart';
 import 'package:estate_ops_tenant/auth/pages/profile_page.dart';
 import 'package:estate_ops_tenant/auth/pages/settings_page.dart';
@@ -248,6 +249,7 @@ class MyApp extends StatelessWidget {
                 MailboxPage.route: (_) => const MailboxPage(),
                 MessageDetailsPage.route: (_) => const MessageDetailsPage(),
                 ProfilePage.route: (_) => const ProfilePage(),
+                EditProfilePage.route: (_) => const EditProfilePage(),
                 SettingsPage.route: (_) => const SettingsPage(),
                 SelectInquiryTypePage.route: (_) =>
                     const SelectInquiryTypePage(),

@@ -11,6 +11,7 @@ import 'package:estate_ops_tenant/inquiry/pages/select_inquirytype.page.dart';
 import 'package:estate_ops_tenant/mailbox/pages/mailbox.page.dart';
 import 'package:estate_ops_tenant/notifications/bloc/notifications_bloc.dart';
 import 'package:estate_ops_tenant/notifications/repositories/notifications_repository.dart';
+import 'package:estate_ops_tenant/onboarding/pages/onboarding_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -238,6 +239,7 @@ class MyApp extends StatelessWidget {
               home: const LoginPage(),
               navigatorKey: navigatorKey,
               routes: {
+                OnboardingPage.route: (_) => const OnboardingPage(),
                 LoginPage.route: (_) => const LoginPage(),
                 DashboardPage.route: (_) => const DashboardPage(),
                 DocumentsPage.route: (_) => const DocumentsPage(),

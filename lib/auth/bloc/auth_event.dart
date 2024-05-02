@@ -41,3 +41,10 @@ class ChangeLanguageEvent extends AuthEvent {
   @override
   List<Object> get props => [locale];
 }
+
+class OnboardingCompletedEvent extends AuthEvent {
+  const OnboardingCompletedEvent();
+
+  @override
+  List<Object> get props => [];
+}

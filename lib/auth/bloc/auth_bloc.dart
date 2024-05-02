@@ -22,6 +22,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     on<LogoutAuthEvent>(_onLogoutAuthEvent);
     on<GetProfileEvent>(_onGetProfileEvent);
     on<ChangeLanguageEvent>(_onChangeLanguageEvent);
+    on<OnboardingCompletedEvent>(_onOnboardingCompletedEvent);
   }
 
   Future<void> _onInitAuthEvent(
@@ -67,6 +68,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   void _onChangeLanguageEvent(
       ChangeLanguageEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(locale: event.locale));
+  }
+
+  void _onOnboardingCompletedEvent(
+      OnboardingCompletedEvent event, Emitter<AuthState> emit) {
+    emit(state.copyWith(onboardingCompleted: true));
   }
 
   @override

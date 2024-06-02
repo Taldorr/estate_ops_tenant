@@ -1,15 +1,14 @@
-import 'package:estate_ops_tenant/auth/auth.dart';
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/inquiry/pages/select_inquirytype.page.dart';
-import 'package:estate_ops_tenant/notifications/bloc/notifications_bloc.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:estate_ops_tenant/util/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../documents/pages/documents_page.dart';
-import '../../mailbox/bloc/mailbox_bloc.dart';
+import '../../mailbox/bloc/bloc.dart';
 import '../../mailbox/widgets/mailbox_overview.dart';
-import '../../main.dart';
+import '../../notifications/bloc/notifications_bloc.dart';
 
 class DashboardPage extends StatefulWidget {
   static const route = '/dashboard';

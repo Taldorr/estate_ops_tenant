@@ -1,13 +1,16 @@
 import 'package:estate_ops_tenant/api/outputs/swagger.swagger.dart';
-import 'package:estate_ops_tenant/documents/pages/document_request_sent_page.dart';
 import 'package:estate_ops_tenant/inquiry/bloc/inquiry_bloc.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:estate_ops_tenant/util/widgets/spacer.dart';
+import 'package:estate_ops_tenant/util/widgets/success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+
+import '../../dashboard/pages/dashboard_page.dart';
+import 'documents_page.dart';
 
 class RequestDocumentPage extends StatefulWidget {
   static const route = '/request-document';
@@ -30,7 +33,20 @@ class _RequestDocumentPageState extends State<RequestDocumentPage> {
             formKey.currentState!.value['description'],
           ),
         );
-    Navigator.of(context).pushNamed(DocumentRequestSentPage.route);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SuccessPage(
+          title: AppLocalizations.of(context)!.documentRequested,
+          content: AppLocalizations.of(context)!.documentRequestedText,
+          primaryLabel: AppLocalizations.of(context)!.backToDocuments,
+          primaryAction: () {
+            Navigator.of(context)
+                .popUntil(ModalRoute.withName(DashboardPage.route));
+            Navigator.of(context).pushNamed(DocumentsPage.route);
+          },
+        ),
+      ),
+    );
   }
 
   List<DropdownMenuItem<DocumentType>> get items => DocumentType.values
@@ -81,7 +97,7 @@ class _RequestDocumentPageState extends State<RequestDocumentPage> {
             const EOSpacer(5),
             FormBuilderTextField(
               decoration: InputDecoration(
-                labelText: '${AppLocalizations.of(context)!.description}*',
+                labelText: AppLocalizations.of(context)!.description,
                 border: const OutlineInputBorder(),
               ),
               name: 'description',

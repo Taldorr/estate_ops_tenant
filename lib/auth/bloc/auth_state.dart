@@ -8,32 +8,52 @@ class AuthState extends Equatable {
     this.accountId,
     this.profile,
     this.locale,
+    this.loading = false,
     this.onboardingCompleted = false,
+    this.credentialsWrong = false,
+    this.somethingWrong = false,
   });
 
   final Credentials? credentials;
   final String? accountId;
   final TenantProfileDto? profile;
   final Locale? locale;
+  final bool loading;
   final bool onboardingCompleted;
+  final bool credentialsWrong;
+  final bool somethingWrong;
 
   @override
-  List<Object?> get props =>
-      [credentials, accountId, profile, locale, onboardingCompleted];
+  List<Object?> get props => [
+        credentials,
+        accountId,
+        profile,
+        locale,
+        onboardingCompleted,
+        credentialsWrong,
+        somethingWrong,
+        loading,
+      ];
 
   AuthState copyWith({
     Credentials? credentials,
     String? accountId,
     TenantProfileDto? profile,
     Locale? locale,
+    bool? loading,
     bool? onboardingCompleted,
+    bool? credentialsWrong,
+    bool? somethingWrong,
   }) {
     return AuthState(
       credentials: credentials ?? this.credentials,
       accountId: accountId ?? this.accountId,
       profile: profile ?? this.profile,
       locale: locale ?? this.locale,
+      loading: loading ?? this.loading,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
+      credentialsWrong: credentialsWrong ?? this.credentialsWrong,
+      somethingWrong: somethingWrong ?? this.somethingWrong,
     );
   }
 

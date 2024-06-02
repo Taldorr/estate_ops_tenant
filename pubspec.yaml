@@ -1,7 +1,7 @@
 name: estate_ops_tenant
 description: "A new Flutter project."
 publish_to: "none"
-version: 0.1.0
+version: 0.1.1+1
 
 environment:
   sdk: ">=3.3.3 <4.0.0"
@@ -31,6 +31,7 @@ dependencies:
   firebase_messaging: ^14.7.17
   flutter_localizations:
     sdk: flutter
+  material_symbols_icons: ^4.2758.0
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +55,12 @@ flutter:
   generate: true
   assets:
     - assets/images/
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: fonts/Quicksand-Regular.ttf
+          weight: 400
+        - asset: fonts/Quicksand-Medium.ttf
+          weight: 500
+        - asset: fonts/Quicksand-Bold.ttf
+          weight: 700

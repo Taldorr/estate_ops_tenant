@@ -11,12 +11,31 @@ class AuthRepository {
 
   AuthRepository({required this.auth0Client});
 
-  Future<Credentials> logIn() {
-    return auth0Client.webAuthentication().login(
-          audience: FlavorConfig.instance.variables["api-audience"]!,
-          redirectUrl:
-              "de.estate-ops.estate-ops://de.estate-ops/ios/de.estate-ops.estate-ops/callback",
-        );
+  Future<DatabaseUser> signUp(String email, String password) async {
+    return auth0Client.api.signup(
+      email: email,
+      password: password,
+      connection: "Username-Password-Authentication",
+    );
+  }
+
+  Future<void> connectAccount(String activationCode) async {
+    try {
+      await ApiService.getInstance()
+          .apiClient
+          .authConnectPost(body: ConnectAccountDto(code: activationCode));
+    } catch (e) {
+      print("error: $e");
+    }
+  }
+
+  Future<Credentials> logIn(String email, String password) {
+    return auth0Client.api.login(
+      audience: FlavorConfig.instance.variables["api-audience"]!,
+      usernameOrEmail: email,
+      password: password,
+      connectionOrRealm: "Username-Password-Authentication",
+    );
   }
 
   Future<AccountInfoDto?> getAuthInfos() async {
@@ -31,18 +50,22 @@ class AuthRepository {
     return null;
   }
 
-  Future<TenantProfileDto> getProfile() async {
+  Future<TenantProfileDto?> getProfile() async {
     final response =
         await ApiService.getInstance().apiClient.tenantsProfileGet();
     if (response.isSuccessful) {
       return response.body!;
     }
-    throw Exception("Failed to get profile");
+    return null;
   }
 
   Future<void> logOut() async {
     await auth0Client.credentialsManager.clearCredentials();
     return auth0Client.webAuthentication().logout();
+  }
+
+  Future<void> storeCredentials(Credentials credentials) {
+    return auth0Client.credentialsManager.storeCredentials(credentials);
   }
 
   Future<Credentials?> getCredentials() async {

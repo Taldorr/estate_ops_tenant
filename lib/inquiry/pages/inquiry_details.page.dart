@@ -25,7 +25,7 @@ class InquiryDetailsPage extends StatelessWidget {
             state.inquirys.firstWhere((element) => element.id == inquiryId);
         return EOPage(
           title:
-              '${inquiry.type.toLocalString()} - ${DateHelper.format(inquiry.createdAt)}',
+              '${inquiry.type.toLocalString(context)} - ${DateHelper.format(inquiry.createdAt)}',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

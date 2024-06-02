@@ -1,15 +1,26 @@
-import 'package:estate_ops_tenant/dashboard/pages/dashboard_page.dart';
-import 'package:estate_ops_tenant/documents/pages/documents_page.dart';
-import 'package:estate_ops_tenant/documents/pages/request_document_page.dart';
 import 'package:estate_ops_tenant/util/constants.dart';
 import 'package:estate_ops_tenant/util/widgets/card.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class DocumentRequestSentPage extends StatelessWidget {
-  static const route = '/document-requested';
-  const DocumentRequestSentPage({super.key});
+class SuccessPage extends StatelessWidget {
+  final String title;
+  final String content;
+
+  final String primaryLabel;
+  final void Function() primaryAction;
+
+  final String? secondaryLabel;
+  final void Function()? secondaryAction;
+
+  const SuccessPage(
+      {super.key,
+      required this.title,
+      required this.content,
+      required this.primaryLabel,
+      required this.primaryAction,
+      this.secondaryLabel,
+      this.secondaryAction});
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +45,13 @@ class DocumentRequestSentPage extends StatelessWidget {
                         color: Constants.success, size: 40),
                   ),
                   Text(
-                    AppLocalizations.of(context)!.documentRequested,
+                    title,
                     style: Theme.of(context).textTheme.labelLarge,
                     textAlign: TextAlign.start,
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    AppLocalizations.of(context)!.documentRequestedText,
+                    content,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -48,21 +59,14 @@ class DocumentRequestSentPage extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName(DashboardPage.route));
-                Navigator.of(context).pushNamed(DocumentsPage.route);
-              },
-              child: Text(AppLocalizations.of(context)!.backToDocuments),
+              onPressed: primaryAction,
+              child: Text(primaryLabel),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName(DocumentsPage.route));
-                Navigator.of(context).pushNamed(RequestDocumentPage.route);
-              },
-              child: Text(AppLocalizations.of(context)!.requestAnotherDocument),
-            ),
+            if (secondaryLabel != null)
+              TextButton(
+                onPressed: secondaryAction,
+                child: Text(secondaryLabel!),
+              ),
           ],
         ),
       ),

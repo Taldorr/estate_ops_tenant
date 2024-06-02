@@ -125,6 +125,20 @@ final class _$Swagger extends Swagger {
   }
 
   @override
+  Future<Response<dynamic>> _authConnectPost(
+      {required ConnectAccountDto? body}) {
+    final Uri $url = Uri.parse('/auth/connect');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<List<TenantDto>>> _tenantsGet() {
     final Uri $url = Uri.parse('/tenants');
     final Request $request = Request(
@@ -207,6 +221,32 @@ final class _$Swagger extends Swagger {
       client.baseUrl,
     );
     return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<List<TenantLogEntryDto>>> _tenantsLogIdGet(
+      {required String? id}) {
+    final Uri $url = Uri.parse('/tenants/log/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<TenantLogEntryDto>, TenantLogEntryDto>($request);
+  }
+
+  @override
+  Future<Response<TenantLogEntryDto>> _tenantsLogPost(
+      {required TenantLogEntryCreateDto? body}) {
+    final Uri $url = Uri.parse('/tenants/log');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<TenantLogEntryDto, TenantLogEntryDto>($request);
   }
 
   @override
@@ -710,6 +750,17 @@ final class _$Swagger extends Swagger {
       body: $body,
     );
     return client.send<InquiryMessageDto, InquiryMessageDto>($request);
+  }
+
+  @override
+  Future<Response<InquiryDto>> _inquiryIdGet({required String? id}) {
+    final Uri $url = Uri.parse('/inquiry/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<InquiryDto, InquiryDto>($request);
   }
 
   @override

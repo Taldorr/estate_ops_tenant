@@ -1,53 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../api/outputs/swagger.enums.swagger.dart';
 
-enum InquiryType {
-  complaint,
-  damage,
-  other,
-  question,
-}
-
 extension InquiryTypeExtension on InquiryType {
-  static InquiryType fromCreateInquiryDtoType(CreateInquiryDtoType dtoType) {
-    switch (dtoType) {
-      case CreateInquiryDtoType.complaint:
-        return InquiryType.complaint;
-      case CreateInquiryDtoType.damage:
-        return InquiryType.damage;
-      case CreateInquiryDtoType.other:
-        return InquiryType.other;
-      case CreateInquiryDtoType.question:
-        return InquiryType.question;
-      default:
-        throw Exception('Unknown CreateInquiryDtoType');
-    }
-  }
-
-  static InquiryType fromInquiryDtoType(InquiryDtoType dtoType) {
-    switch (dtoType) {
-      case InquiryDtoType.complaint:
-        return InquiryType.complaint;
-      case InquiryDtoType.damage:
-        return InquiryType.damage;
-      case InquiryDtoType.other:
-        return InquiryType.other;
-      case InquiryDtoType.question:
-        return InquiryType.question;
-      default:
-        throw Exception('Unknown InquiryDtoType');
-    }
-  }
-
-  String toLocalString() {
+  String toLocalString(BuildContext context) {
     switch (this) {
       case InquiryType.complaint:
-        return 'Beschwerde';
+        return AppLocalizations.of(context)!.inquiryType_complaint;
       case InquiryType.damage:
-        return 'Schaden';
+        return AppLocalizations.of(context)!.inquiryType_damage;
       case InquiryType.other:
-        return 'Sonstiges';
+        return AppLocalizations.of(context)!.inquiryType_other;
       case InquiryType.question:
-        return 'Generelle Frage';
+        return AppLocalizations.of(context)!.inquiryType_generalQuestion;
+      case InquiryType.changeName:
+        return AppLocalizations.of(context)!.inquiryType_changeName;
+      case InquiryType.freeMessage:
+        return AppLocalizations.of(context)!.inquiryType_freeMessage;
+      case InquiryType.serviceMissing:
+        return AppLocalizations.of(context)!.inquiryType_serviceMissing;
       default:
         throw Exception('Unknown InquiryType');
     }

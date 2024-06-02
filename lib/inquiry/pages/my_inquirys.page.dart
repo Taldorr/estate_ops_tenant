@@ -41,7 +41,7 @@ class _MyInquirysPageState extends State<MyInquirysPage> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(
-                      '${state.inquirys[index].type.toLocalString()} - ${DateHelper.format(state.inquirys[index].createdAt)}',
+                      '${state.inquirys[index].type.toLocalString(context)} - ${DateHelper.format(state.inquirys[index].createdAt)}',
                       textAlign: TextAlign.center,
                     ),
                     onTap: () => Navigator.pushNamed(

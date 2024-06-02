@@ -1,13 +1,16 @@
+import 'package:estate_ops_tenant/inquiry/models/inquiry.model.dart';
+import 'package:estate_ops_tenant/inquiry/models/inquiry_message.model.dart';
+
 import '../../api/outputs/swagger.swagger.dart';
 import '../../util/api_service.dart';
 
 class InquiryRepository {
-  Future<InquiryDto?> createInquiry(CreateInquiryDto dto) async {
+  Future<InquiryModel?> createInquiry(CreateInquiryDto dto) async {
     try {
       final response =
           await ApiService.getInstance().apiClient.inquiryPost(body: dto);
       if (response.isSuccessful) {
-        return response.body;
+        return InquiryModel.fromDto(response.body!);
       }
     } catch (e) {
       print("error: $e");
@@ -15,13 +18,13 @@ class InquiryRepository {
     return null;
   }
 
-  Future<InquiryMessageDto?> addMessage(CreateInquiryMessageDto dto) async {
+  Future<InquiryMessageModel?> addMessage(CreateInquiryMessageDto dto) async {
     try {
       final response = await ApiService.getInstance()
           .apiClient
           .inquiryMessagePost(body: dto);
       if (response.isSuccessful) {
-        return response.body;
+        return InquiryMessageModel.fromDto(response.body!);
       }
     } catch (e) {
       print("error: $e");
@@ -36,6 +39,19 @@ class InquiryRepository {
     } catch (e) {
       print("error: $e");
       return [];
+    }
+  }
+
+  Future<InquiryModel?> getOne(String id) async {
+    try {
+      final response =
+          await ApiService.getInstance().apiClient.inquiryIdGet(id: id);
+      return response.body != null
+          ? InquiryModel.fromDto(response.body!)
+          : null;
+    } catch (e) {
+      print("error: $e");
+      return null;
     }
   }
 

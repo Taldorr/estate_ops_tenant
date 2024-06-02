@@ -8,10 +8,11 @@ abstract class InquiryEvent extends Equatable {
 
 class CreateInquiryEvent extends InquiryEvent {
   final CreateInquiryDto dto;
-  const CreateInquiryEvent(this.dto);
+  final List<CreateInquiryMessageDto>? messageDtos;
+  const CreateInquiryEvent(this.dto, {this.messageDtos});
 
   @override
-  List<Object> get props => [dto];
+  List<Object?> get props => [dto, messageDtos];
 }
 
 class LoadInquirysEvent extends InquiryEvent {
@@ -19,6 +20,14 @@ class LoadInquirysEvent extends InquiryEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class SelectCurrentEvent extends InquiryEvent {
+  final String inquiryId;
+  const SelectCurrentEvent(this.inquiryId);
+
+  @override
+  List<Object> get props => [inquiryId];
 }
 
 class UnselectCurrentEvent extends InquiryEvent {
@@ -29,7 +38,7 @@ class UnselectCurrentEvent extends InquiryEvent {
 }
 
 class CreateMessagesEvent extends InquiryEvent {
-  final List<InquiryMessageModel> messages;
+  final List<CreateInquiryMessageDto> messages;
   const CreateMessagesEvent(this.messages);
 
   @override

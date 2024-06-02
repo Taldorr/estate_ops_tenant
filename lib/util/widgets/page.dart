@@ -8,6 +8,7 @@ class EOPage extends StatelessWidget {
   final String? title;
   final int navIndex;
   final bool hideBackButton;
+  final bool hideNavbar;
   final bool gradientBackground;
   const EOPage({
     super.key,
@@ -16,6 +17,7 @@ class EOPage extends StatelessWidget {
     this.navIndex = 1,
     this.hideBackButton = true,
     this.gradientBackground = false,
+    this.hideNavbar = false,
   });
 
   @override
@@ -44,9 +46,11 @@ class EOPage extends StatelessWidget {
             child: child,
           ),
         ),
-        bottomNavigationBar: EONavbar(
-          selectedIndex: navIndex,
-        ),
+        bottomNavigationBar: hideNavbar
+            ? null
+            : EONavbar(
+                selectedIndex: navIndex,
+              ),
       ),
     );
   }

@@ -6,6 +6,8 @@ class MailboxMessage {
   final String title;
   final String content;
 
+  final String? inquiryId;
+
   final DateTime createdAt;
   final DateTime? readAt;
 
@@ -14,6 +16,7 @@ class MailboxMessage {
     required this.title,
     required this.content,
     required this.createdAt,
+    this.inquiryId,
     this.readAt,
   });
 
@@ -22,5 +25,6 @@ class MailboxMessage {
         title: dto.title,
         content: dto.content,
         createdAt: dto.createdAt,
+        inquiryId: dto.inquiryId,
       );
 }

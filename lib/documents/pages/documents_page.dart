@@ -1,12 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:estate_ops_tenant/main.dart';
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../bloc/documents_bloc.dart';
 import '../models/document.model.dart';
@@ -137,7 +138,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
             children: [
               IconButton(
                 onPressed: () => _downloadDocument(doc),
-                icon: const Icon(Icons.arrow_circle_down_outlined),
+                icon: const Icon(Symbols.download_rounded),
               ),
               // IconButton(
               //   onPressed: () => _previewDocument(doc),

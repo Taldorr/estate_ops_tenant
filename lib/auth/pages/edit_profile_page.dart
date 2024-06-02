@@ -1,5 +1,5 @@
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/auth/auth.dart';
-import 'package:estate_ops_tenant/main.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:estate_ops_tenant/util/widgets/section_header.dart';
 import 'package:flutter/material.dart';

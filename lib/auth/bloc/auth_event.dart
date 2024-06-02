@@ -14,10 +14,39 @@ class InitAuthEvent extends AuthEvent {
 }
 
 class LoginAuthEvent extends AuthEvent {
-  const LoginAuthEvent();
+  final String email;
+  final String password;
+  const LoginAuthEvent({
+    required this.email,
+    required this.password,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [email, password];
+}
+
+class SignupAuthEvent extends AuthEvent {
+  final String email;
+  final String password;
+  // final String activationCode;
+  const SignupAuthEvent({
+    required this.email,
+    required this.password,
+    // required this.activationCode,
+  });
+
+  @override
+  List<Object> get props => [email, password];
+}
+
+class ConnectAuthEvent extends AuthEvent {
+  final String activationCode;
+  const ConnectAuthEvent({
+    required this.activationCode,
+  });
+
+  @override
+  List<Object> get props => [activationCode];
 }
 
 class LogoutAuthEvent extends AuthEvent {

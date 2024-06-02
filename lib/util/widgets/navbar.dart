@@ -1,3 +1,4 @@
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/mailbox/bloc/mailbox_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../auth/pages/profile_page.dart';
 import '../../dashboard/pages/dashboard_page.dart';
 import '../../mailbox/pages/mailbox.page.dart';
-import '../../main.dart';
 import '../constants.dart';
 
 class EONavbar extends StatelessWidget {
@@ -48,6 +48,9 @@ class EONavbar extends StatelessWidget {
           NavigationDestination(
             icon: BlocBuilder<MailboxBloc, MailboxState>(
               builder: (context, state) {
+                if (state.unreadMessages.isEmpty) {
+                  return const Icon(Icons.mail_outline_rounded);
+                }
                 return Badge(
                   backgroundColor: Constants.primary,
                   label: Text(state.unreadMessages.length.toString()),

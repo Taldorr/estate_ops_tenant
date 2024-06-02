@@ -1,6 +1,6 @@
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/auth/bloc/auth_bloc.dart';
 import 'package:estate_ops_tenant/auth/pages/language_page.dart';
-import 'package:estate_ops_tenant/main.dart';
 import 'package:estate_ops_tenant/util/constants.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,8 @@ class SettingsPage extends StatelessWidget {
             () => _launchUrl("https://www.estate-ops.de/datenschutz-app")),
         SettingsOption(AppLocalizations.of(context)!.imprint,
             () => _launchUrl("https://www.estate-ops.de/impressum-app")),
-        SettingsOption(AppLocalizations.of(context)!.logout, _onLogout),
+        SettingsOption(
+            AppLocalizations.of(context)!.logout, () => _onLogout(context)),
       ];
 
   Future<void> _launchUrl(String url) async {
@@ -43,10 +44,18 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildListElement(BuildContext context, int index) => ListTile(
         contentPadding: EdgeInsets.zero,
-        title: Text(options(context)[index].title,
-            style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(
+          options(context)[index].title,
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
         onTap: () => options(context)[index].handler(),
-        trailing: const Icon(Icons.arrow_forward_ios),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 20,
+        ),
       );
 
   @override

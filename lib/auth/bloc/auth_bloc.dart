@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:estate_ops_tenant/api/outputs/swagger.swagger.dart';
+import 'package:estate_ops_tenant/app.dart';
+import 'package:estate_ops_tenant/auth/auth.dart';
+import 'package:estate_ops_tenant/auth/pages/activation_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../dashboard/pages/dashboard_page.dart';
-import '../../main.dart';
 import '../repositories/auth_repository.dart';
 
 part 'auth_event.dart';
@@ -24,30 +26,47 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     on<ChangeLanguageEvent>(_onChangeLanguageEvent);
     on<OnboardingCompletedEvent>(_onOnboardingCompletedEvent);
     on<UpdateProfileEvent>(_onUpdateProfileEvent);
+    on<SignupAuthEvent>(_onSignupAuthEvent);
+    on<ConnectAuthEvent>(_onConnectAuthEvent);
   }
 
   Future<void> _onInitAuthEvent(
       InitAuthEvent event, Emitter<AuthState> emit) async {
+    emit(state.copyWith(loading: true));
     final credentials = await _authRepository.getCredentials();
     emit(state.copyWith(credentials: credentials));
     final accountDto = await _authRepository.getAuthInfos();
-    emit(state.copyWith(accountId: accountDto?.id));
+    emit(state.copyWith(accountId: accountDto?.id, loading: false));
     if (credentials != null) {
       add(const GetProfileEvent());
-      navigatorKey.currentState?.pushNamed(DashboardPage.route);
     }
   }
 
   Future<void> _onLoginAuthEvent(
       LoginAuthEvent event, Emitter<AuthState> emit) async {
     try {
-      final credentials = await _authRepository.logIn();
+      emit(state.copyWith(
+        loading: true,
+        credentialsWrong: false,
+        somethingWrong: false,
+      ));
+      final credentials = await _authRepository.logIn(
+        event.email,
+        event.password,
+      );
+      await _authRepository.storeCredentials(credentials);
       emit(state.copyWith(credentials: credentials));
       final accountDto = await _authRepository.getAuthInfos();
       emit(state.copyWith(accountId: accountDto?.id));
       navigatorKey.currentState?.pushNamed(DashboardPage.route);
       if (accountDto != null) {
         add(const GetProfileEvent());
+      }
+    } on ApiException catch (e) {
+      if (e.isInvalidCredentials) {
+        emit(state.copyWith(loading: false, credentialsWrong: true));
+      } else {
+        emit(state.copyWith(loading: false, somethingWrong: true));
       }
     } catch (e) {
       print(e);
@@ -56,14 +75,26 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
   Future<void> _onLogoutAuthEvent(
       LogoutAuthEvent event, Emitter<AuthState> emit) async {
+    emit(const AuthInitial());
     await _authRepository.logOut();
-    emit(state.copyWith(credentials: null));
   }
 
   Future<void> _onGetProfileEvent(
       GetProfileEvent event, Emitter<AuthState> emit) async {
-    final profile = await _authRepository.getProfile();
-    emit(state.copyWith(profile: profile));
+    try {
+      emit(state.copyWith(loading: true));
+      final profile = await _authRepository.getProfile();
+      if (profile != null) {
+        emit(state.copyWith(profile: profile, loading: false));
+        navigatorKey.currentState?.pushNamed(DashboardPage.route);
+      } else if (state.credentials != null) {
+        // If the profile is not set, the user has to activate the account
+        emit(state.copyWith(loading: false));
+        navigatorKey.currentState?.pushNamed(ActivationPage.route);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _onChangeLanguageEvent(
@@ -85,6 +116,32 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       event.phone,
     );
     add(const GetProfileEvent());
+  }
+
+  void _onSignupAuthEvent(
+      SignupAuthEvent event, Emitter<AuthState> emit) async {
+    try {
+      await _authRepository.signUp(event.email, event.password);
+      emit(state.copyWith(loading: false));
+      navigatorKey.currentState?.pushNamed(LoginPage.route);
+    } on ApiException catch (e) {
+      emit(state.copyWith(loading: false, somethingWrong: true));
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _onConnectAuthEvent(
+      ConnectAuthEvent event, Emitter<AuthState> emit) async {
+    try {
+      emit(state.copyWith(loading: true));
+      await _authRepository.connectAccount(event.activationCode);
+      emit(state.copyWith(loading: false));
+      add(const GetProfileEvent());
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

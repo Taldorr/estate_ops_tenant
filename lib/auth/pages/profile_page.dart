@@ -1,3 +1,4 @@
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/auth/auth.dart';
 import 'package:estate_ops_tenant/auth/pages/settings_page.dart';
 import 'package:estate_ops_tenant/util/widgets/navbar.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../documents/pages/documents_page.dart';
-import '../../main.dart';
 import '../../util/widgets/spacer.dart';
 import 'edit_profile_page.dart';
 

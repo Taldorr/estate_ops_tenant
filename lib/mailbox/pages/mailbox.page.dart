@@ -1,13 +1,12 @@
+import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/mailbox/bloc/bloc.dart';
 import 'package:estate_ops_tenant/mailbox/widgets/mailbox_overview.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:estate_ops_tenant/util/widgets/section_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../inquiry/pages/select_inquirytype.page.dart';
-import '../../main.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MailboxPage extends StatefulWidget {
   static const route = '/mailbox';
@@ -34,12 +33,13 @@ class _MailboxPageState extends State<MailboxPage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-             EOSectionHeader(title: AppLocalizations.of(context)!.lastMessages),
+            EOSectionHeader(title: AppLocalizations.of(context)!.lastMessages),
             const EOMailboxOverview(),
             const Spacer(),
             ElevatedButton(
-              onPressed: () => navigatorKey.currentState?.pushNamed(SelectInquiryTypePage.route),
-              child:  Text(AppLocalizations.of(context)!.reportConcern),
+              onPressed: () => navigatorKey.currentState
+                  ?.pushNamed(SelectInquiryTypePage.route),
+              child: Text(AppLocalizations.of(context)!.reportConcern),
             ),
           ],
         );

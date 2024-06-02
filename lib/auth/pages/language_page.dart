@@ -27,6 +27,8 @@ class LanguagePage extends StatelessWidget {
             "🇵🇱 Polski", "assets/icons/pl.png", const Locale('pl')),
         LanguageOption(
             "🇺🇦 Українська", "assets/icons/ua.png", const Locale('ua')),
+        LanguageOption(
+            "🇷🇺 Русский", "assets/icons/ru.png", const Locale('ru')),
       ];
 
   void _onLanguage(BuildContext context, LanguageOption option) {
@@ -36,8 +38,13 @@ class LanguagePage extends StatelessWidget {
 
   Widget _buildListElement(BuildContext context, int index) => ListTile(
         contentPadding: EdgeInsets.zero,
-        title: Text(options(context)[index].title,
-            style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(
+          options(context)[index].title,
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
         onTap: () => _onLanguage(context, options(context)[index]),
         trailing: const Icon(Icons.arrow_forward_ios),
       );

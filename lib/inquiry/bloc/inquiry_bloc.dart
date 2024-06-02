@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../api/outputs/swagger.swagger.dart';
 import '../models/inquiry.model.dart';
-import '../models/inquiry_message.model.dart';
 import '../repositories/inquiry_repository.dart';
 
 part 'inquiry_event.dart';
@@ -18,65 +17,38 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
     on<CreateMessagesEvent>(_onCreateMessageEvent);
     on<CreateInquiryEvent>(_onCreateInquiryEvent);
     on<LoadInquirysEvent>(_onLoadInquirysEvent);
+    on<SelectCurrentEvent>(_onSelectCurrentEvent);
     on<UnselectCurrentEvent>(_onUnselectCurrentEvent);
     on<RequestDocumentEvent>(_onRequestDocumentEvent);
   }
 
   Future<void> _onCreateMessageEvent(
       CreateMessagesEvent event, Emitter<InquiryState> emit) async {
-    final messages = event.messages
-        .map(
-          (m) => CreateInquiryMessageDto(
-            inquiryId: state.current == null ? "INVALID" : state.current!.id,
-            content: m.content ?? "",
-            authorAccountId: m.authorAccountId,
-            isAIGenerated: m.isAIGenerated,
-            createdAt: m.isAIGenerated
-                ? DateTime.now().toUtc()
-                : null, // only set for AI messages so the order is correct
-          ),
-        )
-        .toList();
-    if (state.current == null) {
-      // A question should be the only time we don't have a current inquiry
-      final dto = CreateInquiryDto(
-        type: CreateInquiryDtoType.question,
-        messages: messages,
-      );
-      add(CreateInquiryEvent(dto));
-    } else {
-      try {
-        emit(state.copyWith(isLoading: true));
+    try {
+      emit(state.copyWith(isLoading: true));
+      await Future.wait(
+          event.messages.map((m) => _inquiryRepository.addMessage(m)));
 
-        final newMessages = await Future.wait(
-            messages.map((m) => _inquiryRepository.addMessage(m)));
-
-        final msgModels =
-            newMessages.map((m) => InquiryMessageModel.fromDto(m!)).toList();
-        final inquirys = state.inquirys.map((i) {
-          if (i.id == state.current!.id) {
-            i.messages = [...i.messages, ...msgModels];
-          }
-          return i;
-        }).toList();
-
-        emit(state.copyWith(
-          inquirys: inquirys,
-          current: inquirys.firstWhere((i) => i.id == state.current!.id),
-          isLoading: false,
-        ));
-      } catch (e) {
-        print(e);
-      }
+      add(SelectCurrentEvent(state.current!.id));
+    } catch (e) {
+      print(e);
     }
   }
 
   Future<void> _onCreateInquiryEvent(
       CreateInquiryEvent event, Emitter<InquiryState> emit) async {
     try {
-      final newInquiry = await _inquiryRepository.createInquiry(event.dto);
+      InquiryModel? newInquiry =
+          await _inquiryRepository.createInquiry(event.dto);
+      if (newInquiry != null && event.messageDtos != null) {
+        final futures = event.messageDtos!.map((mDto) => _inquiryRepository
+            .addMessage(mDto.copyWith(inquiryId: newInquiry!.id)));
+        await Future.wait(futures);
+        newInquiry = await _inquiryRepository.getOne(newInquiry.id);
+      }
+
       if (newInquiry != null) {
-        final inquirys = [...state.inquirys, InquiryModel.fromDto(newInquiry)];
+        final inquirys = [...state.inquirys, newInquiry];
         emit(state.copyWith(inquirys: inquirys, current: inquirys.last));
       }
     } catch (e) {
@@ -98,9 +70,19 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
     }
   }
 
+  Future<void> _onSelectCurrentEvent(
+      SelectCurrentEvent event, Emitter<InquiryState> emit) async {
+    final inq = await _inquiryRepository.getOne(event.inquiryId);
+    emit(
+      state.copyWith(
+        current: inq,
+      ),
+    );
+  }
+
   Future<void> _onUnselectCurrentEvent(
       UnselectCurrentEvent event, Emitter<InquiryState> emit) async {
-    emit(state.copyWith(current: null));
+    emit(state.resetCurrent());
   }
 
   Future<void> _onRequestDocumentEvent(

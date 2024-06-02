@@ -1,3 +1,4 @@
+import 'package:estate_ops_tenant/api/outputs/swagger.swagger.dart';
 import 'package:estate_ops_tenant/auth/auth.dart';
 import 'package:estate_ops_tenant/inquiry/bloc/inquiry_bloc.dart';
 import 'package:estate_ops_tenant/inquiry/models/inquiry.type.enum.dart';
@@ -14,7 +15,8 @@ import '../models/inquiry_message.model.dart';
 
 class ChatPage extends StatefulWidget {
   static const route = '/chat';
-  const ChatPage({super.key});
+  final InquiryType? type;
+  const ChatPage({super.key, this.type});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -37,45 +39,70 @@ class _ChatPageState extends State<ChatPage> {
 
   sendMessage() {
     if (!formKey.currentState!.saveAndValidate()) return;
-    List<InquiryMessageModel> messagesToSend = [];
-    if (context.read<InquiryBloc>().state.current == null) {
-      messagesToSend.add(defaultMessage());
+
+    final current = context.read<InquiryBloc>().state.current;
+
+    if (current == null) {
+      // new inquiry, so we assume a type is provided via the constructor
+      context.read<InquiryBloc>().add(
+            CreateInquiryEvent(
+              CreateInquiryDto(
+                  type: widget.type!,
+                  description: formKey.currentState!.value['message']),
+              messageDtos: [
+                CreateInquiryMessageDto(
+                  // will be replaced by the real id in the bloc
+                  inquiryId: "INVALID",
+                  content: AppLocalizations.of(context)!.helloHowCanIHelpYou,
+                  isAIGenerated: true,
+                ),
+                CreateInquiryMessageDto(
+                  // will be replaced by the real id in the bloc
+                  inquiryId: "INVALID",
+                  content: formKey.currentState!.value['message'],
+                  authorAccountId: context.read<AuthBloc>().state.accountId,
+                  isAIGenerated: false,
+                ),
+              ],
+            ),
+          );
+    } else {
+      // existing inquiry, so we just add the message
+      context.read<InquiryBloc>().add(
+            CreateMessagesEvent([
+              CreateInquiryMessageDto(
+                inquiryId: current.id,
+                content: formKey.currentState!.value['message'],
+                authorAccountId: context.read<AuthBloc>().state.accountId,
+                isAIGenerated: false,
+              ),
+            ]),
+          );
     }
-
-    messagesToSend.add(InquiryMessageModel(
-      content: formKey.currentState!.value['message'],
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      id: "INVALID",
-      isAIGenerated: false,
-      showLeft: true,
-      authorAccountId: context.read<AuthBloc>().state.accountId,
-    ));
-
-    context.read<InquiryBloc>().add(CreateMessagesEvent(messagesToSend));
-    formKey.currentState!.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    return EOPage(
-        title: InquiryType.question.toLocalString(),
-        child: BlocBuilder<InquiryBloc, InquiryState>(
-          builder: (context, state) {
-            final msgs = state.current?.messages ?? [defaultMessage()];
-            return FormBuilder(
-              key: formKey,
-              child: Column(
-                children: [
-                  const EODivider(),
-                  const EOSpacer(14),
-                  Expanded(child: EOChat(messages: msgs)),
-                  _buildInput(),
-                ],
-              ),
-            );
-          },
-        ));
+    return BlocBuilder<InquiryBloc, InquiryState>(
+      builder: (context, state) {
+        final msgs = state.current?.messages ?? [defaultMessage()];
+        return EOPage(
+          title: state.current?.type.toLocalString(context) ??
+              InquiryType.question.toLocalString(context),
+          child: FormBuilder(
+            key: formKey,
+            child: Column(
+              children: [
+                const EODivider(),
+                const EOSpacer(14),
+                Expanded(child: EOChat(messages: msgs)),
+                _buildInput(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildInput() {

@@ -81,10 +81,23 @@ Map<String, dynamic> _$InquiryMessageDtoToJson(InquiryMessageDto instance) =>
       'updatedAt': instance.updatedAt.toIso8601String(),
     };
 
+TaskProxyDto _$TaskProxyDtoFromJson(Map<String, dynamic> json) => TaskProxyDto(
+      entityId: json['entityId'] as String,
+      displayAs: json['displayAs'] as String,
+      status: taskStatusFromJson(json['status']),
+    );
+
+Map<String, dynamic> _$TaskProxyDtoToJson(TaskProxyDto instance) =>
+    <String, dynamic>{
+      'entityId': instance.entityId,
+      'displayAs': instance.displayAs,
+      'status': taskStatusToJson(instance.status),
+    };
+
 InquiryDto _$InquiryDtoFromJson(Map<String, dynamic> json) => InquiryDto(
       id: json['id'] as String,
       description: json['description'] as String?,
-      type: inquiryDtoTypeFromJson(json['type']),
+      type: inquiryTypeFromJson(json['type']),
       status: inquiryDtoStatusFromJson(json['status']),
       createdBy: json['createdBy'] == null
           ? null
@@ -92,6 +105,10 @@ InquiryDto _$InquiryDtoFromJson(Map<String, dynamic> json) => InquiryDto(
       messages: (json['messages'] as List<dynamic>?)
               ?.map(
                   (e) => InquiryMessageDto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      taskProxies: (json['taskProxies'] as List<dynamic>?)
+              ?.map((e) => TaskProxyDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -102,10 +119,11 @@ Map<String, dynamic> _$InquiryDtoToJson(InquiryDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'description': instance.description,
-      'type': inquiryDtoTypeToJson(instance.type),
+      'type': inquiryTypeToJson(instance.type),
       'status': inquiryDtoStatusToJson(instance.status),
       'createdBy': instance.createdBy?.toJson(),
       'messages': instance.messages.map((e) => e.toJson()).toList(),
+      'taskProxies': instance.taskProxies.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
     };
@@ -278,6 +296,16 @@ Map<String, dynamic> _$AccountInfoDtoToJson(AccountInfoDto instance) =>
       'id': instance.id,
     };
 
+ConnectAccountDto _$ConnectAccountDtoFromJson(Map<String, dynamic> json) =>
+    ConnectAccountDto(
+      code: json['code'] as String,
+    );
+
+Map<String, dynamic> _$ConnectAccountDtoToJson(ConnectAccountDto instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+    };
+
 TenantProfileDto _$TenantProfileDtoFromJson(Map<String, dynamic> json) =>
     TenantProfileDto(
       tenantId: json['tenantId'] as String,
@@ -359,6 +387,42 @@ Map<String, dynamic> _$ResolvedTenantDtoToJson(ResolvedTenantDto instance) =>
           resolvedTenantDtoContactMethodNullableToJson(instance.contactMethod),
       'buildingString': instance.buildingString,
       'complexString': instance.complexString,
+    };
+
+TenantLogEntryDto _$TenantLogEntryDtoFromJson(Map<String, dynamic> json) =>
+    TenantLogEntryDto(
+      id: json['id'] as String,
+      content: json['content'] as String?,
+      taskProxy: json['taskProxy'] == null
+          ? null
+          : TaskProxyDto.fromJson(json['taskProxy'] as Map<String, dynamic>),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
+    );
+
+Map<String, dynamic> _$TenantLogEntryDtoToJson(TenantLogEntryDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'content': instance.content,
+      'taskProxy': instance.taskProxy?.toJson(),
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
+    };
+
+TenantLogEntryCreateDto _$TenantLogEntryCreateDtoFromJson(
+        Map<String, dynamic> json) =>
+    TenantLogEntryCreateDto(
+      tenantId: json['tenantId'] as String,
+      content: json['content'] as String,
+      dueDate: DateTime.parse(json['dueDate'] as String),
+    );
+
+Map<String, dynamic> _$TenantLogEntryCreateDtoToJson(
+        TenantLogEntryCreateDto instance) =>
+    <String, dynamic>{
+      'tenantId': instance.tenantId,
+      'content': instance.content,
+      'dueDate': instance.dueDate.toIso8601String(),
     };
 
 CreateTenantDto _$CreateTenantDtoFromJson(Map<String, dynamic> json) =>
@@ -930,6 +994,21 @@ Map<String, dynamic> _$DocumentRequestDtoToJson(DocumentRequestDto instance) =>
       'notes': instance.notes,
     };
 
+CreateInquiryDto _$CreateInquiryDtoFromJson(Map<String, dynamic> json) =>
+    CreateInquiryDto(
+      type: inquiryTypeFromJson(json['type']),
+      date:
+          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      description: json['description'] as String?,
+    );
+
+Map<String, dynamic> _$CreateInquiryDtoToJson(CreateInquiryDto instance) =>
+    <String, dynamic>{
+      'type': inquiryTypeToJson(instance.type),
+      'date': instance.date?.toIso8601String(),
+      'description': instance.description,
+    };
+
 CreateInquiryMessageDto _$CreateInquiryMessageDtoFromJson(
         Map<String, dynamic> json) =>
     CreateInquiryMessageDto(
@@ -957,26 +1036,11 @@ Map<String, dynamic> _$CreateInquiryMessageDtoToJson(
       'createdAt': instance.createdAt?.toIso8601String(),
     };
 
-CreateInquiryDto _$CreateInquiryDtoFromJson(Map<String, dynamic> json) =>
-    CreateInquiryDto(
-      messages: (json['messages'] as List<dynamic>?)
-              ?.map((e) =>
-                  CreateInquiryMessageDto.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      type: createInquiryDtoTypeFromJson(json['type']),
-    );
-
-Map<String, dynamic> _$CreateInquiryDtoToJson(CreateInquiryDto instance) =>
-    <String, dynamic>{
-      'messages': instance.messages.map((e) => e.toJson()).toList(),
-      'type': createInquiryDtoTypeToJson(instance.type),
-    };
-
 MessageDto _$MessageDtoFromJson(Map<String, dynamic> json) => MessageDto(
       id: json['id'] as String,
       title: json['title'] as String,
       content: json['content'] as String,
+      inquiryId: json['inquiryId'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -986,6 +1050,7 @@ Map<String, dynamic> _$MessageDtoToJson(MessageDto instance) =>
       'id': instance.id,
       'title': instance.title,
       'content': instance.content,
+      'inquiryId': instance.inquiryId,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
     };

@@ -158,6 +158,19 @@ abstract class Swagger extends ChopperService {
   Future<chopper.Response<AccountInfoDto>> _authGet();
 
   ///
+  Future<chopper.Response> authConnectPost({required ConnectAccountDto? body}) {
+    return _authConnectPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/auth/connect',
+    optionalBody: true,
+  )
+  Future<chopper.Response> _authConnectPost(
+      {@Body() required ConnectAccountDto? body});
+
+  ///
   Future<chopper.Response<List<TenantDto>>> tenantsGet() {
     generatedMapping.putIfAbsent(TenantDto, () => TenantDto.fromJsonFactory);
 
@@ -251,6 +264,39 @@ abstract class Swagger extends ChopperService {
   ///@param id
   @Delete(path: '/tenants/{id}')
   Future<chopper.Response> _tenantsIdDelete({@Path('id') required String? id});
+
+  ///
+  ///@param id
+  Future<chopper.Response<List<TenantLogEntryDto>>> tenantsLogIdGet(
+      {required String? id}) {
+    generatedMapping.putIfAbsent(
+        TenantLogEntryDto, () => TenantLogEntryDto.fromJsonFactory);
+
+    return _tenantsLogIdGet(id: id);
+  }
+
+  ///
+  ///@param id
+  @Get(path: '/tenants/log/{id}')
+  Future<chopper.Response<List<TenantLogEntryDto>>> _tenantsLogIdGet(
+      {@Path('id') required String? id});
+
+  ///
+  Future<chopper.Response<TenantLogEntryDto>> tenantsLogPost(
+      {required TenantLogEntryCreateDto? body}) {
+    generatedMapping.putIfAbsent(
+        TenantLogEntryDto, () => TenantLogEntryDto.fromJsonFactory);
+
+    return _tenantsLogPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/tenants/log',
+    optionalBody: true,
+  )
+  Future<chopper.Response<TenantLogEntryDto>> _tenantsLogPost(
+      {@Body() required TenantLogEntryCreateDto? body});
 
   ///
   Future<chopper.Response> tenantsQueryPost({required QueryDto? body}) {
@@ -805,6 +851,20 @@ abstract class Swagger extends ChopperService {
       {@Body() required CreateInquiryMessageDto? body});
 
   ///
+  ///@param id
+  Future<chopper.Response<InquiryDto>> inquiryIdGet({required String? id}) {
+    generatedMapping.putIfAbsent(InquiryDto, () => InquiryDto.fromJsonFactory);
+
+    return _inquiryIdGet(id: id);
+  }
+
+  ///
+  ///@param id
+  @Get(path: '/inquiry/{id}')
+  Future<chopper.Response<InquiryDto>> _inquiryIdGet(
+      {@Path('id') required String? id});
+
+  ///
   Future<chopper.Response> chatbotTestPost() {
     return _chatbotTestPost();
   }
@@ -1239,6 +1299,77 @@ extension $InquiryMessageDtoExtension on InquiryMessageDto {
 }
 
 @JsonSerializable(explicitToJson: true)
+class TaskProxyDto {
+  const TaskProxyDto({
+    required this.entityId,
+    required this.displayAs,
+    required this.status,
+  });
+
+  factory TaskProxyDto.fromJson(Map<String, dynamic> json) =>
+      _$TaskProxyDtoFromJson(json);
+
+  static const toJsonFactory = _$TaskProxyDtoToJson;
+  Map<String, dynamic> toJson() => _$TaskProxyDtoToJson(this);
+
+  @JsonKey(name: 'entityId')
+  final String entityId;
+  @JsonKey(name: 'displayAs')
+  final String displayAs;
+  @JsonKey(
+    name: 'status',
+    toJson: taskStatusToJson,
+    fromJson: taskStatusFromJson,
+  )
+  final enums.TaskStatus status;
+  static const fromJsonFactory = _$TaskProxyDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TaskProxyDto &&
+            (identical(other.entityId, entityId) ||
+                const DeepCollectionEquality()
+                    .equals(other.entityId, entityId)) &&
+            (identical(other.displayAs, displayAs) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayAs, displayAs)) &&
+            (identical(other.status, status) ||
+                const DeepCollectionEquality().equals(other.status, status)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(entityId) ^
+      const DeepCollectionEquality().hash(displayAs) ^
+      const DeepCollectionEquality().hash(status) ^
+      runtimeType.hashCode;
+}
+
+extension $TaskProxyDtoExtension on TaskProxyDto {
+  TaskProxyDto copyWith(
+      {String? entityId, String? displayAs, enums.TaskStatus? status}) {
+    return TaskProxyDto(
+        entityId: entityId ?? this.entityId,
+        displayAs: displayAs ?? this.displayAs,
+        status: status ?? this.status);
+  }
+
+  TaskProxyDto copyWithWrapped(
+      {Wrapped<String>? entityId,
+      Wrapped<String>? displayAs,
+      Wrapped<enums.TaskStatus>? status}) {
+    return TaskProxyDto(
+        entityId: (entityId != null ? entityId.value : this.entityId),
+        displayAs: (displayAs != null ? displayAs.value : this.displayAs),
+        status: (status != null ? status.value : this.status));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class InquiryDto {
   const InquiryDto({
     required this.id,
@@ -1247,6 +1378,7 @@ class InquiryDto {
     required this.status,
     this.createdBy,
     required this.messages,
+    required this.taskProxies,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -1263,10 +1395,10 @@ class InquiryDto {
   final String? description;
   @JsonKey(
     name: 'type',
-    toJson: inquiryDtoTypeToJson,
-    fromJson: inquiryDtoTypeFromJson,
+    toJson: inquiryTypeToJson,
+    fromJson: inquiryTypeFromJson,
   )
-  final enums.InquiryDtoType type;
+  final enums.InquiryType type;
   @JsonKey(
     name: 'status',
     toJson: inquiryDtoStatusToJson,
@@ -1277,6 +1409,8 @@ class InquiryDto {
   final TenantDto? createdBy;
   @JsonKey(name: 'messages', defaultValue: <InquiryMessageDto>[])
   final List<InquiryMessageDto> messages;
+  @JsonKey(name: 'taskProxies', defaultValue: <TaskProxyDto>[])
+  final List<TaskProxyDto> taskProxies;
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
   @JsonKey(name: 'updatedAt')
@@ -1302,6 +1436,9 @@ class InquiryDto {
             (identical(other.messages, messages) ||
                 const DeepCollectionEquality()
                     .equals(other.messages, messages)) &&
+            (identical(other.taskProxies, taskProxies) ||
+                const DeepCollectionEquality()
+                    .equals(other.taskProxies, taskProxies)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)) &&
@@ -1321,6 +1458,7 @@ class InquiryDto {
       const DeepCollectionEquality().hash(status) ^
       const DeepCollectionEquality().hash(createdBy) ^
       const DeepCollectionEquality().hash(messages) ^
+      const DeepCollectionEquality().hash(taskProxies) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt) ^
       runtimeType.hashCode;
@@ -1330,10 +1468,11 @@ extension $InquiryDtoExtension on InquiryDto {
   InquiryDto copyWith(
       {String? id,
       String? description,
-      enums.InquiryDtoType? type,
+      enums.InquiryType? type,
       enums.InquiryDtoStatus? status,
       TenantDto? createdBy,
       List<InquiryMessageDto>? messages,
+      List<TaskProxyDto>? taskProxies,
       DateTime? createdAt,
       DateTime? updatedAt}) {
     return InquiryDto(
@@ -1343,6 +1482,7 @@ extension $InquiryDtoExtension on InquiryDto {
         status: status ?? this.status,
         createdBy: createdBy ?? this.createdBy,
         messages: messages ?? this.messages,
+        taskProxies: taskProxies ?? this.taskProxies,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -1350,10 +1490,11 @@ extension $InquiryDtoExtension on InquiryDto {
   InquiryDto copyWithWrapped(
       {Wrapped<String>? id,
       Wrapped<String?>? description,
-      Wrapped<enums.InquiryDtoType>? type,
+      Wrapped<enums.InquiryType>? type,
       Wrapped<enums.InquiryDtoStatus>? status,
       Wrapped<TenantDto?>? createdBy,
       Wrapped<List<InquiryMessageDto>>? messages,
+      Wrapped<List<TaskProxyDto>>? taskProxies,
       Wrapped<DateTime>? createdAt,
       Wrapped<DateTime>? updatedAt}) {
     return InquiryDto(
@@ -1364,6 +1505,8 @@ extension $InquiryDtoExtension on InquiryDto {
         status: (status != null ? status.value : this.status),
         createdBy: (createdBy != null ? createdBy.value : this.createdBy),
         messages: (messages != null ? messages.value : this.messages),
+        taskProxies:
+            (taskProxies != null ? taskProxies.value : this.taskProxies),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
@@ -2122,6 +2265,48 @@ extension $AccountInfoDtoExtension on AccountInfoDto {
 }
 
 @JsonSerializable(explicitToJson: true)
+class ConnectAccountDto {
+  const ConnectAccountDto({
+    required this.code,
+  });
+
+  factory ConnectAccountDto.fromJson(Map<String, dynamic> json) =>
+      _$ConnectAccountDtoFromJson(json);
+
+  static const toJsonFactory = _$ConnectAccountDtoToJson;
+  Map<String, dynamic> toJson() => _$ConnectAccountDtoToJson(this);
+
+  @JsonKey(name: 'code')
+  final String code;
+  static const fromJsonFactory = _$ConnectAccountDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ConnectAccountDto &&
+            (identical(other.code, code) ||
+                const DeepCollectionEquality().equals(other.code, code)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(code) ^ runtimeType.hashCode;
+}
+
+extension $ConnectAccountDtoExtension on ConnectAccountDto {
+  ConnectAccountDto copyWith({String? code}) {
+    return ConnectAccountDto(code: code ?? this.code);
+  }
+
+  ConnectAccountDto copyWithWrapped({Wrapped<String>? code}) {
+    return ConnectAccountDto(code: (code != null ? code.value : this.code));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class TenantProfileDto {
   const TenantProfileDto({
     required this.tenantId,
@@ -2491,6 +2676,164 @@ extension $ResolvedTenantDtoExtension on ResolvedTenantDto {
             : this.buildingString),
         complexString:
             (complexString != null ? complexString.value : this.complexString));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TenantLogEntryDto {
+  const TenantLogEntryDto({
+    required this.id,
+    this.content,
+    this.taskProxy,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory TenantLogEntryDto.fromJson(Map<String, dynamic> json) =>
+      _$TenantLogEntryDtoFromJson(json);
+
+  static const toJsonFactory = _$TenantLogEntryDtoToJson;
+  Map<String, dynamic> toJson() => _$TenantLogEntryDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'content')
+  final String? content;
+  @JsonKey(name: 'taskProxy')
+  final TaskProxyDto? taskProxy;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$TenantLogEntryDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TenantLogEntryDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
+            (identical(other.taskProxy, taskProxy) ||
+                const DeepCollectionEquality()
+                    .equals(other.taskProxy, taskProxy)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(taskProxy) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $TenantLogEntryDtoExtension on TenantLogEntryDto {
+  TenantLogEntryDto copyWith(
+      {String? id,
+      String? content,
+      TaskProxyDto? taskProxy,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return TenantLogEntryDto(
+        id: id ?? this.id,
+        content: content ?? this.content,
+        taskProxy: taskProxy ?? this.taskProxy,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  TenantLogEntryDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String?>? content,
+      Wrapped<TaskProxyDto?>? taskProxy,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return TenantLogEntryDto(
+        id: (id != null ? id.value : this.id),
+        content: (content != null ? content.value : this.content),
+        taskProxy: (taskProxy != null ? taskProxy.value : this.taskProxy),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TenantLogEntryCreateDto {
+  const TenantLogEntryCreateDto({
+    required this.tenantId,
+    required this.content,
+    required this.dueDate,
+  });
+
+  factory TenantLogEntryCreateDto.fromJson(Map<String, dynamic> json) =>
+      _$TenantLogEntryCreateDtoFromJson(json);
+
+  static const toJsonFactory = _$TenantLogEntryCreateDtoToJson;
+  Map<String, dynamic> toJson() => _$TenantLogEntryCreateDtoToJson(this);
+
+  @JsonKey(name: 'tenantId')
+  final String tenantId;
+  @JsonKey(name: 'content')
+  final String content;
+  @JsonKey(name: 'dueDate')
+  final DateTime dueDate;
+  static const fromJsonFactory = _$TenantLogEntryCreateDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TenantLogEntryCreateDto &&
+            (identical(other.tenantId, tenantId) ||
+                const DeepCollectionEquality()
+                    .equals(other.tenantId, tenantId)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
+            (identical(other.dueDate, dueDate) ||
+                const DeepCollectionEquality().equals(other.dueDate, dueDate)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(tenantId) ^
+      const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(dueDate) ^
+      runtimeType.hashCode;
+}
+
+extension $TenantLogEntryCreateDtoExtension on TenantLogEntryCreateDto {
+  TenantLogEntryCreateDto copyWith(
+      {String? tenantId, String? content, DateTime? dueDate}) {
+    return TenantLogEntryCreateDto(
+        tenantId: tenantId ?? this.tenantId,
+        content: content ?? this.content,
+        dueDate: dueDate ?? this.dueDate);
+  }
+
+  TenantLogEntryCreateDto copyWithWrapped(
+      {Wrapped<String>? tenantId,
+      Wrapped<String>? content,
+      Wrapped<DateTime>? dueDate}) {
+    return TenantLogEntryCreateDto(
+        tenantId: (tenantId != null ? tenantId.value : this.tenantId),
+        content: (content != null ? content.value : this.content),
+        dueDate: (dueDate != null ? dueDate.value : this.dueDate));
   }
 }
 
@@ -4944,6 +5287,77 @@ extension $DocumentRequestDtoExtension on DocumentRequestDto {
 }
 
 @JsonSerializable(explicitToJson: true)
+class CreateInquiryDto {
+  const CreateInquiryDto({
+    required this.type,
+    this.date,
+    this.description,
+  });
+
+  factory CreateInquiryDto.fromJson(Map<String, dynamic> json) =>
+      _$CreateInquiryDtoFromJson(json);
+
+  static const toJsonFactory = _$CreateInquiryDtoToJson;
+  Map<String, dynamic> toJson() => _$CreateInquiryDtoToJson(this);
+
+  @JsonKey(
+    name: 'type',
+    toJson: inquiryTypeToJson,
+    fromJson: inquiryTypeFromJson,
+  )
+  final enums.InquiryType type;
+  @JsonKey(name: 'date')
+  final DateTime? date;
+  @JsonKey(name: 'description')
+  final String? description;
+  static const fromJsonFactory = _$CreateInquiryDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is CreateInquiryDto &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
+            (identical(other.date, date) ||
+                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(type) ^
+      const DeepCollectionEquality().hash(date) ^
+      const DeepCollectionEquality().hash(description) ^
+      runtimeType.hashCode;
+}
+
+extension $CreateInquiryDtoExtension on CreateInquiryDto {
+  CreateInquiryDto copyWith(
+      {enums.InquiryType? type, DateTime? date, String? description}) {
+    return CreateInquiryDto(
+        type: type ?? this.type,
+        date: date ?? this.date,
+        description: description ?? this.description);
+  }
+
+  CreateInquiryDto copyWithWrapped(
+      {Wrapped<enums.InquiryType>? type,
+      Wrapped<DateTime?>? date,
+      Wrapped<String?>? description}) {
+    return CreateInquiryDto(
+        type: (type != null ? type.value : this.type),
+        date: (date != null ? date.value : this.date),
+        description:
+            (description != null ? description.value : this.description));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class CreateInquiryMessageDto {
   const CreateInquiryMessageDto({
     required this.inquiryId,
@@ -5051,72 +5465,12 @@ extension $CreateInquiryMessageDtoExtension on CreateInquiryMessageDto {
 }
 
 @JsonSerializable(explicitToJson: true)
-class CreateInquiryDto {
-  const CreateInquiryDto({
-    required this.messages,
-    required this.type,
-  });
-
-  factory CreateInquiryDto.fromJson(Map<String, dynamic> json) =>
-      _$CreateInquiryDtoFromJson(json);
-
-  static const toJsonFactory = _$CreateInquiryDtoToJson;
-  Map<String, dynamic> toJson() => _$CreateInquiryDtoToJson(this);
-
-  @JsonKey(name: 'messages', defaultValue: <CreateInquiryMessageDto>[])
-  final List<CreateInquiryMessageDto> messages;
-  @JsonKey(
-    name: 'type',
-    toJson: createInquiryDtoTypeToJson,
-    fromJson: createInquiryDtoTypeFromJson,
-  )
-  final enums.CreateInquiryDtoType type;
-  static const fromJsonFactory = _$CreateInquiryDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is CreateInquiryDto &&
-            (identical(other.messages, messages) ||
-                const DeepCollectionEquality()
-                    .equals(other.messages, messages)) &&
-            (identical(other.type, type) ||
-                const DeepCollectionEquality().equals(other.type, type)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(messages) ^
-      const DeepCollectionEquality().hash(type) ^
-      runtimeType.hashCode;
-}
-
-extension $CreateInquiryDtoExtension on CreateInquiryDto {
-  CreateInquiryDto copyWith(
-      {List<CreateInquiryMessageDto>? messages,
-      enums.CreateInquiryDtoType? type}) {
-    return CreateInquiryDto(
-        messages: messages ?? this.messages, type: type ?? this.type);
-  }
-
-  CreateInquiryDto copyWithWrapped(
-      {Wrapped<List<CreateInquiryMessageDto>>? messages,
-      Wrapped<enums.CreateInquiryDtoType>? type}) {
-    return CreateInquiryDto(
-        messages: (messages != null ? messages.value : this.messages),
-        type: (type != null ? type.value : this.type));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class MessageDto {
   const MessageDto({
     required this.id,
     required this.title,
     required this.content,
+    this.inquiryId,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -5133,6 +5487,8 @@ class MessageDto {
   final String title;
   @JsonKey(name: 'content')
   final String content;
+  @JsonKey(name: 'inquiryId')
+  final String? inquiryId;
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
   @JsonKey(name: 'updatedAt')
@@ -5150,6 +5506,9 @@ class MessageDto {
             (identical(other.content, content) ||
                 const DeepCollectionEquality()
                     .equals(other.content, content)) &&
+            (identical(other.inquiryId, inquiryId) ||
+                const DeepCollectionEquality()
+                    .equals(other.inquiryId, inquiryId)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)) &&
@@ -5166,6 +5525,7 @@ class MessageDto {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(inquiryId) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt) ^
       runtimeType.hashCode;
@@ -5176,12 +5536,14 @@ extension $MessageDtoExtension on MessageDto {
       {String? id,
       String? title,
       String? content,
+      String? inquiryId,
       DateTime? createdAt,
       DateTime? updatedAt}) {
     return MessageDto(
         id: id ?? this.id,
         title: title ?? this.title,
         content: content ?? this.content,
+        inquiryId: inquiryId ?? this.inquiryId,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -5190,12 +5552,14 @@ extension $MessageDtoExtension on MessageDto {
       {Wrapped<String>? id,
       Wrapped<String>? title,
       Wrapped<String>? content,
+      Wrapped<String?>? inquiryId,
       Wrapped<DateTime>? createdAt,
       Wrapped<DateTime>? updatedAt}) {
     return MessageDto(
         id: (id != null ? id.value : this.id),
         title: (title != null ? title.value : this.title),
         content: (content != null ? content.value : this.content),
+        inquiryId: (inquiryId != null ? inquiryId.value : this.inquiryId),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
@@ -5407,74 +5771,132 @@ List<enums.Status>? statusNullableListFromJson(
   return status.map((e) => statusFromJson(e.toString())).toList();
 }
 
-String? inquiryDtoTypeNullableToJson(enums.InquiryDtoType? inquiryDtoType) {
-  return inquiryDtoType?.value;
+String? inquiryTypeNullableToJson(enums.InquiryType? inquiryType) {
+  return inquiryType?.value;
 }
 
-String? inquiryDtoTypeToJson(enums.InquiryDtoType inquiryDtoType) {
-  return inquiryDtoType.value;
+String? inquiryTypeToJson(enums.InquiryType inquiryType) {
+  return inquiryType.value;
 }
 
-enums.InquiryDtoType inquiryDtoTypeFromJson(
-  Object? inquiryDtoType, [
-  enums.InquiryDtoType? defaultValue,
+enums.InquiryType inquiryTypeFromJson(
+  Object? inquiryType, [
+  enums.InquiryType? defaultValue,
 ]) {
-  return enums.InquiryDtoType.values
-          .firstWhereOrNull((e) => e.value == inquiryDtoType) ??
+  return enums.InquiryType.values
+          .firstWhereOrNull((e) => e.value == inquiryType) ??
       defaultValue ??
-      enums.InquiryDtoType.swaggerGeneratedUnknown;
+      enums.InquiryType.swaggerGeneratedUnknown;
 }
 
-enums.InquiryDtoType? inquiryDtoTypeNullableFromJson(
-  Object? inquiryDtoType, [
-  enums.InquiryDtoType? defaultValue,
+enums.InquiryType? inquiryTypeNullableFromJson(
+  Object? inquiryType, [
+  enums.InquiryType? defaultValue,
 ]) {
-  if (inquiryDtoType == null) {
+  if (inquiryType == null) {
     return null;
   }
-  return enums.InquiryDtoType.values
-          .firstWhereOrNull((e) => e.value == inquiryDtoType) ??
+  return enums.InquiryType.values
+          .firstWhereOrNull((e) => e.value == inquiryType) ??
       defaultValue;
 }
 
-String inquiryDtoTypeExplodedListToJson(
-    List<enums.InquiryDtoType>? inquiryDtoType) {
-  return inquiryDtoType?.map((e) => e.value!).join(',') ?? '';
+String inquiryTypeExplodedListToJson(List<enums.InquiryType>? inquiryType) {
+  return inquiryType?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> inquiryDtoTypeListToJson(
-    List<enums.InquiryDtoType>? inquiryDtoType) {
-  if (inquiryDtoType == null) {
+List<String> inquiryTypeListToJson(List<enums.InquiryType>? inquiryType) {
+  if (inquiryType == null) {
     return [];
   }
 
-  return inquiryDtoType.map((e) => e.value!).toList();
+  return inquiryType.map((e) => e.value!).toList();
 }
 
-List<enums.InquiryDtoType> inquiryDtoTypeListFromJson(
-  List? inquiryDtoType, [
-  List<enums.InquiryDtoType>? defaultValue,
+List<enums.InquiryType> inquiryTypeListFromJson(
+  List? inquiryType, [
+  List<enums.InquiryType>? defaultValue,
 ]) {
-  if (inquiryDtoType == null) {
+  if (inquiryType == null) {
     return defaultValue ?? [];
   }
 
-  return inquiryDtoType
-      .map((e) => inquiryDtoTypeFromJson(e.toString()))
-      .toList();
+  return inquiryType.map((e) => inquiryTypeFromJson(e.toString())).toList();
 }
 
-List<enums.InquiryDtoType>? inquiryDtoTypeNullableListFromJson(
-  List? inquiryDtoType, [
-  List<enums.InquiryDtoType>? defaultValue,
+List<enums.InquiryType>? inquiryTypeNullableListFromJson(
+  List? inquiryType, [
+  List<enums.InquiryType>? defaultValue,
 ]) {
-  if (inquiryDtoType == null) {
+  if (inquiryType == null) {
     return defaultValue;
   }
 
-  return inquiryDtoType
-      .map((e) => inquiryDtoTypeFromJson(e.toString()))
-      .toList();
+  return inquiryType.map((e) => inquiryTypeFromJson(e.toString())).toList();
+}
+
+String? taskStatusNullableToJson(enums.TaskStatus? taskStatus) {
+  return taskStatus?.value;
+}
+
+String? taskStatusToJson(enums.TaskStatus taskStatus) {
+  return taskStatus.value;
+}
+
+enums.TaskStatus taskStatusFromJson(
+  Object? taskStatus, [
+  enums.TaskStatus? defaultValue,
+]) {
+  return enums.TaskStatus.values
+          .firstWhereOrNull((e) => e.value == taskStatus) ??
+      defaultValue ??
+      enums.TaskStatus.swaggerGeneratedUnknown;
+}
+
+enums.TaskStatus? taskStatusNullableFromJson(
+  Object? taskStatus, [
+  enums.TaskStatus? defaultValue,
+]) {
+  if (taskStatus == null) {
+    return null;
+  }
+  return enums.TaskStatus.values
+          .firstWhereOrNull((e) => e.value == taskStatus) ??
+      defaultValue;
+}
+
+String taskStatusExplodedListToJson(List<enums.TaskStatus>? taskStatus) {
+  return taskStatus?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> taskStatusListToJson(List<enums.TaskStatus>? taskStatus) {
+  if (taskStatus == null) {
+    return [];
+  }
+
+  return taskStatus.map((e) => e.value!).toList();
+}
+
+List<enums.TaskStatus> taskStatusListFromJson(
+  List? taskStatus, [
+  List<enums.TaskStatus>? defaultValue,
+]) {
+  if (taskStatus == null) {
+    return defaultValue ?? [];
+  }
+
+  return taskStatus.map((e) => taskStatusFromJson(e.toString())).toList();
+}
+
+List<enums.TaskStatus>? taskStatusNullableListFromJson(
+  List? taskStatus, [
+  List<enums.TaskStatus>? defaultValue,
+]) {
+  if (taskStatus == null) {
+    return defaultValue;
+  }
+
+  return taskStatus.map((e) => taskStatusFromJson(e.toString())).toList();
 }
 
 String? inquiryDtoStatusNullableToJson(
@@ -6113,78 +6535,6 @@ List<enums.DocumentType>? documentTypeNullableListFromJson(
   }
 
   return documentType.map((e) => documentTypeFromJson(e.toString())).toList();
-}
-
-String? createInquiryDtoTypeNullableToJson(
-    enums.CreateInquiryDtoType? createInquiryDtoType) {
-  return createInquiryDtoType?.value;
-}
-
-String? createInquiryDtoTypeToJson(
-    enums.CreateInquiryDtoType createInquiryDtoType) {
-  return createInquiryDtoType.value;
-}
-
-enums.CreateInquiryDtoType createInquiryDtoTypeFromJson(
-  Object? createInquiryDtoType, [
-  enums.CreateInquiryDtoType? defaultValue,
-]) {
-  return enums.CreateInquiryDtoType.values
-          .firstWhereOrNull((e) => e.value == createInquiryDtoType) ??
-      defaultValue ??
-      enums.CreateInquiryDtoType.swaggerGeneratedUnknown;
-}
-
-enums.CreateInquiryDtoType? createInquiryDtoTypeNullableFromJson(
-  Object? createInquiryDtoType, [
-  enums.CreateInquiryDtoType? defaultValue,
-]) {
-  if (createInquiryDtoType == null) {
-    return null;
-  }
-  return enums.CreateInquiryDtoType.values
-          .firstWhereOrNull((e) => e.value == createInquiryDtoType) ??
-      defaultValue;
-}
-
-String createInquiryDtoTypeExplodedListToJson(
-    List<enums.CreateInquiryDtoType>? createInquiryDtoType) {
-  return createInquiryDtoType?.map((e) => e.value!).join(',') ?? '';
-}
-
-List<String> createInquiryDtoTypeListToJson(
-    List<enums.CreateInquiryDtoType>? createInquiryDtoType) {
-  if (createInquiryDtoType == null) {
-    return [];
-  }
-
-  return createInquiryDtoType.map((e) => e.value!).toList();
-}
-
-List<enums.CreateInquiryDtoType> createInquiryDtoTypeListFromJson(
-  List? createInquiryDtoType, [
-  List<enums.CreateInquiryDtoType>? defaultValue,
-]) {
-  if (createInquiryDtoType == null) {
-    return defaultValue ?? [];
-  }
-
-  return createInquiryDtoType
-      .map((e) => createInquiryDtoTypeFromJson(e.toString()))
-      .toList();
-}
-
-List<enums.CreateInquiryDtoType>? createInquiryDtoTypeNullableListFromJson(
-  List? createInquiryDtoType, [
-  List<enums.CreateInquiryDtoType>? defaultValue,
-]) {
-  if (createInquiryDtoType == null) {
-    return defaultValue;
-  }
-
-  return createInquiryDtoType
-      .map((e) => createInquiryDtoTypeFromJson(e.toString()))
-      .toList();
 }
 
 typedef $JsonFactory<T> = T Function(Map<String, dynamic> json);

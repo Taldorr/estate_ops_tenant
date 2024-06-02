@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:estate_ops_tenant/inquiry/bloc/inquiry_bloc.dart';
+import 'package:estate_ops_tenant/inquiry/pages/chat.page.dart';
 import 'package:flutter/material.dart';
 
 import '../../util/constants.dart';
@@ -32,8 +34,17 @@ class EOMailboxOverview extends StatelessWidget {
 
   Widget _buildListElement(BuildContext context, MailboxMessage message) =>
       ListTile(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => MessageDetailsPage(message: message))),
+        onTap: () {
+          if (message.inquiryId != null) {
+            context
+                .read<InquiryBloc>()
+                .add(SelectCurrentEvent(message.inquiryId!));
+            Navigator.of(context).pushNamed(ChatPage.route);
+          } else {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => MessageDetailsPage(message: message)));
+          }
+        },
         contentPadding: EdgeInsets.zero,
         title:
             Text(message.title, style: Theme.of(context).textTheme.bodyMedium),

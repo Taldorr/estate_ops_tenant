@@ -1,6 +1,10 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:estate_ops_tenant/auth/auth.dart';
 import 'package:estate_ops_tenant/dashboard/pages/dashboard_page.dart';
+import 'package:estate_ops_tenant/inquiry/widgets/complaint_details.dart';
+import 'package:estate_ops_tenant/inquiry/widgets/missing_service_details.dart';
+import 'package:estate_ops_tenant/inquiry/widgets/name_change_details.dart';
+import 'package:estate_ops_tenant/util/widgets/success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -8,8 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../api/outputs/swagger.swagger.dart';
 import '../../documents/repositories/documents_repository.dart';
-import '../../util/constants.dart';
-import '../../util/widgets/card.dart';
 import '../../util/widgets/page.dart';
 import '../models/inquiry.type.enum.dart';
 import '../repositories/inquiry_repository.dart';
@@ -28,44 +30,55 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
   final formKey = GlobalKey<FormBuilderState>();
 
   bool isLoading = false;
-  bool isDone = false;
 
-  // TODO: refactor
-  void _onSubmit() async {
+  void _goToDoneScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SuccessPage(
+          title: AppLocalizations.of(context)!.concernReported,
+          content: AppLocalizations.of(context)!.concernReportedText,
+          primaryLabel: AppLocalizations.of(context)!.backToDashboard,
+          primaryAction: () {
+            Navigator.of(context)
+                .popUntil(ModalRoute.withName(DashboardPage.route));
+          },
+        ),
+      ),
+    );
+  }
+
+  void _onSubmit(InquiryType type) async {
     if (!formKey.currentState!.saveAndValidate()) return;
 
     setState(() => isLoading = true);
 
-    final description = formKey.currentState?.value['description'];
-    final date = formKey.currentState?.value['date'];
-    final attachments =
-        (formKey.currentState?.value['attachments'] as List<dynamic>? ?? [])
-            .map<XFile>((a) => a as XFile)
-            .toList();
-
-    //TODO: dont use
-    final dto = CreateInquiryDto(type: CreateInquiryDtoType.damage, messages: [
-      CreateInquiryMessageDto(
-        content: description,
-        isAIGenerated: false,
-        authorAccountId: '',
-        inquiryId: "INVALID",
-      )
-    ]
-        //TODO createdById
-        );
+    final dto = CreateInquiryDto(
+      type: type,
+      date: formKey.currentState?.value['date'],
+      description: formKey.currentState?.value['description'],
+    );
 
     // avoiding bloc to accurately display loading state
     try {
       final inquiry =
           await context.read<InquiryRepository>().createInquiry(dto);
 
-      if (attachments.isNotEmpty) {
+      final attachments =
+          (formKey.currentState?.value['attachments'] as List<dynamic>? ?? [])
+              .map<XFile>((a) => a as XFile)
+              .toList();
+
+      // if attachments are present, upload them and connect them to the
+      // first message of the newly created inquiry
+      if (attachments.isNotEmpty &&
+          inquiry != null &&
+          inquiry.messages.isNotEmpty) {
         // ignore: use_build_context_synchronously
-        await context.read<DocumentsRepository>().uploadAttachments(
-            inquiry != null ? [inquiry.messages[0].id] : [], attachments);
+        await context
+            .read<DocumentsRepository>()
+            .uploadAttachments([inquiry.messages.first.id], attachments);
       }
-      setState(() => isDone = true);
+      _goToDoneScreen();
     } catch (e) {
       print(e);
     }
@@ -79,17 +92,17 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
 
     return EOPage(
       hideBackButton: false,
-      title: _buildTitle(selectedType),
+      title: selectedType.toLocalString(context),
       child: FormBuilder(
         key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(child: _buildContent(selectedType)),
-            if (!isDone && !isLoading)
+            if (!isLoading)
               ElevatedButton(
-                onPressed: _onSubmit,
-                child: Text(AppLocalizations.of(context)!.reportDamage),
+                onPressed: () => _onSubmit(selectedType),
+                child: Text(AppLocalizations.of(context)!.send),
               ),
           ],
         ),
@@ -97,70 +110,22 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
     );
   }
 
-  String _buildTitle(InquiryType type) {
-    switch (type) {
-      case InquiryType.complaint:
-        return AppLocalizations.of(context)!.reportComplaint;
-      case InquiryType.damage:
-        return AppLocalizations.of(context)!.reportDamage;
-      case InquiryType.other:
-        return AppLocalizations.of(context)!.other;
-      default:
-        throw Exception('Unknown InquiryType');
-    }
-  }
-
   Widget _buildContent(InquiryType type) {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
-    } else if (isDone) {
-      return _buildDoneScreen();
     }
     switch (type) {
       case InquiryType.damage:
         return const EODamageDetails();
+      case InquiryType.changeName:
+        return const EONameChangeDetails();
+      case InquiryType.complaint:
+        return const EOComplaintDetails();
+      case InquiryType.serviceMissing:
+        return const EOMissingServiceDetails();
 
       default:
         throw Exception('Unknown InquiryType');
     }
-  }
-
-  // TODO: refactor
-  Widget _buildDoneScreen() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Spacer(),
-        EOCard(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 30),
-                child: Icon(Icons.check_rounded,
-                    color: Constants.success, size: 40),
-              ),
-              Text(
-                AppLocalizations.of(context)!.damageReported,
-                style: Theme.of(context).textTheme.labelLarge,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                AppLocalizations.of(context)!.damageReportedText,
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-            ],
-          ),
-        ),
-        const Spacer(),
-        ElevatedButton(
-          onPressed: () => Navigator.of(context)
-              .popUntil(ModalRoute.withName(DashboardPage.route)),
-          child: Text(AppLocalizations.of(context)!.backToDashboard),
-        ),
-      ],
-    );
   }
 }

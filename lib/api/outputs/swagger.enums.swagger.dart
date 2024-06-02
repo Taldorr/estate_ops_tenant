@@ -19,7 +19,7 @@ enum Status {
   const Status(this.value);
 }
 
-enum InquiryDtoType {
+enum InquiryType {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
 
@@ -29,12 +29,36 @@ enum InquiryDtoType {
   damage('DAMAGE'),
   @JsonValue('QUESTION')
   question('QUESTION'),
+  @JsonValue('FREE_MESSAGE')
+  freeMessage('FREE_MESSAGE'),
+  @JsonValue('SERVICE_MISSING')
+  serviceMissing('SERVICE_MISSING'),
+  @JsonValue('CHANGE_NAME')
+  changeName('CHANGE_NAME'),
   @JsonValue('OTHER')
   other('OTHER');
 
   final String? value;
 
-  const InquiryDtoType(this.value);
+  const InquiryType(this.value);
+}
+
+enum TaskStatus {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('OPEN')
+  open('OPEN'),
+  @JsonValue('IN_PROGRESS')
+  inProgress('IN_PROGRESS'),
+  @JsonValue('WAITING')
+  waiting('WAITING'),
+  @JsonValue('COMPLETE')
+  complete('COMPLETE');
+
+  final String? value;
+
+  const TaskStatus(this.value);
 }
 
 enum InquiryDtoStatus {
@@ -183,22 +207,4 @@ enum DocumentType {
   final String? value;
 
   const DocumentType(this.value);
-}
-
-enum CreateInquiryDtoType {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('COMPLAINT')
-  complaint('COMPLAINT'),
-  @JsonValue('DAMAGE')
-  damage('DAMAGE'),
-  @JsonValue('QUESTION')
-  question('QUESTION'),
-  @JsonValue('OTHER')
-  other('OTHER');
-
-  final String? value;
-
-  const CreateInquiryDtoType(this.value);
 }

@@ -23,9 +23,9 @@ class SettingsPage extends StatelessWidget {
   List<SettingsOption> options(BuildContext context) => [
         SettingsOption(AppLocalizations.of(context)!.appLanguage, _onLanguage),
         SettingsOption(AppLocalizations.of(context)!.privacyPolicy,
-            () => _launchUrl("https://www.estate-ops.de/datenschutz-app")),
+            () => _launchUrl(Constants.dataPrivacyUrl)),
         SettingsOption(AppLocalizations.of(context)!.imprint,
-            () => _launchUrl("https://www.estate-ops.de/impressum-app")),
+            () => _launchUrl(Constants.touUrl)),
         SettingsOption(
             AppLocalizations.of(context)!.logout, () => _onLogout(context)),
       ];

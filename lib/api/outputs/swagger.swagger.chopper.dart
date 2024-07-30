@@ -125,6 +125,20 @@ final class _$Swagger extends Swagger {
   }
 
   @override
+  Future<Response<dynamic>> _authAccountPost(
+      {required CreateAccountDto? body}) {
+    final Uri $url = Uri.parse('/auth/account');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> _authConnectPost(
       {required ConnectAccountDto? body}) {
     final Uri $url = Uri.parse('/auth/connect');
@@ -163,31 +177,6 @@ final class _$Swagger extends Swagger {
   }
 
   @override
-  Future<Response<UpdateTenantDto>> _tenantsPut(
-      {required UpdateTenantDto? body}) {
-    final Uri $url = Uri.parse('/tenants');
-    final $body = body;
-    final Request $request = Request(
-      'PUT',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
-    return client.send<UpdateTenantDto, UpdateTenantDto>($request);
-  }
-
-  @override
-  Future<Response<TenantProfileDto>> _tenantsProfileGet() {
-    final Uri $url = Uri.parse('/tenants/profile');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
-    return client.send<TenantProfileDto, TenantProfileDto>($request);
-  }
-
-  @override
   Future<Response<List<ResolvedTenantDto>>> _tenantsFindPost(
       {required FindTenantDto? body}) {
     final Uri $url = Uri.parse('/tenants/find');
@@ -221,32 +210,6 @@ final class _$Swagger extends Swagger {
       client.baseUrl,
     );
     return client.send<dynamic, dynamic>($request);
-  }
-
-  @override
-  Future<Response<List<TenantLogEntryDto>>> _tenantsLogIdGet(
-      {required String? id}) {
-    final Uri $url = Uri.parse('/tenants/log/${id}');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
-    return client.send<List<TenantLogEntryDto>, TenantLogEntryDto>($request);
-  }
-
-  @override
-  Future<Response<TenantLogEntryDto>> _tenantsLogPost(
-      {required TenantLogEntryCreateDto? body}) {
-    final Uri $url = Uri.parse('/tenants/log');
-    final $body = body;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
-    return client.send<TenantLogEntryDto, TenantLogEntryDto>($request);
   }
 
   @override
@@ -450,28 +413,25 @@ final class _$Swagger extends Swagger {
   }
 
   @override
-  Future<Response<dynamic>> _leaseIdGet({required String? id}) {
-    final Uri $url = Uri.parse('/lease/${id}');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
-    return client.send<dynamic, dynamic>($request);
-  }
-
-  @override
-  Future<Response<dynamic>> _leaseIdPut({
-    required String? id,
-    required UpdateLeaseDto? body,
-  }) {
-    final Uri $url = Uri.parse('/lease/${id}');
+  Future<Response<dynamic>> _leasePut({required UpdateLeaseDto? body}) {
+    final Uri $url = Uri.parse('/lease');
     final $body = body;
     final Request $request = Request(
       'PUT',
       $url,
       client.baseUrl,
       body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> _leaseIdGet({required String? id}) {
+    final Uri $url = Uri.parse('/lease/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
     );
     return client.send<dynamic, dynamic>($request);
   }
@@ -485,6 +445,144 @@ final class _$Swagger extends Swagger {
       client.baseUrl,
     );
     return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<List<LeaseDto>>> _leaseContactIdGet({required String? id}) {
+    final Uri $url = Uri.parse('/lease/contact/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<LeaseDto>, LeaseDto>($request);
+  }
+
+  @override
+  Future<Response<List<ContactDto>>> _contactsGet() {
+    final Uri $url = Uri.parse('/contacts');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<ContactDto>, ContactDto>($request);
+  }
+
+  @override
+  Future<Response<TenantProfileDto>> _contactsProfileGet() {
+    final Uri $url = Uri.parse('/contacts/profile');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<TenantProfileDto, TenantProfileDto>($request);
+  }
+
+  @override
+  Future<Response<ContactDto>> _contactsIdGet({required String? id}) {
+    final Uri $url = Uri.parse('/contacts/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<ContactDto, ContactDto>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> _contactsIdDelete({required String? id}) {
+    final Uri $url = Uri.parse('/contacts/${id}');
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<ContactDto>> _contactsPersonPost(
+      {required PersonCreateDto? body}) {
+    final Uri $url = Uri.parse('/contacts/person');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<ContactDto, ContactDto>($request);
+  }
+
+  @override
+  Future<Response<ContactDto>> _contactsPersonPut(
+      {required PersonUpdateDto? body}) {
+    final Uri $url = Uri.parse('/contacts/person');
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<ContactDto, ContactDto>($request);
+  }
+
+  @override
+  Future<Response<List<ContactLogEntryDto>>> _contactsLogIdGet(
+      {required String? id}) {
+    final Uri $url = Uri.parse('/contacts/log/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<ContactLogEntryDto>, ContactLogEntryDto>($request);
+  }
+
+  @override
+  Future<Response<ContactLogEntryDto>> _contactsLogPost(
+      {required ContactLogEntryCreateDto? body}) {
+    final Uri $url = Uri.parse('/contacts/log');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<ContactLogEntryDto, ContactLogEntryDto>($request);
+  }
+
+  @override
+  Future<Response<List<ContactLinkDto>>> _contactsQueryPost(
+      {required QueryDto? body}) {
+    final Uri $url = Uri.parse('/contacts/query');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<List<ContactLinkDto>, ContactLinkDto>($request);
+  }
+
+  @override
+  Future<Response<UpdateContactDetailsDto>> _contactsContactDetailsPut(
+      {required UpdateContactDetailsDto? body}) {
+    final Uri $url = Uri.parse('/contacts/contact-details');
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client
+        .send<UpdateContactDetailsDto, UpdateContactDetailsDto>($request);
   }
 
   @override
@@ -546,6 +644,18 @@ final class _$Swagger extends Swagger {
       client.baseUrl,
     );
     return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<AttachmentDto>> _attachmentIdVisibilityPut(
+      {required String? id}) {
+    final Uri $url = Uri.parse('/attachment/${id}/visibility');
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<AttachmentDto, AttachmentDto>($request);
   }
 
   @override
@@ -757,6 +867,17 @@ final class _$Swagger extends Swagger {
     final Uri $url = Uri.parse('/inquiry/${id}');
     final Request $request = Request(
       'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<InquiryDto, InquiryDto>($request);
+  }
+
+  @override
+  Future<Response<InquiryDto>> _inquiryIdStatusPut({required String? id}) {
+    final Uri $url = Uri.parse('/inquiry/${id}/status');
+    final Request $request = Request(
+      'PUT',
       $url,
       client.baseUrl,
     );

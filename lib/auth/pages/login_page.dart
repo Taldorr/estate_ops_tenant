@@ -74,11 +74,9 @@ class _LoginPageState extends State<LoginPage> {
             }
           },
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                EOCard(
+            return Center(
+              child: SingleChildScrollView(
+                child: EOCard(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -90,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 28),
                       Text(
-                        AppLocalizations.of(context)!.welcome_back,
+                        "${AppLocalizations.of(context)!.welcome_back}!",
                         style: Theme.of(context).textTheme.labelMedium,
                         textAlign: TextAlign.start,
                       ),
@@ -104,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: AppLocalizations.of(context)!.email,
                           border: const OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.emailAddress,
                         name: 'email',
                       ),
                       const SizedBox(height: 10),
@@ -169,8 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                const Spacer(),
-              ],
+              ),
             );
           },
         ),

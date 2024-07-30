@@ -12,6 +12,7 @@ class AuthState extends Equatable {
     this.onboardingCompleted = false,
     this.credentialsWrong = false,
     this.somethingWrong = false,
+    this.isDemo = false,
   });
 
   final Credentials? credentials;
@@ -22,6 +23,7 @@ class AuthState extends Equatable {
   final bool onboardingCompleted;
   final bool credentialsWrong;
   final bool somethingWrong;
+  final bool isDemo;
 
   @override
   List<Object?> get props => [
@@ -33,6 +35,7 @@ class AuthState extends Equatable {
         credentialsWrong,
         somethingWrong,
         loading,
+        isDemo,
       ];
 
   AuthState copyWith({
@@ -44,6 +47,7 @@ class AuthState extends Equatable {
     bool? onboardingCompleted,
     bool? credentialsWrong,
     bool? somethingWrong,
+    bool? isDemo,
   }) {
     return AuthState(
       credentials: credentials ?? this.credentials,
@@ -54,6 +58,7 @@ class AuthState extends Equatable {
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       credentialsWrong: credentialsWrong ?? this.credentialsWrong,
       somethingWrong: somethingWrong ?? this.somethingWrong,
+      isDemo: isDemo ?? this.isDemo,
     );
   }
 

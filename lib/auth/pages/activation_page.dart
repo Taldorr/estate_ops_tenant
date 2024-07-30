@@ -31,6 +31,10 @@ class _ActivationPageState extends State<ActivationPage> {
         ));
   }
 
+  void _logOut() {
+    context.read<AuthBloc>().add(const LogoutAuthEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
@@ -82,6 +86,19 @@ class _ActivationPageState extends State<ActivationPage> {
                     ElevatedButton(
                       onPressed: () => _onSubmit(context),
                       child: Text(AppLocalizations.of(context)!.get_access),
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                        onTap: _logOut,
+                        child: Text(
+                          AppLocalizations.of(context)!.logout,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

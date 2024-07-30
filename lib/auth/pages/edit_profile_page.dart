@@ -33,6 +33,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return EOPage(
       title: AppLocalizations.of(context)!.personalData,
       hideBackButton: false,
+      navIndex: 0,
       child: FormBuilder(
         key: formKey,
         child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {

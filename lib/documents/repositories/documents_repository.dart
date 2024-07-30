@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:chopper/chopper.dart';
 import 'package:cross_file/cross_file.dart';
+import 'package:estate_ops_tenant/util/constants.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -15,7 +16,8 @@ class DocumentsRepository {
   Future<List<DocumentModel>> loadDocuments() async {
     try {
       final response = await ApiService.getInstance().apiClient.attachmentGet();
-      return response.body?.map((dto) => DocumentModel.fromDto(dto)).toList() ?? [];
+      return response.body?.map((dto) => DocumentModel.fromDto(dto)).toList() ??
+          [];
     } catch (e) {
       print("error: $e");
       return [];
@@ -24,7 +26,8 @@ class DocumentsRepository {
 
   Future<Uint8List?> downloadDocument(String id) async {
     try {
-      final response = await ApiService.getInstance().apiClient.attachmentIdGet(id: id);
+      final response =
+          await ApiService.getInstance().apiClient.attachmentIdGet(id: id);
       return response.bodyBytes;
     } catch (e) {
       print("error: $e");
@@ -32,23 +35,32 @@ class DocumentsRepository {
     return null;
   }
 
-  Future<void> uploadAttachments(List<String> inquiryMessageIds, List<XFile> xFiles) async {
+  Future<void> uploadAttachments(
+      List<String> inquiryMessageIds, List<XFile> xFiles,
+      {bool isDemo = false}) async {
     try {
       final multipartFutures = xFiles
           .map((f) => http.MultipartFile.fromPath(
                 'files',
                 f.path,
-                contentType: MediaType.parse(f.mimeType ?? 'application/octet-stream'),
+                contentType:
+                    MediaType.parse(f.mimeType ?? 'application/octet-stream'),
               ))
           .toList();
 
       final files = await Future.wait(multipartFutures);
 
       await ApiService.getInstance().apiClient.client.post(
-        Uri.parse(FlavorConfig.instance.variables["api-base-url"] + '/attachment'),
+        Uri.parse((isDemo
+                ? Constants.demoApiBaseUrl
+                : FlavorConfig.instance.variables["api-base-url"]) +
+            '/attachment'),
         multipart: true,
         parts: [
-          PartValue('dto', jsonEncode(CreateAttachmentDto(inquiryMessageIds: inquiryMessageIds))),
+          PartValue(
+              'dto',
+              jsonEncode(
+                  CreateAttachmentDto(inquiryMessageIds: inquiryMessageIds))),
           PartValueFile('files', files),
         ],
       );

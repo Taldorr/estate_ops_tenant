@@ -2,6 +2,7 @@
 
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:estate_ops_tenant/api/outputs/swagger.swagger.dart';
+import 'package:estate_ops_tenant/app.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 
 import '../../util/api_service.dart';
@@ -43,6 +44,8 @@ class AuthRepository {
       final response = await ApiService.getInstance().apiClient.authGet();
       if (response.isSuccessful) {
         return response.body;
+      } else if (response.statusCode == 401) {
+        await auth0Client.credentialsManager.clearCredentials();
       }
     } catch (e) {
       print("error: $e");
@@ -52,16 +55,16 @@ class AuthRepository {
 
   Future<TenantProfileDto?> getProfile() async {
     final response =
-        await ApiService.getInstance().apiClient.tenantsProfileGet();
-    if (response.isSuccessful) {
-      return response.body!;
+        await ApiService.getInstance().apiClient.contactsProfileGet();
+    if (response.isSuccessful && response.body != null) {
+      return response.body;
     }
     return null;
   }
 
   Future<void> logOut() async {
     await auth0Client.credentialsManager.clearCredentials();
-    return auth0Client.webAuthentication().logout();
+    navigatorKey.currentState?.pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   Future<void> storeCredentials(Credentials credentials) {
@@ -78,7 +81,10 @@ class AuthRepository {
   }
 
   Future<void> updateProfile(String tenantId, String? email, String? phone) {
-    final dto = UpdateTenantDto(id: tenantId, email: email, phone: phone);
-    return ApiService.getInstance().apiClient.tenantsPut(body: dto);
+    final dto =
+        UpdateContactDetailsDto(id: tenantId, email: email, phone: phone);
+    return ApiService.getInstance()
+        .apiClient
+        .contactsContactDetailsPut(body: dto);
   }
 }

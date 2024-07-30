@@ -7,6 +7,20 @@ class EOChatMessage extends StatelessWidget {
   final InquiryMessageModel model;
   const EOChatMessage({super.key, required this.model});
 
+  Widget _buildAttachments() {
+    if (model.documents.isEmpty) return const SizedBox();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(model.documents.length.toString()),
+        const Icon(
+          Icons.attach_file,
+          size: 14,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,6 +37,7 @@ class EOChatMessage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(model.content ?? ""),
+                      _buildAttachments(),
                       Text(
                         DateHelper.format(model.createdAt, withTime: true),
                         textAlign: TextAlign.end,

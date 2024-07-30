@@ -1,7 +1,5 @@
 import '../../api/outputs/swagger.enums.swagger.dart';
 
-enum InquiryStatus { complete, inProgress, open }
-
 extension InquiryStatusExtension on InquiryStatus {
   static InquiryStatus fromInquiryDtoStatus(InquiryDtoStatus dtoStatus) {
     switch (dtoStatus) {

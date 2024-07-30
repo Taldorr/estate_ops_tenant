@@ -10,6 +10,7 @@ class EOPage extends StatelessWidget {
   final bool hideBackButton;
   final bool hideNavbar;
   final bool gradientBackground;
+  final double padding;
   const EOPage({
     super.key,
     required this.child,
@@ -18,6 +19,7 @@ class EOPage extends StatelessWidget {
     this.hideBackButton = true,
     this.gradientBackground = false,
     this.hideNavbar = false,
+    this.padding = 25,
   });
 
   @override
@@ -42,7 +44,7 @@ class EOPage extends StatelessWidget {
             : null,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(25),
+            padding: EdgeInsets.all(padding),
             child: child,
           ),
         ),

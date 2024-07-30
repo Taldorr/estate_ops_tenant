@@ -6,7 +6,10 @@ import 'package:estate_ops_tenant/api/outputs/swagger.swagger.dart';
 import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/auth/auth.dart';
 import 'package:estate_ops_tenant/auth/pages/activation_page.dart';
+import 'package:estate_ops_tenant/util/api_service.dart';
+import 'package:estate_ops_tenant/util/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../dashboard/pages/dashboard_page.dart';
@@ -37,7 +40,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     emit(state.copyWith(credentials: credentials));
     final accountDto = await _authRepository.getAuthInfos();
     emit(state.copyWith(accountId: accountDto?.id, loading: false));
-    if (credentials != null) {
+    if (credentials != null && accountDto != null) {
       add(const GetProfileEvent());
     }
   }
@@ -56,6 +59,13 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       );
       await _authRepository.storeCredentials(credentials);
       emit(state.copyWith(credentials: credentials));
+
+      // If the user is a demo user, we need to send the requests to the demo API
+      if (event.email == Constants.demoEmailAddress) {
+        emit(state.copyWith(isDemo: true));
+        ApiService.init(auth0Client: GetIt.instance<Auth0>(), isDemo: true);
+      }
+
       final accountDto = await _authRepository.getAuthInfos();
       emit(state.copyWith(accountId: accountDto?.id));
       navigatorKey.currentState?.pushNamed(DashboardPage.route);
@@ -82,6 +92,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   Future<void> _onGetProfileEvent(
       GetProfileEvent event, Emitter<AuthState> emit) async {
     try {
+      if (state.profile?.email != null &&
+          state.profile?.email == Constants.demoEmailAddress) {
+        emit(state.copyWith(isDemo: true));
+        ApiService.init(auth0Client: GetIt.instance<Auth0>(), isDemo: true);
+      }
       emit(state.copyWith(loading: true));
       final profile = await _authRepository.getProfile();
       if (profile != null) {
@@ -111,7 +126,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       UpdateProfileEvent event, Emitter<AuthState> emit) async {
     if (state.profile == null) return;
     await _authRepository.updateProfile(
-      state.profile!.tenantId,
+      state.profile!.contactId,
       event.email,
       event.phone,
     );
@@ -124,6 +139,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       await _authRepository.signUp(event.email, event.password);
       emit(state.copyWith(loading: false));
       navigatorKey.currentState?.pushNamed(LoginPage.route);
+      add(LoginAuthEvent(email: event.email, password: event.password));
     } on ApiException catch (e) {
       emit(state.copyWith(loading: false, somethingWrong: true));
       print(e);

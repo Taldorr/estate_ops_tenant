@@ -1,10 +1,12 @@
 import 'package:estate_ops_tenant/app.dart';
+import 'package:estate_ops_tenant/util/constants.dart';
 import 'package:estate_ops_tenant/util/widgets/card.dart';
 import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../bloc/bloc.dart';
 
@@ -30,12 +32,42 @@ class _SignupPageState extends State<SignupPage> {
     context.read<AuthBloc>().add(SignupAuthEvent(
           email: formKey.currentState?.value['email'],
           password: formKey.currentState?.value['password'],
-          // activationCode: formKey.currentState?.value['activation_code'],
         ));
   }
 
   void _login() {
     navigatorKey.currentState?.pushNamed('/login');
+  }
+
+  Future<void> _launchUrl(String url) async {
+    await launchUrlString(url);
+  }
+
+  Widget _buildToU() {
+    return Wrap(
+      children: [
+        Text(AppLocalizations.of(context)!.terms_1),
+        GestureDetector(
+          onTap: () => _launchUrl(Constants.touUrl),
+          child: Text(
+            AppLocalizations.of(context)!.terms_2,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ),
+        Text(AppLocalizations.of(context)!.terms_3),
+        GestureDetector(
+          onTap: () => _launchUrl(Constants.dataPrivacyUrl),
+          child: Text(
+            AppLocalizations.of(context)!.terms_4,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -55,12 +87,11 @@ class _SignupPageState extends State<SignupPage> {
             }
           },
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                EOCard(
+            return Center(
+              child: SingleChildScrollView(
+                child: EOCard(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -85,6 +116,7 @@ class _SignupPageState extends State<SignupPage> {
                           labelText: AppLocalizations.of(context)!.email,
                           border: const OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.emailAddress,
                         name: 'email',
                       ),
                       const SizedBox(height: 10),
@@ -140,6 +172,11 @@ class _SignupPageState extends State<SignupPage> {
                         name: 'password_repeat',
                       ),
                       const SizedBox(height: 10),
+                      FormBuilderCheckbox(
+                        name: 'tou',
+                        title: _buildToU(),
+                        validator: FormBuilderValidators.required(),
+                      ),
                       // FormBuilderTextField(
                       //   validator: FormBuilderValidators.required(),
                       //   decoration: InputDecoration(
@@ -182,8 +219,7 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   ),
                 ),
-                const Spacer(),
-              ],
+              ),
             );
           },
         ),

@@ -158,6 +158,19 @@ abstract class Swagger extends ChopperService {
   Future<chopper.Response<AccountInfoDto>> _authGet();
 
   ///
+  Future<chopper.Response> authAccountPost({required CreateAccountDto? body}) {
+    return _authAccountPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/auth/account',
+    optionalBody: true,
+  )
+  Future<chopper.Response> _authAccountPost(
+      {@Body() required CreateAccountDto? body});
+
+  ///
   Future<chopper.Response> authConnectPost({required ConnectAccountDto? body}) {
     return _authConnectPost(body: body);
   }
@@ -198,35 +211,6 @@ abstract class Swagger extends ChopperService {
       {@Body() required CreateTenantDto? body});
 
   ///
-  Future<chopper.Response<UpdateTenantDto>> tenantsPut(
-      {required UpdateTenantDto? body}) {
-    generatedMapping.putIfAbsent(
-        UpdateTenantDto, () => UpdateTenantDto.fromJsonFactory);
-
-    return _tenantsPut(body: body);
-  }
-
-  ///
-  @Put(
-    path: '/tenants',
-    optionalBody: true,
-  )
-  Future<chopper.Response<UpdateTenantDto>> _tenantsPut(
-      {@Body() required UpdateTenantDto? body});
-
-  ///
-  Future<chopper.Response<TenantProfileDto>> tenantsProfileGet() {
-    generatedMapping.putIfAbsent(
-        TenantProfileDto, () => TenantProfileDto.fromJsonFactory);
-
-    return _tenantsProfileGet();
-  }
-
-  ///
-  @Get(path: '/tenants/profile')
-  Future<chopper.Response<TenantProfileDto>> _tenantsProfileGet();
-
-  ///
   Future<chopper.Response<List<ResolvedTenantDto>>> tenantsFindPost(
       {required FindTenantDto? body}) {
     generatedMapping.putIfAbsent(
@@ -264,39 +248,6 @@ abstract class Swagger extends ChopperService {
   ///@param id
   @Delete(path: '/tenants/{id}')
   Future<chopper.Response> _tenantsIdDelete({@Path('id') required String? id});
-
-  ///
-  ///@param id
-  Future<chopper.Response<List<TenantLogEntryDto>>> tenantsLogIdGet(
-      {required String? id}) {
-    generatedMapping.putIfAbsent(
-        TenantLogEntryDto, () => TenantLogEntryDto.fromJsonFactory);
-
-    return _tenantsLogIdGet(id: id);
-  }
-
-  ///
-  ///@param id
-  @Get(path: '/tenants/log/{id}')
-  Future<chopper.Response<List<TenantLogEntryDto>>> _tenantsLogIdGet(
-      {@Path('id') required String? id});
-
-  ///
-  Future<chopper.Response<TenantLogEntryDto>> tenantsLogPost(
-      {required TenantLogEntryCreateDto? body}) {
-    generatedMapping.putIfAbsent(
-        TenantLogEntryDto, () => TenantLogEntryDto.fromJsonFactory);
-
-    return _tenantsLogPost(body: body);
-  }
-
-  ///
-  @Post(
-    path: '/tenants/log',
-    optionalBody: true,
-  )
-  Future<chopper.Response<TenantLogEntryDto>> _tenantsLogPost(
-      {@Body() required TenantLogEntryCreateDto? body});
 
   ///
   Future<chopper.Response> tenantsQueryPost({required QueryDto? body}) {
@@ -517,6 +468,18 @@ abstract class Swagger extends ChopperService {
       {@Body() required CreateLeaseDto? body});
 
   ///
+  Future<chopper.Response> leasePut({required UpdateLeaseDto? body}) {
+    return _leasePut(body: body);
+  }
+
+  ///
+  @Put(
+    path: '/lease',
+    optionalBody: true,
+  )
+  Future<chopper.Response> _leasePut({@Body() required UpdateLeaseDto? body});
+
+  ///
   ///@param id
   Future<chopper.Response> leaseIdGet({required String? id}) {
     return _leaseIdGet(id: id);
@@ -529,26 +492,6 @@ abstract class Swagger extends ChopperService {
 
   ///
   ///@param id
-  Future<chopper.Response> leaseIdPut({
-    required String? id,
-    required UpdateLeaseDto? body,
-  }) {
-    return _leaseIdPut(id: id, body: body);
-  }
-
-  ///
-  ///@param id
-  @Put(
-    path: '/lease/{id}',
-    optionalBody: true,
-  )
-  Future<chopper.Response> _leaseIdPut({
-    @Path('id') required String? id,
-    @Body() required UpdateLeaseDto? body,
-  });
-
-  ///
-  ///@param id
   Future<chopper.Response> leaseIdDelete({required String? id}) {
     return _leaseIdDelete(id: id);
   }
@@ -557,6 +500,168 @@ abstract class Swagger extends ChopperService {
   ///@param id
   @Delete(path: '/lease/{id}')
   Future<chopper.Response> _leaseIdDelete({@Path('id') required String? id});
+
+  ///
+  ///@param id
+  Future<chopper.Response<List<LeaseDto>>> leaseContactIdGet(
+      {required String? id}) {
+    generatedMapping.putIfAbsent(LeaseDto, () => LeaseDto.fromJsonFactory);
+
+    return _leaseContactIdGet(id: id);
+  }
+
+  ///
+  ///@param id
+  @Get(path: '/lease/contact/{id}')
+  Future<chopper.Response<List<LeaseDto>>> _leaseContactIdGet(
+      {@Path('id') required String? id});
+
+  ///
+  Future<chopper.Response<List<ContactDto>>> contactsGet() {
+    generatedMapping.putIfAbsent(ContactDto, () => ContactDto.fromJsonFactory);
+
+    return _contactsGet();
+  }
+
+  ///
+  @Get(path: '/contacts')
+  Future<chopper.Response<List<ContactDto>>> _contactsGet();
+
+  ///
+  Future<chopper.Response<TenantProfileDto>> contactsProfileGet() {
+    generatedMapping.putIfAbsent(
+        TenantProfileDto, () => TenantProfileDto.fromJsonFactory);
+
+    return _contactsProfileGet();
+  }
+
+  ///
+  @Get(path: '/contacts/profile')
+  Future<chopper.Response<TenantProfileDto>> _contactsProfileGet();
+
+  ///
+  ///@param id
+  Future<chopper.Response<ContactDto>> contactsIdGet({required String? id}) {
+    generatedMapping.putIfAbsent(ContactDto, () => ContactDto.fromJsonFactory);
+
+    return _contactsIdGet(id: id);
+  }
+
+  ///
+  ///@param id
+  @Get(path: '/contacts/{id}')
+  Future<chopper.Response<ContactDto>> _contactsIdGet(
+      {@Path('id') required String? id});
+
+  ///
+  ///@param id
+  Future<chopper.Response> contactsIdDelete({required String? id}) {
+    return _contactsIdDelete(id: id);
+  }
+
+  ///
+  ///@param id
+  @Delete(path: '/contacts/{id}')
+  Future<chopper.Response> _contactsIdDelete({@Path('id') required String? id});
+
+  ///
+  Future<chopper.Response<ContactDto>> contactsPersonPost(
+      {required PersonCreateDto? body}) {
+    generatedMapping.putIfAbsent(ContactDto, () => ContactDto.fromJsonFactory);
+
+    return _contactsPersonPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/contacts/person',
+    optionalBody: true,
+  )
+  Future<chopper.Response<ContactDto>> _contactsPersonPost(
+      {@Body() required PersonCreateDto? body});
+
+  ///
+  Future<chopper.Response<ContactDto>> contactsPersonPut(
+      {required PersonUpdateDto? body}) {
+    generatedMapping.putIfAbsent(ContactDto, () => ContactDto.fromJsonFactory);
+
+    return _contactsPersonPut(body: body);
+  }
+
+  ///
+  @Put(
+    path: '/contacts/person',
+    optionalBody: true,
+  )
+  Future<chopper.Response<ContactDto>> _contactsPersonPut(
+      {@Body() required PersonUpdateDto? body});
+
+  ///
+  ///@param id
+  Future<chopper.Response<List<ContactLogEntryDto>>> contactsLogIdGet(
+      {required String? id}) {
+    generatedMapping.putIfAbsent(
+        ContactLogEntryDto, () => ContactLogEntryDto.fromJsonFactory);
+
+    return _contactsLogIdGet(id: id);
+  }
+
+  ///
+  ///@param id
+  @Get(path: '/contacts/log/{id}')
+  Future<chopper.Response<List<ContactLogEntryDto>>> _contactsLogIdGet(
+      {@Path('id') required String? id});
+
+  ///
+  Future<chopper.Response<ContactLogEntryDto>> contactsLogPost(
+      {required ContactLogEntryCreateDto? body}) {
+    generatedMapping.putIfAbsent(
+        ContactLogEntryDto, () => ContactLogEntryDto.fromJsonFactory);
+
+    return _contactsLogPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/contacts/log',
+    optionalBody: true,
+  )
+  Future<chopper.Response<ContactLogEntryDto>> _contactsLogPost(
+      {@Body() required ContactLogEntryCreateDto? body});
+
+  ///
+  Future<chopper.Response<List<ContactLinkDto>>> contactsQueryPost(
+      {required QueryDto? body}) {
+    generatedMapping.putIfAbsent(
+        ContactLinkDto, () => ContactLinkDto.fromJsonFactory);
+
+    return _contactsQueryPost(body: body);
+  }
+
+  ///
+  @Post(
+    path: '/contacts/query',
+    optionalBody: true,
+  )
+  Future<chopper.Response<List<ContactLinkDto>>> _contactsQueryPost(
+      {@Body() required QueryDto? body});
+
+  ///
+  Future<chopper.Response<UpdateContactDetailsDto>> contactsContactDetailsPut(
+      {required UpdateContactDetailsDto? body}) {
+    generatedMapping.putIfAbsent(
+        UpdateContactDetailsDto, () => UpdateContactDetailsDto.fromJsonFactory);
+
+    return _contactsContactDetailsPut(body: body);
+  }
+
+  ///
+  @Put(
+    path: '/contacts/contact-details',
+    optionalBody: true,
+  )
+  Future<chopper.Response<UpdateContactDetailsDto>> _contactsContactDetailsPut(
+      {@Body() required UpdateContactDetailsDto? body});
 
   ///
   Future<chopper.Response<AttachmentDto>> attachmentPost(
@@ -620,6 +725,25 @@ abstract class Swagger extends ChopperService {
   ///@param id
   @Get(path: '/attachment/{id}')
   Future<chopper.Response> _attachmentIdGet({@Path('id') required String? id});
+
+  ///
+  ///@param id
+  Future<chopper.Response<AttachmentDto>> attachmentIdVisibilityPut(
+      {required String? id}) {
+    generatedMapping.putIfAbsent(
+        AttachmentDto, () => AttachmentDto.fromJsonFactory);
+
+    return _attachmentIdVisibilityPut(id: id);
+  }
+
+  ///
+  ///@param id
+  @Put(
+    path: '/attachment/{id}/visibility',
+    optionalBody: true,
+  )
+  Future<chopper.Response<AttachmentDto>> _attachmentIdVisibilityPut(
+      {@Path('id') required String? id});
 
   ///
   Future<chopper.Response> teamGet() {
@@ -865,6 +989,24 @@ abstract class Swagger extends ChopperService {
       {@Path('id') required String? id});
 
   ///
+  ///@param id
+  Future<chopper.Response<InquiryDto>> inquiryIdStatusPut(
+      {required String? id}) {
+    generatedMapping.putIfAbsent(InquiryDto, () => InquiryDto.fromJsonFactory);
+
+    return _inquiryIdStatusPut(id: id);
+  }
+
+  ///
+  ///@param id
+  @Put(
+    path: '/inquiry/{id}/status',
+    optionalBody: true,
+  )
+  Future<chopper.Response<InquiryDto>> _inquiryIdStatusPut(
+      {@Path('id') required String? id});
+
+  ///
   Future<chopper.Response> chatbotTestPost() {
     return _chatbotTestPost();
   }
@@ -976,10 +1118,12 @@ extension $CreateBugDtoExtension on CreateBugDto {
 class AddressDto {
   const AddressDto({
     required this.id,
-    required this.street,
-    required this.city,
-    required this.state,
-    required this.zip,
+    this.street,
+    this.city,
+    this.addressAddition,
+    this.state,
+    this.zip,
+    this.country,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -993,13 +1137,17 @@ class AddressDto {
   @JsonKey(name: 'id')
   final String id;
   @JsonKey(name: 'street')
-  final String street;
+  final String? street;
   @JsonKey(name: 'city')
-  final String city;
+  final String? city;
+  @JsonKey(name: 'addressAddition')
+  final String? addressAddition;
   @JsonKey(name: 'state')
-  final String state;
+  final String? state;
   @JsonKey(name: 'zip')
-  final String zip;
+  final String? zip;
+  @JsonKey(name: 'country')
+  final String? country;
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
   @JsonKey(name: 'updatedAt')
@@ -1016,10 +1164,16 @@ class AddressDto {
                 const DeepCollectionEquality().equals(other.street, street)) &&
             (identical(other.city, city) ||
                 const DeepCollectionEquality().equals(other.city, city)) &&
+            (identical(other.addressAddition, addressAddition) ||
+                const DeepCollectionEquality()
+                    .equals(other.addressAddition, addressAddition)) &&
             (identical(other.state, state) ||
                 const DeepCollectionEquality().equals(other.state, state)) &&
             (identical(other.zip, zip) ||
                 const DeepCollectionEquality().equals(other.zip, zip)) &&
+            (identical(other.country, country) ||
+                const DeepCollectionEquality()
+                    .equals(other.country, country)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)) &&
@@ -1036,8 +1190,10 @@ class AddressDto {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(street) ^
       const DeepCollectionEquality().hash(city) ^
+      const DeepCollectionEquality().hash(addressAddition) ^
       const DeepCollectionEquality().hash(state) ^
       const DeepCollectionEquality().hash(zip) ^
+      const DeepCollectionEquality().hash(country) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt) ^
       runtimeType.hashCode;
@@ -1048,34 +1204,392 @@ extension $AddressDtoExtension on AddressDto {
       {String? id,
       String? street,
       String? city,
+      String? addressAddition,
       String? state,
       String? zip,
+      String? country,
       DateTime? createdAt,
       DateTime? updatedAt}) {
     return AddressDto(
         id: id ?? this.id,
         street: street ?? this.street,
         city: city ?? this.city,
+        addressAddition: addressAddition ?? this.addressAddition,
         state: state ?? this.state,
         zip: zip ?? this.zip,
+        country: country ?? this.country,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
 
   AddressDto copyWithWrapped(
       {Wrapped<String>? id,
-      Wrapped<String>? street,
-      Wrapped<String>? city,
-      Wrapped<String>? state,
-      Wrapped<String>? zip,
+      Wrapped<String?>? street,
+      Wrapped<String?>? city,
+      Wrapped<String?>? addressAddition,
+      Wrapped<String?>? state,
+      Wrapped<String?>? zip,
+      Wrapped<String?>? country,
       Wrapped<DateTime>? createdAt,
       Wrapped<DateTime>? updatedAt}) {
     return AddressDto(
         id: (id != null ? id.value : this.id),
         street: (street != null ? street.value : this.street),
         city: (city != null ? city.value : this.city),
+        addressAddition: (addressAddition != null
+            ? addressAddition.value
+            : this.addressAddition),
         state: (state != null ? state.value : this.state),
         zip: (zip != null ? zip.value : this.zip),
+        country: (country != null ? country.value : this.country),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TenantLinkDto {
+  const TenantLinkDto({
+    required this.id,
+    required this.label,
+    required this.displayId,
+  });
+
+  factory TenantLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$TenantLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$TenantLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$TenantLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(name: 'displayId')
+  final String displayId;
+  static const fromJsonFactory = _$TenantLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TenantLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.displayId, displayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayId, displayId)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(displayId) ^
+      runtimeType.hashCode;
+}
+
+extension $TenantLinkDtoExtension on TenantLinkDto {
+  TenantLinkDto copyWith({String? id, String? label, String? displayId}) {
+    return TenantLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        displayId: displayId ?? this.displayId);
+  }
+
+  TenantLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<String>? displayId}) {
+    return TenantLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        displayId: (displayId != null ? displayId.value : this.displayId));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class ContactLinkDto {
+  const ContactLinkDto({
+    required this.id,
+    required this.label,
+    required this.displayId,
+  });
+
+  factory ContactLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$ContactLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$ContactLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$ContactLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(name: 'displayId')
+  final String displayId;
+  static const fromJsonFactory = _$ContactLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ContactLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.displayId, displayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayId, displayId)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(displayId) ^
+      runtimeType.hashCode;
+}
+
+extension $ContactLinkDtoExtension on ContactLinkDto {
+  ContactLinkDto copyWith({String? id, String? label, String? displayId}) {
+    return ContactLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        displayId: displayId ?? this.displayId);
+  }
+
+  ContactLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<String>? displayId}) {
+    return ContactLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        displayId: (displayId != null ? displayId.value : this.displayId));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class UnitLinkDto {
+  const UnitLinkDto({
+    required this.id,
+    required this.label,
+    required this.displayId,
+    required this.type,
+  });
+
+  factory UnitLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$UnitLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$UnitLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$UnitLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(name: 'displayId')
+  final String displayId;
+  @JsonKey(
+    name: 'type',
+    toJson: unitTypeToJson,
+    fromJson: unitTypeFromJson,
+  )
+  final enums.UnitType type;
+  static const fromJsonFactory = _$UnitLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UnitLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.displayId, displayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayId, displayId)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(displayId) ^
+      const DeepCollectionEquality().hash(type) ^
+      runtimeType.hashCode;
+}
+
+extension $UnitLinkDtoExtension on UnitLinkDto {
+  UnitLinkDto copyWith(
+      {String? id, String? label, String? displayId, enums.UnitType? type}) {
+    return UnitLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        displayId: displayId ?? this.displayId,
+        type: type ?? this.type);
+  }
+
+  UnitLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<String>? displayId,
+      Wrapped<enums.UnitType>? type}) {
+    return UnitLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        displayId: (displayId != null ? displayId.value : this.displayId),
+        type: (type != null ? type.value : this.type));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class LeaseDto {
+  const LeaseDto({
+    required this.id,
+    this.tenants,
+    required this.contactLink,
+    required this.type,
+    this.unitLink,
+    required this.startDate,
+    required this.endDate,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory LeaseDto.fromJson(Map<String, dynamic> json) =>
+      _$LeaseDtoFromJson(json);
+
+  static const toJsonFactory = _$LeaseDtoToJson;
+  Map<String, dynamic> toJson() => _$LeaseDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'tenants', defaultValue: <TenantLinkDto>[])
+  final List<TenantLinkDto>? tenants;
+  @JsonKey(name: 'contactLink')
+  final ContactLinkDto contactLink;
+  @JsonKey(
+    name: 'type',
+    toJson: contractTypeToJson,
+    fromJson: contractTypeFromJson,
+  )
+  final enums.ContractType type;
+  @JsonKey(name: 'unitLink')
+  final UnitLinkDto? unitLink;
+  @JsonKey(name: 'startDate')
+  final DateTime startDate;
+  @JsonKey(name: 'endDate')
+  final DateTime endDate;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$LeaseDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is LeaseDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.tenants, tenants) ||
+                const DeepCollectionEquality()
+                    .equals(other.tenants, tenants)) &&
+            (identical(other.contactLink, contactLink) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactLink, contactLink)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
+            (identical(other.unitLink, unitLink) ||
+                const DeepCollectionEquality()
+                    .equals(other.unitLink, unitLink)) &&
+            (identical(other.startDate, startDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.startDate, startDate)) &&
+            (identical(other.endDate, endDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.endDate, endDate)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(tenants) ^
+      const DeepCollectionEquality().hash(contactLink) ^
+      const DeepCollectionEquality().hash(type) ^
+      const DeepCollectionEquality().hash(unitLink) ^
+      const DeepCollectionEquality().hash(startDate) ^
+      const DeepCollectionEquality().hash(endDate) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $LeaseDtoExtension on LeaseDto {
+  LeaseDto copyWith(
+      {String? id,
+      List<TenantLinkDto>? tenants,
+      ContactLinkDto? contactLink,
+      enums.ContractType? type,
+      UnitLinkDto? unitLink,
+      DateTime? startDate,
+      DateTime? endDate,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return LeaseDto(
+        id: id ?? this.id,
+        tenants: tenants ?? this.tenants,
+        contactLink: contactLink ?? this.contactLink,
+        type: type ?? this.type,
+        unitLink: unitLink ?? this.unitLink,
+        startDate: startDate ?? this.startDate,
+        endDate: endDate ?? this.endDate,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  LeaseDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<List<TenantLinkDto>?>? tenants,
+      Wrapped<ContactLinkDto>? contactLink,
+      Wrapped<enums.ContractType>? type,
+      Wrapped<UnitLinkDto?>? unitLink,
+      Wrapped<DateTime>? startDate,
+      Wrapped<DateTime>? endDate,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return LeaseDto(
+        id: (id != null ? id.value : this.id),
+        tenants: (tenants != null ? tenants.value : this.tenants),
+        contactLink:
+            (contactLink != null ? contactLink.value : this.contactLink),
+        type: (type != null ? type.value : this.type),
+        unitLink: (unitLink != null ? unitLink.value : this.unitLink),
+        startDate: (startDate != null ? startDate.value : this.startDate),
+        endDate: (endDate != null ? endDate.value : this.endDate),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
@@ -1088,6 +1602,7 @@ class AttachmentDto {
     required this.name,
     required this.mimeType,
     required this.fileKey,
+    required this.canCustomerView,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -1106,6 +1621,8 @@ class AttachmentDto {
   final String mimeType;
   @JsonKey(name: 'fileKey')
   final String fileKey;
+  @JsonKey(name: 'canCustomerView')
+  final bool canCustomerView;
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
   @JsonKey(name: 'updatedAt')
@@ -1126,6 +1643,9 @@ class AttachmentDto {
             (identical(other.fileKey, fileKey) ||
                 const DeepCollectionEquality()
                     .equals(other.fileKey, fileKey)) &&
+            (identical(other.canCustomerView, canCustomerView) ||
+                const DeepCollectionEquality()
+                    .equals(other.canCustomerView, canCustomerView)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)) &&
@@ -1143,6 +1663,7 @@ class AttachmentDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(mimeType) ^
       const DeepCollectionEquality().hash(fileKey) ^
+      const DeepCollectionEquality().hash(canCustomerView) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt) ^
       runtimeType.hashCode;
@@ -1154,6 +1675,7 @@ extension $AttachmentDtoExtension on AttachmentDto {
       String? name,
       String? mimeType,
       String? fileKey,
+      bool? canCustomerView,
       DateTime? createdAt,
       DateTime? updatedAt}) {
     return AttachmentDto(
@@ -1161,6 +1683,7 @@ extension $AttachmentDtoExtension on AttachmentDto {
         name: name ?? this.name,
         mimeType: mimeType ?? this.mimeType,
         fileKey: fileKey ?? this.fileKey,
+        canCustomerView: canCustomerView ?? this.canCustomerView,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -1170,6 +1693,7 @@ extension $AttachmentDtoExtension on AttachmentDto {
       Wrapped<String>? name,
       Wrapped<String>? mimeType,
       Wrapped<String>? fileKey,
+      Wrapped<bool>? canCustomerView,
       Wrapped<DateTime>? createdAt,
       Wrapped<DateTime>? updatedAt}) {
     return AttachmentDto(
@@ -1177,517 +1701,9 @@ extension $AttachmentDtoExtension on AttachmentDto {
         name: (name != null ? name.value : this.name),
         mimeType: (mimeType != null ? mimeType.value : this.mimeType),
         fileKey: (fileKey != null ? fileKey.value : this.fileKey),
-        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
-        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class InquiryMessageDto {
-  const InquiryMessageDto({
-    required this.id,
-    this.content,
-    required this.authorLabel,
-    this.isAIGenerated,
-    this.attachments,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory InquiryMessageDto.fromJson(Map<String, dynamic> json) =>
-      _$InquiryMessageDtoFromJson(json);
-
-  static const toJsonFactory = _$InquiryMessageDtoToJson;
-  Map<String, dynamic> toJson() => _$InquiryMessageDtoToJson(this);
-
-  @JsonKey(name: 'id')
-  final String id;
-  @JsonKey(name: 'content')
-  final String? content;
-  @JsonKey(name: 'authorLabel')
-  final String authorLabel;
-  @JsonKey(name: 'isAIGenerated')
-  final bool? isAIGenerated;
-  @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
-  final List<AttachmentDto>? attachments;
-  @JsonKey(name: 'createdAt')
-  final DateTime createdAt;
-  @JsonKey(name: 'updatedAt')
-  final DateTime updatedAt;
-  static const fromJsonFactory = _$InquiryMessageDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is InquiryMessageDto &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality()
-                    .equals(other.content, content)) &&
-            (identical(other.authorLabel, authorLabel) ||
-                const DeepCollectionEquality()
-                    .equals(other.authorLabel, authorLabel)) &&
-            (identical(other.isAIGenerated, isAIGenerated) ||
-                const DeepCollectionEquality()
-                    .equals(other.isAIGenerated, isAIGenerated)) &&
-            (identical(other.attachments, attachments) ||
-                const DeepCollectionEquality()
-                    .equals(other.attachments, attachments)) &&
-            (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.updatedAt, updatedAt)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(content) ^
-      const DeepCollectionEquality().hash(authorLabel) ^
-      const DeepCollectionEquality().hash(isAIGenerated) ^
-      const DeepCollectionEquality().hash(attachments) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(updatedAt) ^
-      runtimeType.hashCode;
-}
-
-extension $InquiryMessageDtoExtension on InquiryMessageDto {
-  InquiryMessageDto copyWith(
-      {String? id,
-      String? content,
-      String? authorLabel,
-      bool? isAIGenerated,
-      List<AttachmentDto>? attachments,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
-    return InquiryMessageDto(
-        id: id ?? this.id,
-        content: content ?? this.content,
-        authorLabel: authorLabel ?? this.authorLabel,
-        isAIGenerated: isAIGenerated ?? this.isAIGenerated,
-        attachments: attachments ?? this.attachments,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
-  }
-
-  InquiryMessageDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<String?>? content,
-      Wrapped<String>? authorLabel,
-      Wrapped<bool?>? isAIGenerated,
-      Wrapped<List<AttachmentDto>?>? attachments,
-      Wrapped<DateTime>? createdAt,
-      Wrapped<DateTime>? updatedAt}) {
-    return InquiryMessageDto(
-        id: (id != null ? id.value : this.id),
-        content: (content != null ? content.value : this.content),
-        authorLabel:
-            (authorLabel != null ? authorLabel.value : this.authorLabel),
-        isAIGenerated:
-            (isAIGenerated != null ? isAIGenerated.value : this.isAIGenerated),
-        attachments:
-            (attachments != null ? attachments.value : this.attachments),
-        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
-        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class TaskProxyDto {
-  const TaskProxyDto({
-    required this.entityId,
-    required this.displayAs,
-    required this.status,
-  });
-
-  factory TaskProxyDto.fromJson(Map<String, dynamic> json) =>
-      _$TaskProxyDtoFromJson(json);
-
-  static const toJsonFactory = _$TaskProxyDtoToJson;
-  Map<String, dynamic> toJson() => _$TaskProxyDtoToJson(this);
-
-  @JsonKey(name: 'entityId')
-  final String entityId;
-  @JsonKey(name: 'displayAs')
-  final String displayAs;
-  @JsonKey(
-    name: 'status',
-    toJson: taskStatusToJson,
-    fromJson: taskStatusFromJson,
-  )
-  final enums.TaskStatus status;
-  static const fromJsonFactory = _$TaskProxyDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is TaskProxyDto &&
-            (identical(other.entityId, entityId) ||
-                const DeepCollectionEquality()
-                    .equals(other.entityId, entityId)) &&
-            (identical(other.displayAs, displayAs) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayAs, displayAs)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(entityId) ^
-      const DeepCollectionEquality().hash(displayAs) ^
-      const DeepCollectionEquality().hash(status) ^
-      runtimeType.hashCode;
-}
-
-extension $TaskProxyDtoExtension on TaskProxyDto {
-  TaskProxyDto copyWith(
-      {String? entityId, String? displayAs, enums.TaskStatus? status}) {
-    return TaskProxyDto(
-        entityId: entityId ?? this.entityId,
-        displayAs: displayAs ?? this.displayAs,
-        status: status ?? this.status);
-  }
-
-  TaskProxyDto copyWithWrapped(
-      {Wrapped<String>? entityId,
-      Wrapped<String>? displayAs,
-      Wrapped<enums.TaskStatus>? status}) {
-    return TaskProxyDto(
-        entityId: (entityId != null ? entityId.value : this.entityId),
-        displayAs: (displayAs != null ? displayAs.value : this.displayAs),
-        status: (status != null ? status.value : this.status));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class InquiryDto {
-  const InquiryDto({
-    required this.id,
-    this.description,
-    required this.type,
-    required this.status,
-    this.createdBy,
-    required this.messages,
-    required this.taskProxies,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory InquiryDto.fromJson(Map<String, dynamic> json) =>
-      _$InquiryDtoFromJson(json);
-
-  static const toJsonFactory = _$InquiryDtoToJson;
-  Map<String, dynamic> toJson() => _$InquiryDtoToJson(this);
-
-  @JsonKey(name: 'id')
-  final String id;
-  @JsonKey(name: 'description')
-  final String? description;
-  @JsonKey(
-    name: 'type',
-    toJson: inquiryTypeToJson,
-    fromJson: inquiryTypeFromJson,
-  )
-  final enums.InquiryType type;
-  @JsonKey(
-    name: 'status',
-    toJson: inquiryDtoStatusToJson,
-    fromJson: inquiryDtoStatusFromJson,
-  )
-  final enums.InquiryDtoStatus status;
-  @JsonKey(name: 'createdBy')
-  final TenantDto? createdBy;
-  @JsonKey(name: 'messages', defaultValue: <InquiryMessageDto>[])
-  final List<InquiryMessageDto> messages;
-  @JsonKey(name: 'taskProxies', defaultValue: <TaskProxyDto>[])
-  final List<TaskProxyDto> taskProxies;
-  @JsonKey(name: 'createdAt')
-  final DateTime createdAt;
-  @JsonKey(name: 'updatedAt')
-  final DateTime updatedAt;
-  static const fromJsonFactory = _$InquiryDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is InquiryDto &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.description, description) ||
-                const DeepCollectionEquality()
-                    .equals(other.description, description)) &&
-            (identical(other.type, type) ||
-                const DeepCollectionEquality().equals(other.type, type)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
-            (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdBy, createdBy)) &&
-            (identical(other.messages, messages) ||
-                const DeepCollectionEquality()
-                    .equals(other.messages, messages)) &&
-            (identical(other.taskProxies, taskProxies) ||
-                const DeepCollectionEquality()
-                    .equals(other.taskProxies, taskProxies)) &&
-            (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.updatedAt, updatedAt)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(description) ^
-      const DeepCollectionEquality().hash(type) ^
-      const DeepCollectionEquality().hash(status) ^
-      const DeepCollectionEquality().hash(createdBy) ^
-      const DeepCollectionEquality().hash(messages) ^
-      const DeepCollectionEquality().hash(taskProxies) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(updatedAt) ^
-      runtimeType.hashCode;
-}
-
-extension $InquiryDtoExtension on InquiryDto {
-  InquiryDto copyWith(
-      {String? id,
-      String? description,
-      enums.InquiryType? type,
-      enums.InquiryDtoStatus? status,
-      TenantDto? createdBy,
-      List<InquiryMessageDto>? messages,
-      List<TaskProxyDto>? taskProxies,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
-    return InquiryDto(
-        id: id ?? this.id,
-        description: description ?? this.description,
-        type: type ?? this.type,
-        status: status ?? this.status,
-        createdBy: createdBy ?? this.createdBy,
-        messages: messages ?? this.messages,
-        taskProxies: taskProxies ?? this.taskProxies,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
-  }
-
-  InquiryDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<String?>? description,
-      Wrapped<enums.InquiryType>? type,
-      Wrapped<enums.InquiryDtoStatus>? status,
-      Wrapped<TenantDto?>? createdBy,
-      Wrapped<List<InquiryMessageDto>>? messages,
-      Wrapped<List<TaskProxyDto>>? taskProxies,
-      Wrapped<DateTime>? createdAt,
-      Wrapped<DateTime>? updatedAt}) {
-    return InquiryDto(
-        id: (id != null ? id.value : this.id),
-        description:
-            (description != null ? description.value : this.description),
-        type: (type != null ? type.value : this.type),
-        status: (status != null ? status.value : this.status),
-        createdBy: (createdBy != null ? createdBy.value : this.createdBy),
-        messages: (messages != null ? messages.value : this.messages),
-        taskProxies:
-            (taskProxies != null ? taskProxies.value : this.taskProxies),
-        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
-        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class TenantDto {
-  const TenantDto({
-    required this.id,
-    required this.displayId,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phone,
-    this.notes,
-    this.contactMethod,
-    this.leases,
-    this.attachments,
-    this.inquirys,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory TenantDto.fromJson(Map<String, dynamic> json) =>
-      _$TenantDtoFromJson(json);
-
-  static const toJsonFactory = _$TenantDtoToJson;
-  Map<String, dynamic> toJson() => _$TenantDtoToJson(this);
-
-  @JsonKey(name: 'id')
-  final String id;
-  @JsonKey(name: 'displayId')
-  final String displayId;
-  @JsonKey(name: 'firstName')
-  final String? firstName;
-  @JsonKey(name: 'lastName')
-  final String? lastName;
-  @JsonKey(name: 'email')
-  final String? email;
-  @JsonKey(name: 'phone')
-  final String? phone;
-  @JsonKey(name: 'notes')
-  final String? notes;
-  @JsonKey(
-    name: 'contactMethod',
-    toJson: tenantDtoContactMethodNullableToJson,
-    fromJson: tenantDtoContactMethodNullableFromJson,
-  )
-  final enums.TenantDtoContactMethod? contactMethod;
-  @JsonKey(name: 'leases', defaultValue: <LeaseDto>[])
-  final List<LeaseDto>? leases;
-  @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
-  final List<AttachmentDto>? attachments;
-  @JsonKey(name: 'inquirys', defaultValue: <InquiryDto>[])
-  final List<InquiryDto>? inquirys;
-  @JsonKey(name: 'createdAt')
-  final DateTime createdAt;
-  @JsonKey(name: 'updatedAt')
-  final DateTime updatedAt;
-  static const fromJsonFactory = _$TenantDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is TenantDto &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.displayId, displayId) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayId, displayId)) &&
-            (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality()
-                    .equals(other.firstName, firstName)) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastName, lastName)) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
-            (identical(other.phone, phone) ||
-                const DeepCollectionEquality().equals(other.phone, phone)) &&
-            (identical(other.notes, notes) ||
-                const DeepCollectionEquality().equals(other.notes, notes)) &&
-            (identical(other.contactMethod, contactMethod) ||
-                const DeepCollectionEquality()
-                    .equals(other.contactMethod, contactMethod)) &&
-            (identical(other.leases, leases) ||
-                const DeepCollectionEquality().equals(other.leases, leases)) &&
-            (identical(other.attachments, attachments) ||
-                const DeepCollectionEquality()
-                    .equals(other.attachments, attachments)) &&
-            (identical(other.inquirys, inquirys) ||
-                const DeepCollectionEquality()
-                    .equals(other.inquirys, inquirys)) &&
-            (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.updatedAt, updatedAt)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(displayId) ^
-      const DeepCollectionEquality().hash(firstName) ^
-      const DeepCollectionEquality().hash(lastName) ^
-      const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(phone) ^
-      const DeepCollectionEquality().hash(notes) ^
-      const DeepCollectionEquality().hash(contactMethod) ^
-      const DeepCollectionEquality().hash(leases) ^
-      const DeepCollectionEquality().hash(attachments) ^
-      const DeepCollectionEquality().hash(inquirys) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(updatedAt) ^
-      runtimeType.hashCode;
-}
-
-extension $TenantDtoExtension on TenantDto {
-  TenantDto copyWith(
-      {String? id,
-      String? displayId,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? phone,
-      String? notes,
-      enums.TenantDtoContactMethod? contactMethod,
-      List<LeaseDto>? leases,
-      List<AttachmentDto>? attachments,
-      List<InquiryDto>? inquirys,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
-    return TenantDto(
-        id: id ?? this.id,
-        displayId: displayId ?? this.displayId,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        notes: notes ?? this.notes,
-        contactMethod: contactMethod ?? this.contactMethod,
-        leases: leases ?? this.leases,
-        attachments: attachments ?? this.attachments,
-        inquirys: inquirys ?? this.inquirys,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
-  }
-
-  TenantDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<String>? displayId,
-      Wrapped<String?>? firstName,
-      Wrapped<String?>? lastName,
-      Wrapped<String?>? email,
-      Wrapped<String?>? phone,
-      Wrapped<String?>? notes,
-      Wrapped<enums.TenantDtoContactMethod?>? contactMethod,
-      Wrapped<List<LeaseDto>?>? leases,
-      Wrapped<List<AttachmentDto>?>? attachments,
-      Wrapped<List<InquiryDto>?>? inquirys,
-      Wrapped<DateTime>? createdAt,
-      Wrapped<DateTime>? updatedAt}) {
-    return TenantDto(
-        id: (id != null ? id.value : this.id),
-        displayId: (displayId != null ? displayId.value : this.displayId),
-        firstName: (firstName != null ? firstName.value : this.firstName),
-        lastName: (lastName != null ? lastName.value : this.lastName),
-        email: (email != null ? email.value : this.email),
-        phone: (phone != null ? phone.value : this.phone),
-        notes: (notes != null ? notes.value : this.notes),
-        contactMethod:
-            (contactMethod != null ? contactMethod.value : this.contactMethod),
-        leases: (leases != null ? leases.value : this.leases),
-        attachments:
-            (attachments != null ? attachments.value : this.attachments),
-        inquirys: (inquirys != null ? inquirys.value : this.inquirys),
+        canCustomerView: (canCustomerView != null
+            ? canCustomerView.value
+            : this.canCustomerView),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
@@ -1700,6 +1716,7 @@ class UnitDto {
     required this.displayId,
     required this.name,
     this.complexString,
+    required this.type,
     this.buildingString,
     required this.status,
     required this.address,
@@ -1724,6 +1741,12 @@ class UnitDto {
   final String name;
   @JsonKey(name: 'complexString')
   final String? complexString;
+  @JsonKey(
+    name: 'type',
+    toJson: unitTypeToJson,
+    fromJson: unitTypeFromJson,
+  )
+  final enums.UnitType type;
   @JsonKey(name: 'buildingString')
   final String? buildingString;
   @JsonKey(
@@ -1760,6 +1783,8 @@ class UnitDto {
             (identical(other.complexString, complexString) ||
                 const DeepCollectionEquality()
                     .equals(other.complexString, complexString)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
             (identical(other.buildingString, buildingString) ||
                 const DeepCollectionEquality()
                     .equals(other.buildingString, buildingString)) &&
@@ -1792,6 +1817,7 @@ class UnitDto {
       const DeepCollectionEquality().hash(displayId) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(complexString) ^
+      const DeepCollectionEquality().hash(type) ^
       const DeepCollectionEquality().hash(buildingString) ^
       const DeepCollectionEquality().hash(status) ^
       const DeepCollectionEquality().hash(address) ^
@@ -1809,6 +1835,7 @@ extension $UnitDtoExtension on UnitDto {
       String? displayId,
       String? name,
       String? complexString,
+      enums.UnitType? type,
       String? buildingString,
       enums.Status? status,
       AddressDto? address,
@@ -1822,6 +1849,7 @@ extension $UnitDtoExtension on UnitDto {
         displayId: displayId ?? this.displayId,
         name: name ?? this.name,
         complexString: complexString ?? this.complexString,
+        type: type ?? this.type,
         buildingString: buildingString ?? this.buildingString,
         status: status ?? this.status,
         address: address ?? this.address,
@@ -1837,6 +1865,7 @@ extension $UnitDtoExtension on UnitDto {
       Wrapped<String>? displayId,
       Wrapped<String>? name,
       Wrapped<String?>? complexString,
+      Wrapped<enums.UnitType>? type,
       Wrapped<String?>? buildingString,
       Wrapped<enums.Status>? status,
       Wrapped<AddressDto>? address,
@@ -1851,6 +1880,7 @@ extension $UnitDtoExtension on UnitDto {
         name: (name != null ? name.value : this.name),
         complexString:
             (complexString != null ? complexString.value : this.complexString),
+        type: (type != null ? type.value : this.type),
         buildingString: (buildingString != null
             ? buildingString.value
             : this.buildingString),
@@ -1860,118 +1890,6 @@ extension $UnitDtoExtension on UnitDto {
         notes: (notes != null ? notes.value : this.notes),
         attachments:
             (attachments != null ? attachments.value : this.attachments),
-        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
-        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class LeaseDto {
-  const LeaseDto({
-    required this.id,
-    this.tenants,
-    this.unit,
-    required this.startDate,
-    required this.endDate,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory LeaseDto.fromJson(Map<String, dynamic> json) =>
-      _$LeaseDtoFromJson(json);
-
-  static const toJsonFactory = _$LeaseDtoToJson;
-  Map<String, dynamic> toJson() => _$LeaseDtoToJson(this);
-
-  @JsonKey(name: 'id')
-  final String id;
-  @JsonKey(name: 'tenants', defaultValue: <TenantDto>[])
-  final List<TenantDto>? tenants;
-  @JsonKey(name: 'unit')
-  final UnitDto? unit;
-  @JsonKey(name: 'startDate')
-  final DateTime startDate;
-  @JsonKey(name: 'endDate')
-  final DateTime endDate;
-  @JsonKey(name: 'createdAt')
-  final DateTime createdAt;
-  @JsonKey(name: 'updatedAt')
-  final DateTime updatedAt;
-  static const fromJsonFactory = _$LeaseDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is LeaseDto &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.tenants, tenants) ||
-                const DeepCollectionEquality()
-                    .equals(other.tenants, tenants)) &&
-            (identical(other.unit, unit) ||
-                const DeepCollectionEquality().equals(other.unit, unit)) &&
-            (identical(other.startDate, startDate) ||
-                const DeepCollectionEquality()
-                    .equals(other.startDate, startDate)) &&
-            (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality()
-                    .equals(other.endDate, endDate)) &&
-            (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.updatedAt, updatedAt)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(tenants) ^
-      const DeepCollectionEquality().hash(unit) ^
-      const DeepCollectionEquality().hash(startDate) ^
-      const DeepCollectionEquality().hash(endDate) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(updatedAt) ^
-      runtimeType.hashCode;
-}
-
-extension $LeaseDtoExtension on LeaseDto {
-  LeaseDto copyWith(
-      {String? id,
-      List<TenantDto>? tenants,
-      UnitDto? unit,
-      DateTime? startDate,
-      DateTime? endDate,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
-    return LeaseDto(
-        id: id ?? this.id,
-        tenants: tenants ?? this.tenants,
-        unit: unit ?? this.unit,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
-  }
-
-  LeaseDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<List<TenantDto>?>? tenants,
-      Wrapped<UnitDto?>? unit,
-      Wrapped<DateTime>? startDate,
-      Wrapped<DateTime>? endDate,
-      Wrapped<DateTime>? createdAt,
-      Wrapped<DateTime>? updatedAt}) {
-    return LeaseDto(
-        id: (id != null ? id.value : this.id),
-        tenants: (tenants != null ? tenants.value : this.tenants),
-        unit: (unit != null ? unit.value : this.unit),
-        startDate: (startDate != null ? startDate.value : this.startDate),
-        endDate: (endDate != null ? endDate.value : this.endDate),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
@@ -2265,6 +2183,49 @@ extension $AccountInfoDtoExtension on AccountInfoDto {
 }
 
 @JsonSerializable(explicitToJson: true)
+class CreateAccountDto {
+  const CreateAccountDto({
+    required this.authId,
+  });
+
+  factory CreateAccountDto.fromJson(Map<String, dynamic> json) =>
+      _$CreateAccountDtoFromJson(json);
+
+  static const toJsonFactory = _$CreateAccountDtoToJson;
+  Map<String, dynamic> toJson() => _$CreateAccountDtoToJson(this);
+
+  @JsonKey(name: 'authId')
+  final String authId;
+  static const fromJsonFactory = _$CreateAccountDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is CreateAccountDto &&
+            (identical(other.authId, authId) ||
+                const DeepCollectionEquality().equals(other.authId, authId)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(authId) ^ runtimeType.hashCode;
+}
+
+extension $CreateAccountDtoExtension on CreateAccountDto {
+  CreateAccountDto copyWith({String? authId}) {
+    return CreateAccountDto(authId: authId ?? this.authId);
+  }
+
+  CreateAccountDto copyWithWrapped({Wrapped<String>? authId}) {
+    return CreateAccountDto(
+        authId: (authId != null ? authId.value : this.authId));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class ConnectAccountDto {
   const ConnectAccountDto({
     required this.code,
@@ -2307,37 +2268,103 @@ extension $ConnectAccountDtoExtension on ConnectAccountDto {
 }
 
 @JsonSerializable(explicitToJson: true)
-class TenantProfileDto {
-  const TenantProfileDto({
-    required this.tenantId,
-    required this.tenantDisplayId,
-    this.unitId,
-    this.unitDisplayId,
+class InquiryLinkDto {
+  const InquiryLinkDto({
+    required this.id,
+    required this.label,
+    required this.status,
+  });
+
+  factory InquiryLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$InquiryLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$InquiryLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$InquiryLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(
+    name: 'status',
+    toJson: inquiryStatusToJson,
+    fromJson: inquiryStatusFromJson,
+  )
+  final enums.InquiryStatus status;
+  static const fromJsonFactory = _$InquiryLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is InquiryLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.status, status) ||
+                const DeepCollectionEquality().equals(other.status, status)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(status) ^
+      runtimeType.hashCode;
+}
+
+extension $InquiryLinkDtoExtension on InquiryLinkDto {
+  InquiryLinkDto copyWith(
+      {String? id, String? label, enums.InquiryStatus? status}) {
+    return InquiryLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        status: status ?? this.status);
+  }
+
+  InquiryLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<enums.InquiryStatus>? status}) {
+    return InquiryLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        status: (status != null ? status.value : this.status));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TenantDto {
+  const TenantDto({
+    required this.id,
+    required this.displayId,
     this.firstName,
     this.lastName,
     this.email,
     this.phone,
+    this.notes,
     this.contactMethod,
-    this.street,
-    this.zip,
-    this.city,
-    this.country,
+    this.leases,
+    this.attachments,
+    this.inquiryLinks,
+    required this.createdAt,
+    required this.updatedAt,
+    this.lastLogin,
   });
 
-  factory TenantProfileDto.fromJson(Map<String, dynamic> json) =>
-      _$TenantProfileDtoFromJson(json);
+  factory TenantDto.fromJson(Map<String, dynamic> json) =>
+      _$TenantDtoFromJson(json);
 
-  static const toJsonFactory = _$TenantProfileDtoToJson;
-  Map<String, dynamic> toJson() => _$TenantProfileDtoToJson(this);
+  static const toJsonFactory = _$TenantDtoToJson;
+  Map<String, dynamic> toJson() => _$TenantDtoToJson(this);
 
-  @JsonKey(name: 'tenantId')
-  final String tenantId;
-  @JsonKey(name: 'tenantDisplayId')
-  final String tenantDisplayId;
-  @JsonKey(name: 'unitId')
-  final String? unitId;
-  @JsonKey(name: 'unitDisplayId')
-  final String? unitDisplayId;
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'displayId')
+  final String displayId;
   @JsonKey(name: 'firstName')
   final String? firstName;
   @JsonKey(name: 'lastName')
@@ -2346,37 +2373,37 @@ class TenantProfileDto {
   final String? email;
   @JsonKey(name: 'phone')
   final String? phone;
+  @JsonKey(name: 'notes')
+  final String? notes;
   @JsonKey(
     name: 'contactMethod',
-    toJson: tenantProfileDtoContactMethodNullableToJson,
-    fromJson: tenantProfileDtoContactMethodNullableFromJson,
+    toJson: tenantDtoContactMethodNullableToJson,
+    fromJson: tenantDtoContactMethodNullableFromJson,
   )
-  final enums.TenantProfileDtoContactMethod? contactMethod;
-  @JsonKey(name: 'street')
-  final String? street;
-  @JsonKey(name: 'zip')
-  final String? zip;
-  @JsonKey(name: 'city')
-  final String? city;
-  @JsonKey(name: 'country')
-  final String? country;
-  static const fromJsonFactory = _$TenantProfileDtoFromJson;
+  final enums.TenantDtoContactMethod? contactMethod;
+  @JsonKey(name: 'leases', defaultValue: <LeaseDto>[])
+  final List<LeaseDto>? leases;
+  @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
+  final List<AttachmentDto>? attachments;
+  @JsonKey(name: 'inquiryLinks', defaultValue: <InquiryLinkDto>[])
+  final List<InquiryLinkDto>? inquiryLinks;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  @JsonKey(name: 'lastLogin')
+  final DateTime? lastLogin;
+  static const fromJsonFactory = _$TenantDtoFromJson;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other is TenantProfileDto &&
-            (identical(other.tenantId, tenantId) ||
+        (other is TenantDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.displayId, displayId) ||
                 const DeepCollectionEquality()
-                    .equals(other.tenantId, tenantId)) &&
-            (identical(other.tenantDisplayId, tenantDisplayId) ||
-                const DeepCollectionEquality()
-                    .equals(other.tenantDisplayId, tenantDisplayId)) &&
-            (identical(other.unitId, unitId) ||
-                const DeepCollectionEquality().equals(other.unitId, unitId)) &&
-            (identical(other.unitDisplayId, unitDisplayId) ||
-                const DeepCollectionEquality()
-                    .equals(other.unitDisplayId, unitDisplayId)) &&
+                    .equals(other.displayId, displayId)) &&
             (identical(other.firstName, firstName) ||
                 const DeepCollectionEquality()
                     .equals(other.firstName, firstName)) &&
@@ -2387,17 +2414,28 @@ class TenantProfileDto {
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phone, phone) ||
                 const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)) &&
             (identical(other.contactMethod, contactMethod) ||
                 const DeepCollectionEquality()
                     .equals(other.contactMethod, contactMethod)) &&
-            (identical(other.street, street) ||
-                const DeepCollectionEquality().equals(other.street, street)) &&
-            (identical(other.zip, zip) ||
-                const DeepCollectionEquality().equals(other.zip, zip)) &&
-            (identical(other.city, city) ||
-                const DeepCollectionEquality().equals(other.city, city)) &&
-            (identical(other.country, country) ||
-                const DeepCollectionEquality().equals(other.country, country)));
+            (identical(other.leases, leases) ||
+                const DeepCollectionEquality().equals(other.leases, leases)) &&
+            (identical(other.attachments, attachments) ||
+                const DeepCollectionEquality()
+                    .equals(other.attachments, attachments)) &&
+            (identical(other.inquiryLinks, inquiryLinks) ||
+                const DeepCollectionEquality()
+                    .equals(other.inquiryLinks, inquiryLinks)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)) &&
+            (identical(other.lastLogin, lastLogin) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastLogin, lastLogin)));
   }
 
   @override
@@ -2405,85 +2443,89 @@ class TenantProfileDto {
 
   @override
   int get hashCode =>
-      const DeepCollectionEquality().hash(tenantId) ^
-      const DeepCollectionEquality().hash(tenantDisplayId) ^
-      const DeepCollectionEquality().hash(unitId) ^
-      const DeepCollectionEquality().hash(unitDisplayId) ^
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(displayId) ^
       const DeepCollectionEquality().hash(firstName) ^
       const DeepCollectionEquality().hash(lastName) ^
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(notes) ^
       const DeepCollectionEquality().hash(contactMethod) ^
-      const DeepCollectionEquality().hash(street) ^
-      const DeepCollectionEquality().hash(zip) ^
-      const DeepCollectionEquality().hash(city) ^
-      const DeepCollectionEquality().hash(country) ^
+      const DeepCollectionEquality().hash(leases) ^
+      const DeepCollectionEquality().hash(attachments) ^
+      const DeepCollectionEquality().hash(inquiryLinks) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      const DeepCollectionEquality().hash(lastLogin) ^
       runtimeType.hashCode;
 }
 
-extension $TenantProfileDtoExtension on TenantProfileDto {
-  TenantProfileDto copyWith(
-      {String? tenantId,
-      String? tenantDisplayId,
-      String? unitId,
-      String? unitDisplayId,
+extension $TenantDtoExtension on TenantDto {
+  TenantDto copyWith(
+      {String? id,
+      String? displayId,
       String? firstName,
       String? lastName,
       String? email,
       String? phone,
-      enums.TenantProfileDtoContactMethod? contactMethod,
-      String? street,
-      String? zip,
-      String? city,
-      String? country}) {
-    return TenantProfileDto(
-        tenantId: tenantId ?? this.tenantId,
-        tenantDisplayId: tenantDisplayId ?? this.tenantDisplayId,
-        unitId: unitId ?? this.unitId,
-        unitDisplayId: unitDisplayId ?? this.unitDisplayId,
+      String? notes,
+      enums.TenantDtoContactMethod? contactMethod,
+      List<LeaseDto>? leases,
+      List<AttachmentDto>? attachments,
+      List<InquiryLinkDto>? inquiryLinks,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      DateTime? lastLogin}) {
+    return TenantDto(
+        id: id ?? this.id,
+        displayId: displayId ?? this.displayId,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
         email: email ?? this.email,
         phone: phone ?? this.phone,
+        notes: notes ?? this.notes,
         contactMethod: contactMethod ?? this.contactMethod,
-        street: street ?? this.street,
-        zip: zip ?? this.zip,
-        city: city ?? this.city,
-        country: country ?? this.country);
+        leases: leases ?? this.leases,
+        attachments: attachments ?? this.attachments,
+        inquiryLinks: inquiryLinks ?? this.inquiryLinks,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        lastLogin: lastLogin ?? this.lastLogin);
   }
 
-  TenantProfileDto copyWithWrapped(
-      {Wrapped<String>? tenantId,
-      Wrapped<String>? tenantDisplayId,
-      Wrapped<String?>? unitId,
-      Wrapped<String?>? unitDisplayId,
+  TenantDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? displayId,
       Wrapped<String?>? firstName,
       Wrapped<String?>? lastName,
       Wrapped<String?>? email,
       Wrapped<String?>? phone,
-      Wrapped<enums.TenantProfileDtoContactMethod?>? contactMethod,
-      Wrapped<String?>? street,
-      Wrapped<String?>? zip,
-      Wrapped<String?>? city,
-      Wrapped<String?>? country}) {
-    return TenantProfileDto(
-        tenantId: (tenantId != null ? tenantId.value : this.tenantId),
-        tenantDisplayId: (tenantDisplayId != null
-            ? tenantDisplayId.value
-            : this.tenantDisplayId),
-        unitId: (unitId != null ? unitId.value : this.unitId),
-        unitDisplayId:
-            (unitDisplayId != null ? unitDisplayId.value : this.unitDisplayId),
+      Wrapped<String?>? notes,
+      Wrapped<enums.TenantDtoContactMethod?>? contactMethod,
+      Wrapped<List<LeaseDto>?>? leases,
+      Wrapped<List<AttachmentDto>?>? attachments,
+      Wrapped<List<InquiryLinkDto>?>? inquiryLinks,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt,
+      Wrapped<DateTime?>? lastLogin}) {
+    return TenantDto(
+        id: (id != null ? id.value : this.id),
+        displayId: (displayId != null ? displayId.value : this.displayId),
         firstName: (firstName != null ? firstName.value : this.firstName),
         lastName: (lastName != null ? lastName.value : this.lastName),
         email: (email != null ? email.value : this.email),
         phone: (phone != null ? phone.value : this.phone),
+        notes: (notes != null ? notes.value : this.notes),
         contactMethod:
             (contactMethod != null ? contactMethod.value : this.contactMethod),
-        street: (street != null ? street.value : this.street),
-        zip: (zip != null ? zip.value : this.zip),
-        city: (city != null ? city.value : this.city),
-        country: (country != null ? country.value : this.country));
+        leases: (leases != null ? leases.value : this.leases),
+        attachments:
+            (attachments != null ? attachments.value : this.attachments),
+        inquiryLinks:
+            (inquiryLinks != null ? inquiryLinks.value : this.inquiryLinks),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt),
+        lastLogin: (lastLogin != null ? lastLogin.value : this.lastLogin));
   }
 }
 
@@ -2680,164 +2722,6 @@ extension $ResolvedTenantDtoExtension on ResolvedTenantDto {
 }
 
 @JsonSerializable(explicitToJson: true)
-class TenantLogEntryDto {
-  const TenantLogEntryDto({
-    required this.id,
-    this.content,
-    this.taskProxy,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory TenantLogEntryDto.fromJson(Map<String, dynamic> json) =>
-      _$TenantLogEntryDtoFromJson(json);
-
-  static const toJsonFactory = _$TenantLogEntryDtoToJson;
-  Map<String, dynamic> toJson() => _$TenantLogEntryDtoToJson(this);
-
-  @JsonKey(name: 'id')
-  final String id;
-  @JsonKey(name: 'content')
-  final String? content;
-  @JsonKey(name: 'taskProxy')
-  final TaskProxyDto? taskProxy;
-  @JsonKey(name: 'createdAt')
-  final DateTime createdAt;
-  @JsonKey(name: 'updatedAt')
-  final DateTime updatedAt;
-  static const fromJsonFactory = _$TenantLogEntryDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is TenantLogEntryDto &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality()
-                    .equals(other.content, content)) &&
-            (identical(other.taskProxy, taskProxy) ||
-                const DeepCollectionEquality()
-                    .equals(other.taskProxy, taskProxy)) &&
-            (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.updatedAt, updatedAt)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(content) ^
-      const DeepCollectionEquality().hash(taskProxy) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(updatedAt) ^
-      runtimeType.hashCode;
-}
-
-extension $TenantLogEntryDtoExtension on TenantLogEntryDto {
-  TenantLogEntryDto copyWith(
-      {String? id,
-      String? content,
-      TaskProxyDto? taskProxy,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
-    return TenantLogEntryDto(
-        id: id ?? this.id,
-        content: content ?? this.content,
-        taskProxy: taskProxy ?? this.taskProxy,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
-  }
-
-  TenantLogEntryDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<String?>? content,
-      Wrapped<TaskProxyDto?>? taskProxy,
-      Wrapped<DateTime>? createdAt,
-      Wrapped<DateTime>? updatedAt}) {
-    return TenantLogEntryDto(
-        id: (id != null ? id.value : this.id),
-        content: (content != null ? content.value : this.content),
-        taskProxy: (taskProxy != null ? taskProxy.value : this.taskProxy),
-        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
-        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class TenantLogEntryCreateDto {
-  const TenantLogEntryCreateDto({
-    required this.tenantId,
-    required this.content,
-    required this.dueDate,
-  });
-
-  factory TenantLogEntryCreateDto.fromJson(Map<String, dynamic> json) =>
-      _$TenantLogEntryCreateDtoFromJson(json);
-
-  static const toJsonFactory = _$TenantLogEntryCreateDtoToJson;
-  Map<String, dynamic> toJson() => _$TenantLogEntryCreateDtoToJson(this);
-
-  @JsonKey(name: 'tenantId')
-  final String tenantId;
-  @JsonKey(name: 'content')
-  final String content;
-  @JsonKey(name: 'dueDate')
-  final DateTime dueDate;
-  static const fromJsonFactory = _$TenantLogEntryCreateDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is TenantLogEntryCreateDto &&
-            (identical(other.tenantId, tenantId) ||
-                const DeepCollectionEquality()
-                    .equals(other.tenantId, tenantId)) &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality()
-                    .equals(other.content, content)) &&
-            (identical(other.dueDate, dueDate) ||
-                const DeepCollectionEquality().equals(other.dueDate, dueDate)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(tenantId) ^
-      const DeepCollectionEquality().hash(content) ^
-      const DeepCollectionEquality().hash(dueDate) ^
-      runtimeType.hashCode;
-}
-
-extension $TenantLogEntryCreateDtoExtension on TenantLogEntryCreateDto {
-  TenantLogEntryCreateDto copyWith(
-      {String? tenantId, String? content, DateTime? dueDate}) {
-    return TenantLogEntryCreateDto(
-        tenantId: tenantId ?? this.tenantId,
-        content: content ?? this.content,
-        dueDate: dueDate ?? this.dueDate);
-  }
-
-  TenantLogEntryCreateDto copyWithWrapped(
-      {Wrapped<String>? tenantId,
-      Wrapped<String>? content,
-      Wrapped<DateTime>? dueDate}) {
-    return TenantLogEntryCreateDto(
-        tenantId: (tenantId != null ? tenantId.value : this.tenantId),
-        content: (content != null ? content.value : this.content),
-        dueDate: (dueDate != null ? dueDate.value : this.dueDate));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class CreateTenantDto {
   const CreateTenantDto({
     this.firstName,
@@ -2927,54 +2811,32 @@ extension $CreateTenantDtoExtension on CreateTenantDto {
 }
 
 @JsonSerializable(explicitToJson: true)
-class UpdateTenantDto {
-  const UpdateTenantDto({
+class ComplexLinkDto {
+  const ComplexLinkDto({
     required this.id,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phone,
-    this.notes,
+    required this.label,
   });
 
-  factory UpdateTenantDto.fromJson(Map<String, dynamic> json) =>
-      _$UpdateTenantDtoFromJson(json);
+  factory ComplexLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$ComplexLinkDtoFromJson(json);
 
-  static const toJsonFactory = _$UpdateTenantDtoToJson;
-  Map<String, dynamic> toJson() => _$UpdateTenantDtoToJson(this);
+  static const toJsonFactory = _$ComplexLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$ComplexLinkDtoToJson(this);
 
   @JsonKey(name: 'id')
   final String id;
-  @JsonKey(name: 'firstName')
-  final String? firstName;
-  @JsonKey(name: 'lastName')
-  final String? lastName;
-  @JsonKey(name: 'email')
-  final String? email;
-  @JsonKey(name: 'phone')
-  final String? phone;
-  @JsonKey(name: 'notes')
-  final String? notes;
-  static const fromJsonFactory = _$UpdateTenantDtoFromJson;
+  @JsonKey(name: 'label')
+  final String label;
+  static const fromJsonFactory = _$ComplexLinkDtoFromJson;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other is UpdateTenantDto &&
+        (other is ComplexLinkDto &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality()
-                    .equals(other.firstName, firstName)) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastName, lastName)) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
-            (identical(other.phone, phone) ||
-                const DeepCollectionEquality().equals(other.phone, phone)) &&
-            (identical(other.notes, notes) ||
-                const DeepCollectionEquality().equals(other.notes, notes)));
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)));
   }
 
   @override
@@ -2983,45 +2845,20 @@ class UpdateTenantDto {
   @override
   int get hashCode =>
       const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(firstName) ^
-      const DeepCollectionEquality().hash(lastName) ^
-      const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(phone) ^
-      const DeepCollectionEquality().hash(notes) ^
+      const DeepCollectionEquality().hash(label) ^
       runtimeType.hashCode;
 }
 
-extension $UpdateTenantDtoExtension on UpdateTenantDto {
-  UpdateTenantDto copyWith(
-      {String? id,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? phone,
-      String? notes}) {
-    return UpdateTenantDto(
-        id: id ?? this.id,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        notes: notes ?? this.notes);
+extension $ComplexLinkDtoExtension on ComplexLinkDto {
+  ComplexLinkDto copyWith({String? id, String? label}) {
+    return ComplexLinkDto(id: id ?? this.id, label: label ?? this.label);
   }
 
-  UpdateTenantDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<String?>? firstName,
-      Wrapped<String?>? lastName,
-      Wrapped<String?>? email,
-      Wrapped<String?>? phone,
-      Wrapped<String?>? notes}) {
-    return UpdateTenantDto(
+  ComplexLinkDto copyWithWrapped(
+      {Wrapped<String>? id, Wrapped<String>? label}) {
+    return ComplexLinkDto(
         id: (id != null ? id.value : this.id),
-        firstName: (firstName != null ? firstName.value : this.firstName),
-        lastName: (lastName != null ? lastName.value : this.lastName),
-        email: (email != null ? email.value : this.email),
-        phone: (phone != null ? phone.value : this.phone),
-        notes: (notes != null ? notes.value : this.notes));
+        label: (label != null ? label.value : this.label));
   }
 }
 
@@ -3030,7 +2867,7 @@ class BuildingDto {
   const BuildingDto({
     required this.id,
     required this.displayId,
-    this.complexString,
+    this.complexLink,
     required this.name,
     required this.units,
     required this.address,
@@ -3050,8 +2887,8 @@ class BuildingDto {
   final String id;
   @JsonKey(name: 'displayId')
   final String displayId;
-  @JsonKey(name: 'complexString')
-  final String? complexString;
+  @JsonKey(name: 'complexLink')
+  final ComplexLinkDto? complexLink;
   @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'units', defaultValue: <UnitDto>[])
@@ -3077,9 +2914,9 @@ class BuildingDto {
             (identical(other.displayId, displayId) ||
                 const DeepCollectionEquality()
                     .equals(other.displayId, displayId)) &&
-            (identical(other.complexString, complexString) ||
+            (identical(other.complexLink, complexLink) ||
                 const DeepCollectionEquality()
-                    .equals(other.complexString, complexString)) &&
+                    .equals(other.complexLink, complexLink)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.units, units) ||
@@ -3107,7 +2944,7 @@ class BuildingDto {
   int get hashCode =>
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(displayId) ^
-      const DeepCollectionEquality().hash(complexString) ^
+      const DeepCollectionEquality().hash(complexLink) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(units) ^
       const DeepCollectionEquality().hash(address) ^
@@ -3122,7 +2959,7 @@ extension $BuildingDtoExtension on BuildingDto {
   BuildingDto copyWith(
       {String? id,
       String? displayId,
-      String? complexString,
+      ComplexLinkDto? complexLink,
       String? name,
       List<UnitDto>? units,
       AddressDto? address,
@@ -3133,7 +2970,7 @@ extension $BuildingDtoExtension on BuildingDto {
     return BuildingDto(
         id: id ?? this.id,
         displayId: displayId ?? this.displayId,
-        complexString: complexString ?? this.complexString,
+        complexLink: complexLink ?? this.complexLink,
         name: name ?? this.name,
         units: units ?? this.units,
         address: address ?? this.address,
@@ -3146,7 +2983,7 @@ extension $BuildingDtoExtension on BuildingDto {
   BuildingDto copyWithWrapped(
       {Wrapped<String>? id,
       Wrapped<String>? displayId,
-      Wrapped<String?>? complexString,
+      Wrapped<ComplexLinkDto?>? complexLink,
       Wrapped<String>? name,
       Wrapped<List<UnitDto>>? units,
       Wrapped<AddressDto>? address,
@@ -3157,8 +2994,8 @@ extension $BuildingDtoExtension on BuildingDto {
     return BuildingDto(
         id: (id != null ? id.value : this.id),
         displayId: (displayId != null ? displayId.value : this.displayId),
-        complexString:
-            (complexString != null ? complexString.value : this.complexString),
+        complexLink:
+            (complexLink != null ? complexLink.value : this.complexLink),
         name: (name != null ? name.value : this.name),
         units: (units != null ? units.value : this.units),
         address: (address != null ? address.value : this.address),
@@ -3568,10 +3405,12 @@ extension $AddUnitBuildingDtoExtension on AddUnitBuildingDto {
 @JsonSerializable(explicitToJson: true)
 class CreateLeaseDto {
   const CreateLeaseDto({
-    required this.tenantId,
-    required this.unitId,
+    required this.contactId,
+    required this.type,
+    this.unitId,
     required this.startDate,
-    required this.endDate,
+    this.endDate,
+    this.notes,
   });
 
   factory CreateLeaseDto.fromJson(Map<String, dynamic> json) =>
@@ -3580,30 +3419,43 @@ class CreateLeaseDto {
   static const toJsonFactory = _$CreateLeaseDtoToJson;
   Map<String, dynamic> toJson() => _$CreateLeaseDtoToJson(this);
 
-  @JsonKey(name: 'tenantId')
-  final String tenantId;
+  @JsonKey(name: 'contactId')
+  final String contactId;
+  @JsonKey(
+    name: 'type',
+    toJson: contractTypeToJson,
+    fromJson: contractTypeFromJson,
+  )
+  final enums.ContractType type;
   @JsonKey(name: 'unitId')
-  final String unitId;
+  final String? unitId;
   @JsonKey(name: 'startDate')
   final DateTime startDate;
   @JsonKey(name: 'endDate')
-  final DateTime endDate;
+  final DateTime? endDate;
+  @JsonKey(name: 'notes')
+  final String? notes;
   static const fromJsonFactory = _$CreateLeaseDtoFromJson;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CreateLeaseDto &&
-            (identical(other.tenantId, tenantId) ||
+            (identical(other.contactId, contactId) ||
                 const DeepCollectionEquality()
-                    .equals(other.tenantId, tenantId)) &&
+                    .equals(other.contactId, contactId)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
             (identical(other.unitId, unitId) ||
                 const DeepCollectionEquality().equals(other.unitId, unitId)) &&
             (identical(other.startDate, startDate) ||
                 const DeepCollectionEquality()
                     .equals(other.startDate, startDate)) &&
             (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality().equals(other.endDate, endDate)));
+                const DeepCollectionEquality()
+                    .equals(other.endDate, endDate)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)));
   }
 
   @override
@@ -3611,36 +3463,46 @@ class CreateLeaseDto {
 
   @override
   int get hashCode =>
-      const DeepCollectionEquality().hash(tenantId) ^
+      const DeepCollectionEquality().hash(contactId) ^
+      const DeepCollectionEquality().hash(type) ^
       const DeepCollectionEquality().hash(unitId) ^
       const DeepCollectionEquality().hash(startDate) ^
       const DeepCollectionEquality().hash(endDate) ^
+      const DeepCollectionEquality().hash(notes) ^
       runtimeType.hashCode;
 }
 
 extension $CreateLeaseDtoExtension on CreateLeaseDto {
   CreateLeaseDto copyWith(
-      {String? tenantId,
+      {String? contactId,
+      enums.ContractType? type,
       String? unitId,
       DateTime? startDate,
-      DateTime? endDate}) {
+      DateTime? endDate,
+      String? notes}) {
     return CreateLeaseDto(
-        tenantId: tenantId ?? this.tenantId,
+        contactId: contactId ?? this.contactId,
+        type: type ?? this.type,
         unitId: unitId ?? this.unitId,
         startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate);
+        endDate: endDate ?? this.endDate,
+        notes: notes ?? this.notes);
   }
 
   CreateLeaseDto copyWithWrapped(
-      {Wrapped<String>? tenantId,
-      Wrapped<String>? unitId,
+      {Wrapped<String>? contactId,
+      Wrapped<enums.ContractType>? type,
+      Wrapped<String?>? unitId,
       Wrapped<DateTime>? startDate,
-      Wrapped<DateTime>? endDate}) {
+      Wrapped<DateTime?>? endDate,
+      Wrapped<String?>? notes}) {
     return CreateLeaseDto(
-        tenantId: (tenantId != null ? tenantId.value : this.tenantId),
+        contactId: (contactId != null ? contactId.value : this.contactId),
+        type: (type != null ? type.value : this.type),
         unitId: (unitId != null ? unitId.value : this.unitId),
         startDate: (startDate != null ? startDate.value : this.startDate),
-        endDate: (endDate != null ? endDate.value : this.endDate));
+        endDate: (endDate != null ? endDate.value : this.endDate),
+        notes: (notes != null ? notes.value : this.notes));
   }
 }
 
@@ -3648,10 +3510,12 @@ extension $CreateLeaseDtoExtension on CreateLeaseDto {
 class UpdateLeaseDto {
   const UpdateLeaseDto({
     required this.id,
-    required this.tenantId,
-    required this.unitId,
+    required this.contactId,
+    required this.type,
+    this.unitId,
     required this.startDate,
-    required this.endDate,
+    this.endDate,
+    this.notes,
   });
 
   factory UpdateLeaseDto.fromJson(Map<String, dynamic> json) =>
@@ -3662,14 +3526,22 @@ class UpdateLeaseDto {
 
   @JsonKey(name: 'id')
   final String id;
-  @JsonKey(name: 'tenantId')
-  final String tenantId;
+  @JsonKey(name: 'contactId')
+  final String contactId;
+  @JsonKey(
+    name: 'type',
+    toJson: contractTypeToJson,
+    fromJson: contractTypeFromJson,
+  )
+  final enums.ContractType type;
   @JsonKey(name: 'unitId')
-  final String unitId;
+  final String? unitId;
   @JsonKey(name: 'startDate')
   final DateTime startDate;
   @JsonKey(name: 'endDate')
-  final DateTime endDate;
+  final DateTime? endDate;
+  @JsonKey(name: 'notes')
+  final String? notes;
   static const fromJsonFactory = _$UpdateLeaseDtoFromJson;
 
   @override
@@ -3678,16 +3550,21 @@ class UpdateLeaseDto {
         (other is UpdateLeaseDto &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.tenantId, tenantId) ||
+            (identical(other.contactId, contactId) ||
                 const DeepCollectionEquality()
-                    .equals(other.tenantId, tenantId)) &&
+                    .equals(other.contactId, contactId)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
             (identical(other.unitId, unitId) ||
                 const DeepCollectionEquality().equals(other.unitId, unitId)) &&
             (identical(other.startDate, startDate) ||
                 const DeepCollectionEquality()
                     .equals(other.startDate, startDate)) &&
             (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality().equals(other.endDate, endDate)));
+                const DeepCollectionEquality()
+                    .equals(other.endDate, endDate)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)));
   }
 
   @override
@@ -3696,40 +3573,1101 @@ class UpdateLeaseDto {
   @override
   int get hashCode =>
       const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(tenantId) ^
+      const DeepCollectionEquality().hash(contactId) ^
+      const DeepCollectionEquality().hash(type) ^
       const DeepCollectionEquality().hash(unitId) ^
       const DeepCollectionEquality().hash(startDate) ^
       const DeepCollectionEquality().hash(endDate) ^
+      const DeepCollectionEquality().hash(notes) ^
       runtimeType.hashCode;
 }
 
 extension $UpdateLeaseDtoExtension on UpdateLeaseDto {
   UpdateLeaseDto copyWith(
       {String? id,
-      String? tenantId,
+      String? contactId,
+      enums.ContractType? type,
       String? unitId,
       DateTime? startDate,
-      DateTime? endDate}) {
+      DateTime? endDate,
+      String? notes}) {
     return UpdateLeaseDto(
         id: id ?? this.id,
-        tenantId: tenantId ?? this.tenantId,
+        contactId: contactId ?? this.contactId,
+        type: type ?? this.type,
         unitId: unitId ?? this.unitId,
         startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate);
+        endDate: endDate ?? this.endDate,
+        notes: notes ?? this.notes);
   }
 
   UpdateLeaseDto copyWithWrapped(
       {Wrapped<String>? id,
-      Wrapped<String>? tenantId,
-      Wrapped<String>? unitId,
+      Wrapped<String>? contactId,
+      Wrapped<enums.ContractType>? type,
+      Wrapped<String?>? unitId,
       Wrapped<DateTime>? startDate,
-      Wrapped<DateTime>? endDate}) {
+      Wrapped<DateTime?>? endDate,
+      Wrapped<String?>? notes}) {
     return UpdateLeaseDto(
         id: (id != null ? id.value : this.id),
-        tenantId: (tenantId != null ? tenantId.value : this.tenantId),
+        contactId: (contactId != null ? contactId.value : this.contactId),
+        type: (type != null ? type.value : this.type),
         unitId: (unitId != null ? unitId.value : this.unitId),
         startDate: (startDate != null ? startDate.value : this.startDate),
-        endDate: (endDate != null ? endDate.value : this.endDate));
+        endDate: (endDate != null ? endDate.value : this.endDate),
+        notes: (notes != null ? notes.value : this.notes));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class PersonDto {
+  const PersonDto({
+    required this.id,
+    required this.salutation,
+    required this.firstName,
+    required this.lastName,
+  });
+
+  factory PersonDto.fromJson(Map<String, dynamic> json) =>
+      _$PersonDtoFromJson(json);
+
+  static const toJsonFactory = _$PersonDtoToJson;
+  Map<String, dynamic> toJson() => _$PersonDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(
+    name: 'salutation',
+    toJson: salutationToJson,
+    fromJson: salutationFromJson,
+  )
+  final enums.Salutation salutation;
+  @JsonKey(name: 'firstName')
+  final String firstName;
+  @JsonKey(name: 'lastName')
+  final String lastName;
+  static const fromJsonFactory = _$PersonDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is PersonDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.salutation, salutation) ||
+                const DeepCollectionEquality()
+                    .equals(other.salutation, salutation)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(salutation) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName) ^
+      runtimeType.hashCode;
+}
+
+extension $PersonDtoExtension on PersonDto {
+  PersonDto copyWith(
+      {String? id,
+      enums.Salutation? salutation,
+      String? firstName,
+      String? lastName}) {
+    return PersonDto(
+        id: id ?? this.id,
+        salutation: salutation ?? this.salutation,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName);
+  }
+
+  PersonDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<enums.Salutation>? salutation,
+      Wrapped<String>? firstName,
+      Wrapped<String>? lastName}) {
+    return PersonDto(
+        id: (id != null ? id.value : this.id),
+        salutation: (salutation != null ? salutation.value : this.salutation),
+        firstName: (firstName != null ? firstName.value : this.firstName),
+        lastName: (lastName != null ? lastName.value : this.lastName));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class ContactDto {
+  const ContactDto({
+    required this.id,
+    required this.displayId,
+    this.person,
+    this.roles,
+    this.email,
+    this.phone,
+    required this.preferredChannel,
+    this.address,
+    required this.notes,
+    this.attachments,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory ContactDto.fromJson(Map<String, dynamic> json) =>
+      _$ContactDtoFromJson(json);
+
+  static const toJsonFactory = _$ContactDtoToJson;
+  Map<String, dynamic> toJson() => _$ContactDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'displayId')
+  final String displayId;
+  @JsonKey(name: 'person')
+  final PersonDto? person;
+  @JsonKey(
+    name: 'roles',
+    toJson: contractTypeListToJson,
+    fromJson: contractTypeListFromJson,
+  )
+  final List<enums.ContractType>? roles;
+  @JsonKey(name: 'email')
+  final String? email;
+  @JsonKey(name: 'phone')
+  final String? phone;
+  @JsonKey(
+    name: 'preferredChannel',
+    toJson: contactMethodToJson,
+    fromJson: contactMethodFromJson,
+  )
+  final enums.ContactMethod preferredChannel;
+  @JsonKey(name: 'address')
+  final AddressDto? address;
+  @JsonKey(name: 'notes')
+  final String notes;
+  @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
+  final List<AttachmentDto>? attachments;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$ContactDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ContactDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.displayId, displayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayId, displayId)) &&
+            (identical(other.person, person) ||
+                const DeepCollectionEquality().equals(other.person, person)) &&
+            (identical(other.roles, roles) ||
+                const DeepCollectionEquality().equals(other.roles, roles)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.phone, phone) ||
+                const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.preferredChannel, preferredChannel) ||
+                const DeepCollectionEquality()
+                    .equals(other.preferredChannel, preferredChannel)) &&
+            (identical(other.address, address) ||
+                const DeepCollectionEquality()
+                    .equals(other.address, address)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)) &&
+            (identical(other.attachments, attachments) ||
+                const DeepCollectionEquality()
+                    .equals(other.attachments, attachments)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(displayId) ^
+      const DeepCollectionEquality().hash(person) ^
+      const DeepCollectionEquality().hash(roles) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(preferredChannel) ^
+      const DeepCollectionEquality().hash(address) ^
+      const DeepCollectionEquality().hash(notes) ^
+      const DeepCollectionEquality().hash(attachments) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $ContactDtoExtension on ContactDto {
+  ContactDto copyWith(
+      {String? id,
+      String? displayId,
+      PersonDto? person,
+      List<enums.ContractType>? roles,
+      String? email,
+      String? phone,
+      enums.ContactMethod? preferredChannel,
+      AddressDto? address,
+      String? notes,
+      List<AttachmentDto>? attachments,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return ContactDto(
+        id: id ?? this.id,
+        displayId: displayId ?? this.displayId,
+        person: person ?? this.person,
+        roles: roles ?? this.roles,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        preferredChannel: preferredChannel ?? this.preferredChannel,
+        address: address ?? this.address,
+        notes: notes ?? this.notes,
+        attachments: attachments ?? this.attachments,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  ContactDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? displayId,
+      Wrapped<PersonDto?>? person,
+      Wrapped<List<enums.ContractType>?>? roles,
+      Wrapped<String?>? email,
+      Wrapped<String?>? phone,
+      Wrapped<enums.ContactMethod>? preferredChannel,
+      Wrapped<AddressDto?>? address,
+      Wrapped<String>? notes,
+      Wrapped<List<AttachmentDto>?>? attachments,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return ContactDto(
+        id: (id != null ? id.value : this.id),
+        displayId: (displayId != null ? displayId.value : this.displayId),
+        person: (person != null ? person.value : this.person),
+        roles: (roles != null ? roles.value : this.roles),
+        email: (email != null ? email.value : this.email),
+        phone: (phone != null ? phone.value : this.phone),
+        preferredChannel: (preferredChannel != null
+            ? preferredChannel.value
+            : this.preferredChannel),
+        address: (address != null ? address.value : this.address),
+        notes: (notes != null ? notes.value : this.notes),
+        attachments:
+            (attachments != null ? attachments.value : this.attachments),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TenantProfileDto {
+  const TenantProfileDto({
+    required this.contactId,
+    required this.contactDisplayId,
+    this.unitId,
+    this.unitDisplayId,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phone,
+    this.contactMethod,
+    this.street,
+    this.zip,
+    this.city,
+    this.country,
+  });
+
+  factory TenantProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$TenantProfileDtoFromJson(json);
+
+  static const toJsonFactory = _$TenantProfileDtoToJson;
+  Map<String, dynamic> toJson() => _$TenantProfileDtoToJson(this);
+
+  @JsonKey(name: 'contactId')
+  final String contactId;
+  @JsonKey(name: 'contactDisplayId')
+  final String contactDisplayId;
+  @JsonKey(name: 'unitId')
+  final String? unitId;
+  @JsonKey(name: 'unitDisplayId')
+  final String? unitDisplayId;
+  @JsonKey(name: 'firstName')
+  final String? firstName;
+  @JsonKey(name: 'lastName')
+  final String? lastName;
+  @JsonKey(name: 'email')
+  final String? email;
+  @JsonKey(name: 'phone')
+  final String? phone;
+  @JsonKey(
+    name: 'contactMethod',
+    toJson: tenantProfileDtoContactMethodNullableToJson,
+    fromJson: tenantProfileDtoContactMethodNullableFromJson,
+  )
+  final enums.TenantProfileDtoContactMethod? contactMethod;
+  @JsonKey(name: 'street')
+  final String? street;
+  @JsonKey(name: 'zip')
+  final String? zip;
+  @JsonKey(name: 'city')
+  final String? city;
+  @JsonKey(name: 'country')
+  final String? country;
+  static const fromJsonFactory = _$TenantProfileDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TenantProfileDto &&
+            (identical(other.contactId, contactId) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactId, contactId)) &&
+            (identical(other.contactDisplayId, contactDisplayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactDisplayId, contactDisplayId)) &&
+            (identical(other.unitId, unitId) ||
+                const DeepCollectionEquality().equals(other.unitId, unitId)) &&
+            (identical(other.unitDisplayId, unitDisplayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.unitDisplayId, unitDisplayId)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.phone, phone) ||
+                const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.contactMethod, contactMethod) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactMethod, contactMethod)) &&
+            (identical(other.street, street) ||
+                const DeepCollectionEquality().equals(other.street, street)) &&
+            (identical(other.zip, zip) ||
+                const DeepCollectionEquality().equals(other.zip, zip)) &&
+            (identical(other.city, city) ||
+                const DeepCollectionEquality().equals(other.city, city)) &&
+            (identical(other.country, country) ||
+                const DeepCollectionEquality().equals(other.country, country)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(contactId) ^
+      const DeepCollectionEquality().hash(contactDisplayId) ^
+      const DeepCollectionEquality().hash(unitId) ^
+      const DeepCollectionEquality().hash(unitDisplayId) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(contactMethod) ^
+      const DeepCollectionEquality().hash(street) ^
+      const DeepCollectionEquality().hash(zip) ^
+      const DeepCollectionEquality().hash(city) ^
+      const DeepCollectionEquality().hash(country) ^
+      runtimeType.hashCode;
+}
+
+extension $TenantProfileDtoExtension on TenantProfileDto {
+  TenantProfileDto copyWith(
+      {String? contactId,
+      String? contactDisplayId,
+      String? unitId,
+      String? unitDisplayId,
+      String? firstName,
+      String? lastName,
+      String? email,
+      String? phone,
+      enums.TenantProfileDtoContactMethod? contactMethod,
+      String? street,
+      String? zip,
+      String? city,
+      String? country}) {
+    return TenantProfileDto(
+        contactId: contactId ?? this.contactId,
+        contactDisplayId: contactDisplayId ?? this.contactDisplayId,
+        unitId: unitId ?? this.unitId,
+        unitDisplayId: unitDisplayId ?? this.unitDisplayId,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        contactMethod: contactMethod ?? this.contactMethod,
+        street: street ?? this.street,
+        zip: zip ?? this.zip,
+        city: city ?? this.city,
+        country: country ?? this.country);
+  }
+
+  TenantProfileDto copyWithWrapped(
+      {Wrapped<String>? contactId,
+      Wrapped<String>? contactDisplayId,
+      Wrapped<String?>? unitId,
+      Wrapped<String?>? unitDisplayId,
+      Wrapped<String?>? firstName,
+      Wrapped<String?>? lastName,
+      Wrapped<String?>? email,
+      Wrapped<String?>? phone,
+      Wrapped<enums.TenantProfileDtoContactMethod?>? contactMethod,
+      Wrapped<String?>? street,
+      Wrapped<String?>? zip,
+      Wrapped<String?>? city,
+      Wrapped<String?>? country}) {
+    return TenantProfileDto(
+        contactId: (contactId != null ? contactId.value : this.contactId),
+        contactDisplayId: (contactDisplayId != null
+            ? contactDisplayId.value
+            : this.contactDisplayId),
+        unitId: (unitId != null ? unitId.value : this.unitId),
+        unitDisplayId:
+            (unitDisplayId != null ? unitDisplayId.value : this.unitDisplayId),
+        firstName: (firstName != null ? firstName.value : this.firstName),
+        lastName: (lastName != null ? lastName.value : this.lastName),
+        email: (email != null ? email.value : this.email),
+        phone: (phone != null ? phone.value : this.phone),
+        contactMethod:
+            (contactMethod != null ? contactMethod.value : this.contactMethod),
+        street: (street != null ? street.value : this.street),
+        zip: (zip != null ? zip.value : this.zip),
+        city: (city != null ? city.value : this.city),
+        country: (country != null ? country.value : this.country));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class PersonCreateDto {
+  const PersonCreateDto({
+    this.email,
+    this.phone,
+    this.notes,
+    required this.address,
+    required this.preferredChannel,
+    required this.salutation,
+    required this.firstName,
+    required this.lastName,
+  });
+
+  factory PersonCreateDto.fromJson(Map<String, dynamic> json) =>
+      _$PersonCreateDtoFromJson(json);
+
+  static const toJsonFactory = _$PersonCreateDtoToJson;
+  Map<String, dynamic> toJson() => _$PersonCreateDtoToJson(this);
+
+  @JsonKey(name: 'email')
+  final String? email;
+  @JsonKey(name: 'phone')
+  final String? phone;
+  @JsonKey(name: 'notes')
+  final String? notes;
+  @JsonKey(name: 'address')
+  final CreateAddressDto address;
+  @JsonKey(
+    name: 'preferredChannel',
+    toJson: contactMethodToJson,
+    fromJson: contactMethodFromJson,
+  )
+  final enums.ContactMethod preferredChannel;
+  @JsonKey(
+    name: 'salutation',
+    toJson: salutationToJson,
+    fromJson: salutationFromJson,
+  )
+  final enums.Salutation salutation;
+  @JsonKey(name: 'firstName')
+  final String firstName;
+  @JsonKey(name: 'lastName')
+  final String lastName;
+  static const fromJsonFactory = _$PersonCreateDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is PersonCreateDto &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.phone, phone) ||
+                const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)) &&
+            (identical(other.address, address) ||
+                const DeepCollectionEquality()
+                    .equals(other.address, address)) &&
+            (identical(other.preferredChannel, preferredChannel) ||
+                const DeepCollectionEquality()
+                    .equals(other.preferredChannel, preferredChannel)) &&
+            (identical(other.salutation, salutation) ||
+                const DeepCollectionEquality()
+                    .equals(other.salutation, salutation)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(notes) ^
+      const DeepCollectionEquality().hash(address) ^
+      const DeepCollectionEquality().hash(preferredChannel) ^
+      const DeepCollectionEquality().hash(salutation) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName) ^
+      runtimeType.hashCode;
+}
+
+extension $PersonCreateDtoExtension on PersonCreateDto {
+  PersonCreateDto copyWith(
+      {String? email,
+      String? phone,
+      String? notes,
+      CreateAddressDto? address,
+      enums.ContactMethod? preferredChannel,
+      enums.Salutation? salutation,
+      String? firstName,
+      String? lastName}) {
+    return PersonCreateDto(
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        notes: notes ?? this.notes,
+        address: address ?? this.address,
+        preferredChannel: preferredChannel ?? this.preferredChannel,
+        salutation: salutation ?? this.salutation,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName);
+  }
+
+  PersonCreateDto copyWithWrapped(
+      {Wrapped<String?>? email,
+      Wrapped<String?>? phone,
+      Wrapped<String?>? notes,
+      Wrapped<CreateAddressDto>? address,
+      Wrapped<enums.ContactMethod>? preferredChannel,
+      Wrapped<enums.Salutation>? salutation,
+      Wrapped<String>? firstName,
+      Wrapped<String>? lastName}) {
+    return PersonCreateDto(
+        email: (email != null ? email.value : this.email),
+        phone: (phone != null ? phone.value : this.phone),
+        notes: (notes != null ? notes.value : this.notes),
+        address: (address != null ? address.value : this.address),
+        preferredChannel: (preferredChannel != null
+            ? preferredChannel.value
+            : this.preferredChannel),
+        salutation: (salutation != null ? salutation.value : this.salutation),
+        firstName: (firstName != null ? firstName.value : this.firstName),
+        lastName: (lastName != null ? lastName.value : this.lastName));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class PersonUpdateDto {
+  const PersonUpdateDto({
+    required this.id,
+    this.email,
+    this.phone,
+    this.notes,
+    required this.preferredChannel,
+    this.street,
+    this.zip,
+    this.city,
+    required this.salutation,
+    required this.firstName,
+    required this.lastName,
+  });
+
+  factory PersonUpdateDto.fromJson(Map<String, dynamic> json) =>
+      _$PersonUpdateDtoFromJson(json);
+
+  static const toJsonFactory = _$PersonUpdateDtoToJson;
+  Map<String, dynamic> toJson() => _$PersonUpdateDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'email')
+  final String? email;
+  @JsonKey(name: 'phone')
+  final String? phone;
+  @JsonKey(name: 'notes')
+  final String? notes;
+  @JsonKey(
+    name: 'preferredChannel',
+    toJson: contactMethodToJson,
+    fromJson: contactMethodFromJson,
+  )
+  final enums.ContactMethod preferredChannel;
+  @JsonKey(name: 'street')
+  final String? street;
+  @JsonKey(name: 'zip')
+  final String? zip;
+  @JsonKey(name: 'city')
+  final String? city;
+  @JsonKey(
+    name: 'salutation',
+    toJson: salutationToJson,
+    fromJson: salutationFromJson,
+  )
+  final enums.Salutation salutation;
+  @JsonKey(name: 'firstName')
+  final String firstName;
+  @JsonKey(name: 'lastName')
+  final String lastName;
+  static const fromJsonFactory = _$PersonUpdateDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is PersonUpdateDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.phone, phone) ||
+                const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.notes, notes) ||
+                const DeepCollectionEquality().equals(other.notes, notes)) &&
+            (identical(other.preferredChannel, preferredChannel) ||
+                const DeepCollectionEquality()
+                    .equals(other.preferredChannel, preferredChannel)) &&
+            (identical(other.street, street) ||
+                const DeepCollectionEquality().equals(other.street, street)) &&
+            (identical(other.zip, zip) ||
+                const DeepCollectionEquality().equals(other.zip, zip)) &&
+            (identical(other.city, city) ||
+                const DeepCollectionEquality().equals(other.city, city)) &&
+            (identical(other.salutation, salutation) ||
+                const DeepCollectionEquality()
+                    .equals(other.salutation, salutation)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(notes) ^
+      const DeepCollectionEquality().hash(preferredChannel) ^
+      const DeepCollectionEquality().hash(street) ^
+      const DeepCollectionEquality().hash(zip) ^
+      const DeepCollectionEquality().hash(city) ^
+      const DeepCollectionEquality().hash(salutation) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName) ^
+      runtimeType.hashCode;
+}
+
+extension $PersonUpdateDtoExtension on PersonUpdateDto {
+  PersonUpdateDto copyWith(
+      {String? id,
+      String? email,
+      String? phone,
+      String? notes,
+      enums.ContactMethod? preferredChannel,
+      String? street,
+      String? zip,
+      String? city,
+      enums.Salutation? salutation,
+      String? firstName,
+      String? lastName}) {
+    return PersonUpdateDto(
+        id: id ?? this.id,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        notes: notes ?? this.notes,
+        preferredChannel: preferredChannel ?? this.preferredChannel,
+        street: street ?? this.street,
+        zip: zip ?? this.zip,
+        city: city ?? this.city,
+        salutation: salutation ?? this.salutation,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName);
+  }
+
+  PersonUpdateDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String?>? email,
+      Wrapped<String?>? phone,
+      Wrapped<String?>? notes,
+      Wrapped<enums.ContactMethod>? preferredChannel,
+      Wrapped<String?>? street,
+      Wrapped<String?>? zip,
+      Wrapped<String?>? city,
+      Wrapped<enums.Salutation>? salutation,
+      Wrapped<String>? firstName,
+      Wrapped<String>? lastName}) {
+    return PersonUpdateDto(
+        id: (id != null ? id.value : this.id),
+        email: (email != null ? email.value : this.email),
+        phone: (phone != null ? phone.value : this.phone),
+        notes: (notes != null ? notes.value : this.notes),
+        preferredChannel: (preferredChannel != null
+            ? preferredChannel.value
+            : this.preferredChannel),
+        street: (street != null ? street.value : this.street),
+        zip: (zip != null ? zip.value : this.zip),
+        city: (city != null ? city.value : this.city),
+        salutation: (salutation != null ? salutation.value : this.salutation),
+        firstName: (firstName != null ? firstName.value : this.firstName),
+        lastName: (lastName != null ? lastName.value : this.lastName));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TaskLinkDto {
+  const TaskLinkDto({
+    required this.id,
+    required this.label,
+    required this.status,
+  });
+
+  factory TaskLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$TaskLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$TaskLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$TaskLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(
+    name: 'status',
+    toJson: taskStatusToJson,
+    fromJson: taskStatusFromJson,
+  )
+  final enums.TaskStatus status;
+  static const fromJsonFactory = _$TaskLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TaskLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.status, status) ||
+                const DeepCollectionEquality().equals(other.status, status)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(status) ^
+      runtimeType.hashCode;
+}
+
+extension $TaskLinkDtoExtension on TaskLinkDto {
+  TaskLinkDto copyWith({String? id, String? label, enums.TaskStatus? status}) {
+    return TaskLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        status: status ?? this.status);
+  }
+
+  TaskLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<enums.TaskStatus>? status}) {
+    return TaskLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        status: (status != null ? status.value : this.status));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class ContactLogEntryDto {
+  const ContactLogEntryDto({
+    required this.id,
+    this.content,
+    this.taskLink,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory ContactLogEntryDto.fromJson(Map<String, dynamic> json) =>
+      _$ContactLogEntryDtoFromJson(json);
+
+  static const toJsonFactory = _$ContactLogEntryDtoToJson;
+  Map<String, dynamic> toJson() => _$ContactLogEntryDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'content')
+  final String? content;
+  @JsonKey(name: 'taskLink')
+  final TaskLinkDto? taskLink;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$ContactLogEntryDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ContactLogEntryDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
+            (identical(other.taskLink, taskLink) ||
+                const DeepCollectionEquality()
+                    .equals(other.taskLink, taskLink)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(taskLink) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $ContactLogEntryDtoExtension on ContactLogEntryDto {
+  ContactLogEntryDto copyWith(
+      {String? id,
+      String? content,
+      TaskLinkDto? taskLink,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return ContactLogEntryDto(
+        id: id ?? this.id,
+        content: content ?? this.content,
+        taskLink: taskLink ?? this.taskLink,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  ContactLogEntryDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String?>? content,
+      Wrapped<TaskLinkDto?>? taskLink,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return ContactLogEntryDto(
+        id: (id != null ? id.value : this.id),
+        content: (content != null ? content.value : this.content),
+        taskLink: (taskLink != null ? taskLink.value : this.taskLink),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class ContactLogEntryCreateDto {
+  const ContactLogEntryCreateDto({
+    required this.contactId,
+    required this.content,
+    this.taskId,
+    required this.dueDate,
+  });
+
+  factory ContactLogEntryCreateDto.fromJson(Map<String, dynamic> json) =>
+      _$ContactLogEntryCreateDtoFromJson(json);
+
+  static const toJsonFactory = _$ContactLogEntryCreateDtoToJson;
+  Map<String, dynamic> toJson() => _$ContactLogEntryCreateDtoToJson(this);
+
+  @JsonKey(name: 'contactId')
+  final String contactId;
+  @JsonKey(name: 'content')
+  final String content;
+  @JsonKey(name: 'taskId')
+  final String? taskId;
+  @JsonKey(name: 'dueDate')
+  final DateTime dueDate;
+  static const fromJsonFactory = _$ContactLogEntryCreateDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ContactLogEntryCreateDto &&
+            (identical(other.contactId, contactId) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactId, contactId)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
+            (identical(other.taskId, taskId) ||
+                const DeepCollectionEquality().equals(other.taskId, taskId)) &&
+            (identical(other.dueDate, dueDate) ||
+                const DeepCollectionEquality().equals(other.dueDate, dueDate)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(contactId) ^
+      const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(taskId) ^
+      const DeepCollectionEquality().hash(dueDate) ^
+      runtimeType.hashCode;
+}
+
+extension $ContactLogEntryCreateDtoExtension on ContactLogEntryCreateDto {
+  ContactLogEntryCreateDto copyWith(
+      {String? contactId, String? content, String? taskId, DateTime? dueDate}) {
+    return ContactLogEntryCreateDto(
+        contactId: contactId ?? this.contactId,
+        content: content ?? this.content,
+        taskId: taskId ?? this.taskId,
+        dueDate: dueDate ?? this.dueDate);
+  }
+
+  ContactLogEntryCreateDto copyWithWrapped(
+      {Wrapped<String>? contactId,
+      Wrapped<String>? content,
+      Wrapped<String?>? taskId,
+      Wrapped<DateTime>? dueDate}) {
+    return ContactLogEntryCreateDto(
+        contactId: (contactId != null ? contactId.value : this.contactId),
+        content: (content != null ? content.value : this.content),
+        taskId: (taskId != null ? taskId.value : this.taskId),
+        dueDate: (dueDate != null ? dueDate.value : this.dueDate));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class UpdateContactDetailsDto {
+  const UpdateContactDetailsDto({
+    required this.id,
+    this.email,
+    this.phone,
+    this.preferredChannel,
+  });
+
+  factory UpdateContactDetailsDto.fromJson(Map<String, dynamic> json) =>
+      _$UpdateContactDetailsDtoFromJson(json);
+
+  static const toJsonFactory = _$UpdateContactDetailsDtoToJson;
+  Map<String, dynamic> toJson() => _$UpdateContactDetailsDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'email')
+  final String? email;
+  @JsonKey(name: 'phone')
+  final String? phone;
+  @JsonKey(
+    name: 'preferredChannel',
+    toJson: contactMethodNullableToJson,
+    fromJson: contactMethodNullableFromJson,
+  )
+  final enums.ContactMethod? preferredChannel;
+  static const fromJsonFactory = _$UpdateContactDetailsDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UpdateContactDetailsDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.phone, phone) ||
+                const DeepCollectionEquality().equals(other.phone, phone)) &&
+            (identical(other.preferredChannel, preferredChannel) ||
+                const DeepCollectionEquality()
+                    .equals(other.preferredChannel, preferredChannel)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(phone) ^
+      const DeepCollectionEquality().hash(preferredChannel) ^
+      runtimeType.hashCode;
+}
+
+extension $UpdateContactDetailsDtoExtension on UpdateContactDetailsDto {
+  UpdateContactDetailsDto copyWith(
+      {String? id,
+      String? email,
+      String? phone,
+      enums.ContactMethod? preferredChannel}) {
+    return UpdateContactDetailsDto(
+        id: id ?? this.id,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        preferredChannel: preferredChannel ?? this.preferredChannel);
+  }
+
+  UpdateContactDetailsDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String?>? email,
+      Wrapped<String?>? phone,
+      Wrapped<enums.ContactMethod?>? preferredChannel}) {
+    return UpdateContactDetailsDto(
+        id: (id != null ? id.value : this.id),
+        email: (email != null ? email.value : this.email),
+        phone: (phone != null ? phone.value : this.phone),
+        preferredChannel: (preferredChannel != null
+            ? preferredChannel.value
+            : this.preferredChannel));
   }
 }
 
@@ -3737,6 +4675,7 @@ extension $UpdateLeaseDtoExtension on UpdateLeaseDto {
 class CreateAttachmentDto {
   const CreateAttachmentDto({
     this.tenantIds,
+    this.contactIds,
     this.taskIds,
     this.unitIds,
     this.buildingIds,
@@ -3752,6 +4691,8 @@ class CreateAttachmentDto {
 
   @JsonKey(name: 'tenantIds', defaultValue: <String>[])
   final List<String>? tenantIds;
+  @JsonKey(name: 'contactIds', defaultValue: <String>[])
+  final List<String>? contactIds;
   @JsonKey(name: 'taskIds', defaultValue: <String>[])
   final List<String>? taskIds;
   @JsonKey(name: 'unitIds', defaultValue: <String>[])
@@ -3771,6 +4712,9 @@ class CreateAttachmentDto {
             (identical(other.tenantIds, tenantIds) ||
                 const DeepCollectionEquality()
                     .equals(other.tenantIds, tenantIds)) &&
+            (identical(other.contactIds, contactIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactIds, contactIds)) &&
             (identical(other.taskIds, taskIds) ||
                 const DeepCollectionEquality()
                     .equals(other.taskIds, taskIds)) &&
@@ -3794,6 +4738,7 @@ class CreateAttachmentDto {
   @override
   int get hashCode =>
       const DeepCollectionEquality().hash(tenantIds) ^
+      const DeepCollectionEquality().hash(contactIds) ^
       const DeepCollectionEquality().hash(taskIds) ^
       const DeepCollectionEquality().hash(unitIds) ^
       const DeepCollectionEquality().hash(buildingIds) ^
@@ -3805,6 +4750,7 @@ class CreateAttachmentDto {
 extension $CreateAttachmentDtoExtension on CreateAttachmentDto {
   CreateAttachmentDto copyWith(
       {List<String>? tenantIds,
+      List<String>? contactIds,
       List<String>? taskIds,
       List<String>? unitIds,
       List<String>? buildingIds,
@@ -3812,6 +4758,7 @@ extension $CreateAttachmentDtoExtension on CreateAttachmentDto {
       List<String>? inquiryMessageIds}) {
     return CreateAttachmentDto(
         tenantIds: tenantIds ?? this.tenantIds,
+        contactIds: contactIds ?? this.contactIds,
         taskIds: taskIds ?? this.taskIds,
         unitIds: unitIds ?? this.unitIds,
         buildingIds: buildingIds ?? this.buildingIds,
@@ -3821,6 +4768,7 @@ extension $CreateAttachmentDtoExtension on CreateAttachmentDto {
 
   CreateAttachmentDto copyWithWrapped(
       {Wrapped<List<String>?>? tenantIds,
+      Wrapped<List<String>?>? contactIds,
       Wrapped<List<String>?>? taskIds,
       Wrapped<List<String>?>? unitIds,
       Wrapped<List<String>?>? buildingIds,
@@ -3828,6 +4776,7 @@ extension $CreateAttachmentDtoExtension on CreateAttachmentDto {
       Wrapped<List<String>?>? inquiryMessageIds}) {
     return CreateAttachmentDto(
         tenantIds: (tenantIds != null ? tenantIds.value : this.tenantIds),
+        contactIds: (contactIds != null ? contactIds.value : this.contactIds),
         taskIds: (taskIds != null ? taskIds.value : this.taskIds),
         unitIds: (unitIds != null ? unitIds.value : this.unitIds),
         buildingIds:
@@ -3844,6 +4793,7 @@ class DeleteAttachmentDto {
   const DeleteAttachmentDto({
     required this.attachmentId,
     this.tenantId,
+    this.contactId,
     this.leaseId,
     this.unitId,
     this.complexId,
@@ -3861,6 +4811,8 @@ class DeleteAttachmentDto {
   final String attachmentId;
   @JsonKey(name: 'tenantId')
   final String? tenantId;
+  @JsonKey(name: 'contactId')
+  final String? contactId;
   @JsonKey(name: 'leaseId')
   final String? leaseId;
   @JsonKey(name: 'unitId')
@@ -3883,6 +4835,9 @@ class DeleteAttachmentDto {
             (identical(other.tenantId, tenantId) ||
                 const DeepCollectionEquality()
                     .equals(other.tenantId, tenantId)) &&
+            (identical(other.contactId, contactId) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactId, contactId)) &&
             (identical(other.leaseId, leaseId) ||
                 const DeepCollectionEquality()
                     .equals(other.leaseId, leaseId)) &&
@@ -3905,6 +4860,7 @@ class DeleteAttachmentDto {
   int get hashCode =>
       const DeepCollectionEquality().hash(attachmentId) ^
       const DeepCollectionEquality().hash(tenantId) ^
+      const DeepCollectionEquality().hash(contactId) ^
       const DeepCollectionEquality().hash(leaseId) ^
       const DeepCollectionEquality().hash(unitId) ^
       const DeepCollectionEquality().hash(complexId) ^
@@ -3917,6 +4873,7 @@ extension $DeleteAttachmentDtoExtension on DeleteAttachmentDto {
   DeleteAttachmentDto copyWith(
       {String? attachmentId,
       String? tenantId,
+      String? contactId,
       String? leaseId,
       String? unitId,
       String? complexId,
@@ -3925,6 +4882,7 @@ extension $DeleteAttachmentDtoExtension on DeleteAttachmentDto {
     return DeleteAttachmentDto(
         attachmentId: attachmentId ?? this.attachmentId,
         tenantId: tenantId ?? this.tenantId,
+        contactId: contactId ?? this.contactId,
         leaseId: leaseId ?? this.leaseId,
         unitId: unitId ?? this.unitId,
         complexId: complexId ?? this.complexId,
@@ -3935,6 +4893,7 @@ extension $DeleteAttachmentDtoExtension on DeleteAttachmentDto {
   DeleteAttachmentDto copyWithWrapped(
       {Wrapped<String>? attachmentId,
       Wrapped<String?>? tenantId,
+      Wrapped<String?>? contactId,
       Wrapped<String?>? leaseId,
       Wrapped<String?>? unitId,
       Wrapped<String?>? complexId,
@@ -3944,6 +4903,7 @@ extension $DeleteAttachmentDtoExtension on DeleteAttachmentDto {
         attachmentId:
             (attachmentId != null ? attachmentId.value : this.attachmentId),
         tenantId: (tenantId != null ? tenantId.value : this.tenantId),
+        contactId: (contactId != null ? contactId.value : this.contactId),
         leaseId: (leaseId != null ? leaseId.value : this.leaseId),
         unitId: (unitId != null ? unitId.value : this.unitId),
         complexId: (complexId != null ? complexId.value : this.complexId),
@@ -4256,6 +5216,7 @@ class TeamDto {
     required this.lastBuildingId,
     required this.lastComplexId,
     required this.lastTenantId,
+    required this.lastContactId,
     required this.members,
     required this.createdAt,
     required this.updatedAt,
@@ -4281,6 +5242,8 @@ class TeamDto {
   final double lastComplexId;
   @JsonKey(name: 'lastTenantId')
   final double lastTenantId;
+  @JsonKey(name: 'lastContactId')
+  final double lastContactId;
   @JsonKey(name: 'members', defaultValue: <MemberDto>[])
   final List<MemberDto> members;
   @JsonKey(name: 'createdAt')
@@ -4312,6 +5275,9 @@ class TeamDto {
             (identical(other.lastTenantId, lastTenantId) ||
                 const DeepCollectionEquality()
                     .equals(other.lastTenantId, lastTenantId)) &&
+            (identical(other.lastContactId, lastContactId) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastContactId, lastContactId)) &&
             (identical(other.members, members) ||
                 const DeepCollectionEquality()
                     .equals(other.members, members)) &&
@@ -4335,6 +5301,7 @@ class TeamDto {
       const DeepCollectionEquality().hash(lastBuildingId) ^
       const DeepCollectionEquality().hash(lastComplexId) ^
       const DeepCollectionEquality().hash(lastTenantId) ^
+      const DeepCollectionEquality().hash(lastContactId) ^
       const DeepCollectionEquality().hash(members) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt) ^
@@ -4350,6 +5317,7 @@ extension $TeamDtoExtension on TeamDto {
       double? lastBuildingId,
       double? lastComplexId,
       double? lastTenantId,
+      double? lastContactId,
       List<MemberDto>? members,
       DateTime? createdAt,
       DateTime? updatedAt}) {
@@ -4361,6 +5329,7 @@ extension $TeamDtoExtension on TeamDto {
         lastBuildingId: lastBuildingId ?? this.lastBuildingId,
         lastComplexId: lastComplexId ?? this.lastComplexId,
         lastTenantId: lastTenantId ?? this.lastTenantId,
+        lastContactId: lastContactId ?? this.lastContactId,
         members: members ?? this.members,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
@@ -4374,6 +5343,7 @@ extension $TeamDtoExtension on TeamDto {
       Wrapped<double>? lastBuildingId,
       Wrapped<double>? lastComplexId,
       Wrapped<double>? lastTenantId,
+      Wrapped<double>? lastContactId,
       Wrapped<List<MemberDto>>? members,
       Wrapped<DateTime>? createdAt,
       Wrapped<DateTime>? updatedAt}) {
@@ -4389,9 +5359,141 @@ extension $TeamDtoExtension on TeamDto {
             (lastComplexId != null ? lastComplexId.value : this.lastComplexId),
         lastTenantId:
             (lastTenantId != null ? lastTenantId.value : this.lastTenantId),
+        lastContactId:
+            (lastContactId != null ? lastContactId.value : this.lastContactId),
         members: (members != null ? members.value : this.members),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MemberLinkDto {
+  const MemberLinkDto({
+    required this.id,
+    required this.label,
+    required this.avatarUrl,
+  });
+
+  factory MemberLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$MemberLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$MemberLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$MemberLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(name: 'avatarUrl')
+  final String avatarUrl;
+  static const fromJsonFactory = _$MemberLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is MemberLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.avatarUrl, avatarUrl) ||
+                const DeepCollectionEquality()
+                    .equals(other.avatarUrl, avatarUrl)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(avatarUrl) ^
+      runtimeType.hashCode;
+}
+
+extension $MemberLinkDtoExtension on MemberLinkDto {
+  MemberLinkDto copyWith({String? id, String? label, String? avatarUrl}) {
+    return MemberLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        avatarUrl: avatarUrl ?? this.avatarUrl);
+  }
+
+  MemberLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<String>? avatarUrl}) {
+    return MemberLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        avatarUrl: (avatarUrl != null ? avatarUrl.value : this.avatarUrl));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class BuildingLinkDto {
+  const BuildingLinkDto({
+    required this.id,
+    required this.label,
+    required this.displayId,
+  });
+
+  factory BuildingLinkDto.fromJson(Map<String, dynamic> json) =>
+      _$BuildingLinkDtoFromJson(json);
+
+  static const toJsonFactory = _$BuildingLinkDtoToJson;
+  Map<String, dynamic> toJson() => _$BuildingLinkDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'label')
+  final String label;
+  @JsonKey(name: 'displayId')
+  final String displayId;
+  static const fromJsonFactory = _$BuildingLinkDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is BuildingLinkDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.label, label) ||
+                const DeepCollectionEquality().equals(other.label, label)) &&
+            (identical(other.displayId, displayId) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayId, displayId)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(label) ^
+      const DeepCollectionEquality().hash(displayId) ^
+      runtimeType.hashCode;
+}
+
+extension $BuildingLinkDtoExtension on BuildingLinkDto {
+  BuildingLinkDto copyWith({String? id, String? label, String? displayId}) {
+    return BuildingLinkDto(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        displayId: displayId ?? this.displayId);
+  }
+
+  BuildingLinkDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? label,
+      Wrapped<String>? displayId}) {
+    return BuildingLinkDto(
+        id: (id != null ? id.value : this.id),
+        label: (label != null ? label.value : this.label),
+        displayId: (displayId != null ? displayId.value : this.displayId));
   }
 }
 
@@ -4460,62 +5562,6 @@ extension $MemberProxyDtoExtension on MemberProxyDto {
         entityId: (entityId != null ? entityId.value : this.entityId),
         displayAs: (displayAs != null ? displayAs.value : this.displayAs),
         avatarUrl: (avatarUrl != null ? avatarUrl.value : this.avatarUrl));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class GenericProxyDto {
-  const GenericProxyDto({
-    required this.entityId,
-    required this.displayAs,
-  });
-
-  factory GenericProxyDto.fromJson(Map<String, dynamic> json) =>
-      _$GenericProxyDtoFromJson(json);
-
-  static const toJsonFactory = _$GenericProxyDtoToJson;
-  Map<String, dynamic> toJson() => _$GenericProxyDtoToJson(this);
-
-  @JsonKey(name: 'entityId')
-  final String entityId;
-  @JsonKey(name: 'displayAs')
-  final String displayAs;
-  static const fromJsonFactory = _$GenericProxyDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is GenericProxyDto &&
-            (identical(other.entityId, entityId) ||
-                const DeepCollectionEquality()
-                    .equals(other.entityId, entityId)) &&
-            (identical(other.displayAs, displayAs) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayAs, displayAs)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(entityId) ^
-      const DeepCollectionEquality().hash(displayAs) ^
-      runtimeType.hashCode;
-}
-
-extension $GenericProxyDtoExtension on GenericProxyDto {
-  GenericProxyDto copyWith({String? entityId, String? displayAs}) {
-    return GenericProxyDto(
-        entityId: entityId ?? this.entityId,
-        displayAs: displayAs ?? this.displayAs);
-  }
-
-  GenericProxyDto copyWithWrapped(
-      {Wrapped<String>? entityId, Wrapped<String>? displayAs}) {
-    return GenericProxyDto(
-        entityId: (entityId != null ? entityId.value : this.entityId),
-        displayAs: (displayAs != null ? displayAs.value : this.displayAs));
   }
 }
 
@@ -4629,14 +5675,16 @@ class TaskDto {
     required this.dueDate,
     required this.createdBy,
     required this.status,
+    required this.priority,
     required this.assignees,
-    required this.tenants,
+    required this.contacts,
     required this.units,
     required this.buildings,
     required this.complexes,
     required this.attachments,
     required this.connectedTo,
     required this.comments,
+    this.inquirys,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -4658,29 +5706,37 @@ class TaskDto {
   @JsonKey(name: 'dueDate')
   final DateTime dueDate;
   @JsonKey(name: 'createdBy')
-  final MemberDto createdBy;
+  final MemberLinkDto createdBy;
   @JsonKey(
     name: 'status',
     toJson: statusToJson,
     fromJson: statusFromJson,
   )
   final enums.Status status;
-  @JsonKey(name: 'assignees', defaultValue: <MemberProxyDto>[])
-  final List<MemberProxyDto> assignees;
-  @JsonKey(name: 'tenants', defaultValue: <GenericProxyDto>[])
-  final List<GenericProxyDto> tenants;
-  @JsonKey(name: 'units', defaultValue: <GenericProxyDto>[])
-  final List<GenericProxyDto> units;
-  @JsonKey(name: 'buildings', defaultValue: <GenericProxyDto>[])
-  final List<GenericProxyDto> buildings;
-  @JsonKey(name: 'complexes', defaultValue: <GenericProxyDto>[])
-  final List<GenericProxyDto> complexes;
+  @JsonKey(
+    name: 'priority',
+    toJson: taskPriorityToJson,
+    fromJson: taskPriorityFromJson,
+  )
+  final enums.TaskPriority priority;
+  @JsonKey(name: 'assignees', defaultValue: <MemberLinkDto>[])
+  final List<MemberLinkDto> assignees;
+  @JsonKey(name: 'contacts', defaultValue: <ContactLinkDto>[])
+  final List<ContactLinkDto> contacts;
+  @JsonKey(name: 'units', defaultValue: <UnitLinkDto>[])
+  final List<UnitLinkDto> units;
+  @JsonKey(name: 'buildings', defaultValue: <BuildingLinkDto>[])
+  final List<BuildingLinkDto> buildings;
+  @JsonKey(name: 'complexes', defaultValue: <ComplexLinkDto>[])
+  final List<ComplexLinkDto> complexes;
   @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
   final List<AttachmentDto> attachments;
-  @JsonKey(name: 'connectedTo', defaultValue: <TaskDto>[])
-  final List<TaskDto> connectedTo;
+  @JsonKey(name: 'connectedTo', defaultValue: <TaskLinkDto>[])
+  final List<TaskLinkDto> connectedTo;
   @JsonKey(name: 'comments', defaultValue: <TaskCommentDto>[])
   final List<TaskCommentDto> comments;
+  @JsonKey(name: 'inquirys', defaultValue: <InquiryLinkDto>[])
+  final List<InquiryLinkDto>? inquirys;
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
   @JsonKey(name: 'updatedAt')
@@ -4709,12 +5765,15 @@ class TaskDto {
                     .equals(other.createdBy, createdBy)) &&
             (identical(other.status, status) ||
                 const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.priority, priority) ||
+                const DeepCollectionEquality()
+                    .equals(other.priority, priority)) &&
             (identical(other.assignees, assignees) ||
                 const DeepCollectionEquality()
                     .equals(other.assignees, assignees)) &&
-            (identical(other.tenants, tenants) ||
+            (identical(other.contacts, contacts) ||
                 const DeepCollectionEquality()
-                    .equals(other.tenants, tenants)) &&
+                    .equals(other.contacts, contacts)) &&
             (identical(other.units, units) ||
                 const DeepCollectionEquality().equals(other.units, units)) &&
             (identical(other.buildings, buildings) ||
@@ -4732,6 +5791,9 @@ class TaskDto {
             (identical(other.comments, comments) ||
                 const DeepCollectionEquality()
                     .equals(other.comments, comments)) &&
+            (identical(other.inquirys, inquirys) ||
+                const DeepCollectionEquality()
+                    .equals(other.inquirys, inquirys)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)) &&
@@ -4752,14 +5814,16 @@ class TaskDto {
       const DeepCollectionEquality().hash(dueDate) ^
       const DeepCollectionEquality().hash(createdBy) ^
       const DeepCollectionEquality().hash(status) ^
+      const DeepCollectionEquality().hash(priority) ^
       const DeepCollectionEquality().hash(assignees) ^
-      const DeepCollectionEquality().hash(tenants) ^
+      const DeepCollectionEquality().hash(contacts) ^
       const DeepCollectionEquality().hash(units) ^
       const DeepCollectionEquality().hash(buildings) ^
       const DeepCollectionEquality().hash(complexes) ^
       const DeepCollectionEquality().hash(attachments) ^
       const DeepCollectionEquality().hash(connectedTo) ^
       const DeepCollectionEquality().hash(comments) ^
+      const DeepCollectionEquality().hash(inquirys) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt) ^
       runtimeType.hashCode;
@@ -4772,16 +5836,18 @@ extension $TaskDtoExtension on TaskDto {
       String? title,
       String? description,
       DateTime? dueDate,
-      MemberDto? createdBy,
+      MemberLinkDto? createdBy,
       enums.Status? status,
-      List<MemberProxyDto>? assignees,
-      List<GenericProxyDto>? tenants,
-      List<GenericProxyDto>? units,
-      List<GenericProxyDto>? buildings,
-      List<GenericProxyDto>? complexes,
+      enums.TaskPriority? priority,
+      List<MemberLinkDto>? assignees,
+      List<ContactLinkDto>? contacts,
+      List<UnitLinkDto>? units,
+      List<BuildingLinkDto>? buildings,
+      List<ComplexLinkDto>? complexes,
       List<AttachmentDto>? attachments,
-      List<TaskDto>? connectedTo,
+      List<TaskLinkDto>? connectedTo,
       List<TaskCommentDto>? comments,
+      List<InquiryLinkDto>? inquirys,
       DateTime? createdAt,
       DateTime? updatedAt}) {
     return TaskDto(
@@ -4792,14 +5858,16 @@ extension $TaskDtoExtension on TaskDto {
         dueDate: dueDate ?? this.dueDate,
         createdBy: createdBy ?? this.createdBy,
         status: status ?? this.status,
+        priority: priority ?? this.priority,
         assignees: assignees ?? this.assignees,
-        tenants: tenants ?? this.tenants,
+        contacts: contacts ?? this.contacts,
         units: units ?? this.units,
         buildings: buildings ?? this.buildings,
         complexes: complexes ?? this.complexes,
         attachments: attachments ?? this.attachments,
         connectedTo: connectedTo ?? this.connectedTo,
         comments: comments ?? this.comments,
+        inquirys: inquirys ?? this.inquirys,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -4810,16 +5878,18 @@ extension $TaskDtoExtension on TaskDto {
       Wrapped<String>? title,
       Wrapped<String>? description,
       Wrapped<DateTime>? dueDate,
-      Wrapped<MemberDto>? createdBy,
+      Wrapped<MemberLinkDto>? createdBy,
       Wrapped<enums.Status>? status,
-      Wrapped<List<MemberProxyDto>>? assignees,
-      Wrapped<List<GenericProxyDto>>? tenants,
-      Wrapped<List<GenericProxyDto>>? units,
-      Wrapped<List<GenericProxyDto>>? buildings,
-      Wrapped<List<GenericProxyDto>>? complexes,
+      Wrapped<enums.TaskPriority>? priority,
+      Wrapped<List<MemberLinkDto>>? assignees,
+      Wrapped<List<ContactLinkDto>>? contacts,
+      Wrapped<List<UnitLinkDto>>? units,
+      Wrapped<List<BuildingLinkDto>>? buildings,
+      Wrapped<List<ComplexLinkDto>>? complexes,
       Wrapped<List<AttachmentDto>>? attachments,
-      Wrapped<List<TaskDto>>? connectedTo,
+      Wrapped<List<TaskLinkDto>>? connectedTo,
       Wrapped<List<TaskCommentDto>>? comments,
+      Wrapped<List<InquiryLinkDto>?>? inquirys,
       Wrapped<DateTime>? createdAt,
       Wrapped<DateTime>? updatedAt}) {
     return TaskDto(
@@ -4831,8 +5901,9 @@ extension $TaskDtoExtension on TaskDto {
         dueDate: (dueDate != null ? dueDate.value : this.dueDate),
         createdBy: (createdBy != null ? createdBy.value : this.createdBy),
         status: (status != null ? status.value : this.status),
+        priority: (priority != null ? priority.value : this.priority),
         assignees: (assignees != null ? assignees.value : this.assignees),
-        tenants: (tenants != null ? tenants.value : this.tenants),
+        contacts: (contacts != null ? contacts.value : this.contacts),
         units: (units != null ? units.value : this.units),
         buildings: (buildings != null ? buildings.value : this.buildings),
         complexes: (complexes != null ? complexes.value : this.complexes),
@@ -4841,6 +5912,7 @@ extension $TaskDtoExtension on TaskDto {
         connectedTo:
             (connectedTo != null ? connectedTo.value : this.connectedTo),
         comments: (comments != null ? comments.value : this.comments),
+        inquirys: (inquirys != null ? inquirys.value : this.inquirys),
         createdAt: (createdAt != null ? createdAt.value : this.createdAt),
         updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
@@ -4852,6 +5924,7 @@ class CreateTaskDto {
     required this.title,
     required this.description,
     required this.status,
+    required this.priority,
     this.assigneeId,
     required this.tenantIds,
     required this.unitIds,
@@ -4874,6 +5947,12 @@ class CreateTaskDto {
     fromJson: createTaskDtoStatusFromJson,
   )
   final enums.CreateTaskDtoStatus status;
+  @JsonKey(
+    name: 'priority',
+    toJson: taskPriorityToJson,
+    fromJson: taskPriorityFromJson,
+  )
+  final enums.TaskPriority priority;
   @JsonKey(name: 'assigneeId')
   final String? assigneeId;
   @JsonKey(name: 'tenantIds', defaultValue: <String>[])
@@ -4895,6 +5974,9 @@ class CreateTaskDto {
                     .equals(other.description, description)) &&
             (identical(other.status, status) ||
                 const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.priority, priority) ||
+                const DeepCollectionEquality()
+                    .equals(other.priority, priority)) &&
             (identical(other.assigneeId, assigneeId) ||
                 const DeepCollectionEquality()
                     .equals(other.assigneeId, assigneeId)) &&
@@ -4917,6 +5999,7 @@ class CreateTaskDto {
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(description) ^
       const DeepCollectionEquality().hash(status) ^
+      const DeepCollectionEquality().hash(priority) ^
       const DeepCollectionEquality().hash(assigneeId) ^
       const DeepCollectionEquality().hash(tenantIds) ^
       const DeepCollectionEquality().hash(unitIds) ^
@@ -4929,6 +6012,7 @@ extension $CreateTaskDtoExtension on CreateTaskDto {
       {String? title,
       String? description,
       enums.CreateTaskDtoStatus? status,
+      enums.TaskPriority? priority,
       String? assigneeId,
       List<String>? tenantIds,
       List<String>? unitIds,
@@ -4937,6 +6021,7 @@ extension $CreateTaskDtoExtension on CreateTaskDto {
         title: title ?? this.title,
         description: description ?? this.description,
         status: status ?? this.status,
+        priority: priority ?? this.priority,
         assigneeId: assigneeId ?? this.assigneeId,
         tenantIds: tenantIds ?? this.tenantIds,
         unitIds: unitIds ?? this.unitIds,
@@ -4947,6 +6032,7 @@ extension $CreateTaskDtoExtension on CreateTaskDto {
       {Wrapped<String>? title,
       Wrapped<String>? description,
       Wrapped<enums.CreateTaskDtoStatus>? status,
+      Wrapped<enums.TaskPriority>? priority,
       Wrapped<String?>? assigneeId,
       Wrapped<List<String>>? tenantIds,
       Wrapped<List<String>>? unitIds,
@@ -4956,6 +6042,7 @@ extension $CreateTaskDtoExtension on CreateTaskDto {
         description:
             (description != null ? description.value : this.description),
         status: (status != null ? status.value : this.status),
+        priority: (priority != null ? priority.value : this.priority),
         assigneeId: (assigneeId != null ? assigneeId.value : this.assigneeId),
         tenantIds: (tenantIds != null ? tenantIds.value : this.tenantIds),
         unitIds: (unitIds != null ? unitIds.value : this.unitIds),
@@ -5078,11 +6165,13 @@ extension $UpdateStatusTaskDtoExtension on UpdateStatusTaskDto {
 class UpdateTaskDto {
   const UpdateTaskDto({
     required this.id,
-    required this.description,
+    this.description,
     required this.status,
-    required this.dueDate,
+    required this.priority,
+    this.dueDate,
     required this.assigneeIds,
     required this.tenantIds,
+    required this.contactIds,
     required this.unitIds,
     required this.buildingIds,
     required this.complexIds,
@@ -5098,19 +6187,27 @@ class UpdateTaskDto {
   @JsonKey(name: 'id')
   final String id;
   @JsonKey(name: 'description')
-  final String description;
+  final String? description;
   @JsonKey(
     name: 'status',
     toJson: updateTaskDtoStatusToJson,
     fromJson: updateTaskDtoStatusFromJson,
   )
   final enums.UpdateTaskDtoStatus status;
+  @JsonKey(
+    name: 'priority',
+    toJson: taskPriorityToJson,
+    fromJson: taskPriorityFromJson,
+  )
+  final enums.TaskPriority priority;
   @JsonKey(name: 'dueDate')
-  final DateTime dueDate;
+  final DateTime? dueDate;
   @JsonKey(name: 'assigneeIds', defaultValue: <String>[])
   final List<String> assigneeIds;
   @JsonKey(name: 'tenantIds', defaultValue: <String>[])
   final List<String> tenantIds;
+  @JsonKey(name: 'contactIds', defaultValue: <String>[])
+  final List<String> contactIds;
   @JsonKey(name: 'unitIds', defaultValue: <String>[])
   final List<String> unitIds;
   @JsonKey(name: 'buildingIds', defaultValue: <String>[])
@@ -5132,6 +6229,9 @@ class UpdateTaskDto {
                     .equals(other.description, description)) &&
             (identical(other.status, status) ||
                 const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.priority, priority) ||
+                const DeepCollectionEquality()
+                    .equals(other.priority, priority)) &&
             (identical(other.dueDate, dueDate) ||
                 const DeepCollectionEquality()
                     .equals(other.dueDate, dueDate)) &&
@@ -5141,6 +6241,9 @@ class UpdateTaskDto {
             (identical(other.tenantIds, tenantIds) ||
                 const DeepCollectionEquality()
                     .equals(other.tenantIds, tenantIds)) &&
+            (identical(other.contactIds, contactIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.contactIds, contactIds)) &&
             (identical(other.unitIds, unitIds) ||
                 const DeepCollectionEquality()
                     .equals(other.unitIds, unitIds)) &&
@@ -5162,9 +6265,11 @@ class UpdateTaskDto {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(description) ^
       const DeepCollectionEquality().hash(status) ^
+      const DeepCollectionEquality().hash(priority) ^
       const DeepCollectionEquality().hash(dueDate) ^
       const DeepCollectionEquality().hash(assigneeIds) ^
       const DeepCollectionEquality().hash(tenantIds) ^
+      const DeepCollectionEquality().hash(contactIds) ^
       const DeepCollectionEquality().hash(unitIds) ^
       const DeepCollectionEquality().hash(buildingIds) ^
       const DeepCollectionEquality().hash(complexIds) ^
@@ -5177,9 +6282,11 @@ extension $UpdateTaskDtoExtension on UpdateTaskDto {
       {String? id,
       String? description,
       enums.UpdateTaskDtoStatus? status,
+      enums.TaskPriority? priority,
       DateTime? dueDate,
       List<String>? assigneeIds,
       List<String>? tenantIds,
+      List<String>? contactIds,
       List<String>? unitIds,
       List<String>? buildingIds,
       List<String>? complexIds,
@@ -5188,9 +6295,11 @@ extension $UpdateTaskDtoExtension on UpdateTaskDto {
         id: id ?? this.id,
         description: description ?? this.description,
         status: status ?? this.status,
+        priority: priority ?? this.priority,
         dueDate: dueDate ?? this.dueDate,
         assigneeIds: assigneeIds ?? this.assigneeIds,
         tenantIds: tenantIds ?? this.tenantIds,
+        contactIds: contactIds ?? this.contactIds,
         unitIds: unitIds ?? this.unitIds,
         buildingIds: buildingIds ?? this.buildingIds,
         complexIds: complexIds ?? this.complexIds,
@@ -5199,11 +6308,13 @@ extension $UpdateTaskDtoExtension on UpdateTaskDto {
 
   UpdateTaskDto copyWithWrapped(
       {Wrapped<String>? id,
-      Wrapped<String>? description,
+      Wrapped<String?>? description,
       Wrapped<enums.UpdateTaskDtoStatus>? status,
-      Wrapped<DateTime>? dueDate,
+      Wrapped<enums.TaskPriority>? priority,
+      Wrapped<DateTime?>? dueDate,
       Wrapped<List<String>>? assigneeIds,
       Wrapped<List<String>>? tenantIds,
+      Wrapped<List<String>>? contactIds,
       Wrapped<List<String>>? unitIds,
       Wrapped<List<String>>? buildingIds,
       Wrapped<List<String>>? complexIds,
@@ -5213,10 +6324,12 @@ extension $UpdateTaskDtoExtension on UpdateTaskDto {
         description:
             (description != null ? description.value : this.description),
         status: (status != null ? status.value : this.status),
+        priority: (priority != null ? priority.value : this.priority),
         dueDate: (dueDate != null ? dueDate.value : this.dueDate),
         assigneeIds:
             (assigneeIds != null ? assigneeIds.value : this.assigneeIds),
         tenantIds: (tenantIds != null ? tenantIds.value : this.tenantIds),
+        contactIds: (contactIds != null ? contactIds.value : this.contactIds),
         unitIds: (unitIds != null ? unitIds.value : this.unitIds),
         buildingIds:
             (buildingIds != null ? buildingIds.value : this.buildingIds),
@@ -5354,6 +6467,275 @@ extension $CreateInquiryDtoExtension on CreateInquiryDto {
         date: (date != null ? date.value : this.date),
         description:
             (description != null ? description.value : this.description));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class InquiryMessageDto {
+  const InquiryMessageDto({
+    required this.id,
+    this.content,
+    required this.authorLabel,
+    this.isAIGenerated,
+    this.attachments,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory InquiryMessageDto.fromJson(Map<String, dynamic> json) =>
+      _$InquiryMessageDtoFromJson(json);
+
+  static const toJsonFactory = _$InquiryMessageDtoToJson;
+  Map<String, dynamic> toJson() => _$InquiryMessageDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'content')
+  final String? content;
+  @JsonKey(name: 'authorLabel')
+  final String authorLabel;
+  @JsonKey(name: 'isAIGenerated')
+  final bool? isAIGenerated;
+  @JsonKey(name: 'attachments', defaultValue: <AttachmentDto>[])
+  final List<AttachmentDto>? attachments;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$InquiryMessageDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is InquiryMessageDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
+            (identical(other.authorLabel, authorLabel) ||
+                const DeepCollectionEquality()
+                    .equals(other.authorLabel, authorLabel)) &&
+            (identical(other.isAIGenerated, isAIGenerated) ||
+                const DeepCollectionEquality()
+                    .equals(other.isAIGenerated, isAIGenerated)) &&
+            (identical(other.attachments, attachments) ||
+                const DeepCollectionEquality()
+                    .equals(other.attachments, attachments)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(authorLabel) ^
+      const DeepCollectionEquality().hash(isAIGenerated) ^
+      const DeepCollectionEquality().hash(attachments) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $InquiryMessageDtoExtension on InquiryMessageDto {
+  InquiryMessageDto copyWith(
+      {String? id,
+      String? content,
+      String? authorLabel,
+      bool? isAIGenerated,
+      List<AttachmentDto>? attachments,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return InquiryMessageDto(
+        id: id ?? this.id,
+        content: content ?? this.content,
+        authorLabel: authorLabel ?? this.authorLabel,
+        isAIGenerated: isAIGenerated ?? this.isAIGenerated,
+        attachments: attachments ?? this.attachments,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  InquiryMessageDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String?>? content,
+      Wrapped<String>? authorLabel,
+      Wrapped<bool?>? isAIGenerated,
+      Wrapped<List<AttachmentDto>?>? attachments,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return InquiryMessageDto(
+        id: (id != null ? id.value : this.id),
+        content: (content != null ? content.value : this.content),
+        authorLabel:
+            (authorLabel != null ? authorLabel.value : this.authorLabel),
+        isAIGenerated:
+            (isAIGenerated != null ? isAIGenerated.value : this.isAIGenerated),
+        attachments:
+            (attachments != null ? attachments.value : this.attachments),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class InquiryDto {
+  const InquiryDto({
+    required this.id,
+    this.description,
+    required this.type,
+    required this.status,
+    this.createdBy,
+    required this.messages,
+    required this.taskLinks,
+    this.suggestion,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory InquiryDto.fromJson(Map<String, dynamic> json) =>
+      _$InquiryDtoFromJson(json);
+
+  static const toJsonFactory = _$InquiryDtoToJson;
+  Map<String, dynamic> toJson() => _$InquiryDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'description')
+  final String? description;
+  @JsonKey(
+    name: 'type',
+    toJson: inquiryTypeToJson,
+    fromJson: inquiryTypeFromJson,
+  )
+  final enums.InquiryType type;
+  @JsonKey(
+    name: 'status',
+    toJson: inquiryDtoStatusToJson,
+    fromJson: inquiryDtoStatusFromJson,
+  )
+  final enums.InquiryDtoStatus status;
+  @JsonKey(name: 'createdBy')
+  final TenantDto? createdBy;
+  @JsonKey(name: 'messages', defaultValue: <InquiryMessageDto>[])
+  final List<InquiryMessageDto> messages;
+  @JsonKey(name: 'taskLinks', defaultValue: <TaskLinkDto>[])
+  final List<TaskLinkDto> taskLinks;
+  @JsonKey(name: 'suggestion')
+  final String? suggestion;
+  @JsonKey(name: 'createdAt')
+  final DateTime createdAt;
+  @JsonKey(name: 'updatedAt')
+  final DateTime updatedAt;
+  static const fromJsonFactory = _$InquiryDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is InquiryDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
+            (identical(other.status, status) ||
+                const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.createdBy, createdBy) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdBy, createdBy)) &&
+            (identical(other.messages, messages) ||
+                const DeepCollectionEquality()
+                    .equals(other.messages, messages)) &&
+            (identical(other.taskLinks, taskLinks) ||
+                const DeepCollectionEquality()
+                    .equals(other.taskLinks, taskLinks)) &&
+            (identical(other.suggestion, suggestion) ||
+                const DeepCollectionEquality()
+                    .equals(other.suggestion, suggestion)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(type) ^
+      const DeepCollectionEquality().hash(status) ^
+      const DeepCollectionEquality().hash(createdBy) ^
+      const DeepCollectionEquality().hash(messages) ^
+      const DeepCollectionEquality().hash(taskLinks) ^
+      const DeepCollectionEquality().hash(suggestion) ^
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
+      runtimeType.hashCode;
+}
+
+extension $InquiryDtoExtension on InquiryDto {
+  InquiryDto copyWith(
+      {String? id,
+      String? description,
+      enums.InquiryType? type,
+      enums.InquiryDtoStatus? status,
+      TenantDto? createdBy,
+      List<InquiryMessageDto>? messages,
+      List<TaskLinkDto>? taskLinks,
+      String? suggestion,
+      DateTime? createdAt,
+      DateTime? updatedAt}) {
+    return InquiryDto(
+        id: id ?? this.id,
+        description: description ?? this.description,
+        type: type ?? this.type,
+        status: status ?? this.status,
+        createdBy: createdBy ?? this.createdBy,
+        messages: messages ?? this.messages,
+        taskLinks: taskLinks ?? this.taskLinks,
+        suggestion: suggestion ?? this.suggestion,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt);
+  }
+
+  InquiryDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String?>? description,
+      Wrapped<enums.InquiryType>? type,
+      Wrapped<enums.InquiryDtoStatus>? status,
+      Wrapped<TenantDto?>? createdBy,
+      Wrapped<List<InquiryMessageDto>>? messages,
+      Wrapped<List<TaskLinkDto>>? taskLinks,
+      Wrapped<String?>? suggestion,
+      Wrapped<DateTime>? createdAt,
+      Wrapped<DateTime>? updatedAt}) {
+    return InquiryDto(
+        id: (id != null ? id.value : this.id),
+        description:
+            (description != null ? description.value : this.description),
+        type: (type != null ? type.value : this.type),
+        status: (status != null ? status.value : this.status),
+        createdBy: (createdBy != null ? createdBy.value : this.createdBy),
+        messages: (messages != null ? messages.value : this.messages),
+        taskLinks: (taskLinks != null ? taskLinks.value : this.taskLinks),
+        suggestion: (suggestion != null ? suggestion.value : this.suggestion),
+        createdAt: (createdAt != null ? createdAt.value : this.createdAt),
+        updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt));
   }
 }
 
@@ -5709,6 +7091,68 @@ extension $UpdateFCMTokenDtoExtension on UpdateFCMTokenDto {
   }
 }
 
+String? unitTypeNullableToJson(enums.UnitType? unitType) {
+  return unitType?.value;
+}
+
+String? unitTypeToJson(enums.UnitType unitType) {
+  return unitType.value;
+}
+
+enums.UnitType unitTypeFromJson(
+  Object? unitType, [
+  enums.UnitType? defaultValue,
+]) {
+  return enums.UnitType.values.firstWhereOrNull((e) => e.value == unitType) ??
+      defaultValue ??
+      enums.UnitType.swaggerGeneratedUnknown;
+}
+
+enums.UnitType? unitTypeNullableFromJson(
+  Object? unitType, [
+  enums.UnitType? defaultValue,
+]) {
+  if (unitType == null) {
+    return null;
+  }
+  return enums.UnitType.values.firstWhereOrNull((e) => e.value == unitType) ??
+      defaultValue;
+}
+
+String unitTypeExplodedListToJson(List<enums.UnitType>? unitType) {
+  return unitType?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> unitTypeListToJson(List<enums.UnitType>? unitType) {
+  if (unitType == null) {
+    return [];
+  }
+
+  return unitType.map((e) => e.value!).toList();
+}
+
+List<enums.UnitType> unitTypeListFromJson(
+  List? unitType, [
+  List<enums.UnitType>? defaultValue,
+]) {
+  if (unitType == null) {
+    return defaultValue ?? [];
+  }
+
+  return unitType.map((e) => unitTypeFromJson(e.toString())).toList();
+}
+
+List<enums.UnitType>? unitTypeNullableListFromJson(
+  List? unitType, [
+  List<enums.UnitType>? defaultValue,
+]) {
+  if (unitType == null) {
+    return defaultValue;
+  }
+
+  return unitType.map((e) => unitTypeFromJson(e.toString())).toList();
+}
+
 String? statusNullableToJson(enums.Status? status) {
   return status?.value;
 }
@@ -5771,203 +7215,133 @@ List<enums.Status>? statusNullableListFromJson(
   return status.map((e) => statusFromJson(e.toString())).toList();
 }
 
-String? inquiryTypeNullableToJson(enums.InquiryType? inquiryType) {
-  return inquiryType?.value;
+String? contractTypeNullableToJson(enums.ContractType? contractType) {
+  return contractType?.value;
 }
 
-String? inquiryTypeToJson(enums.InquiryType inquiryType) {
-  return inquiryType.value;
+String? contractTypeToJson(enums.ContractType contractType) {
+  return contractType.value;
 }
 
-enums.InquiryType inquiryTypeFromJson(
-  Object? inquiryType, [
-  enums.InquiryType? defaultValue,
+enums.ContractType contractTypeFromJson(
+  Object? contractType, [
+  enums.ContractType? defaultValue,
 ]) {
-  return enums.InquiryType.values
-          .firstWhereOrNull((e) => e.value == inquiryType) ??
+  return enums.ContractType.values
+          .firstWhereOrNull((e) => e.value == contractType) ??
       defaultValue ??
-      enums.InquiryType.swaggerGeneratedUnknown;
+      enums.ContractType.swaggerGeneratedUnknown;
 }
 
-enums.InquiryType? inquiryTypeNullableFromJson(
-  Object? inquiryType, [
-  enums.InquiryType? defaultValue,
+enums.ContractType? contractTypeNullableFromJson(
+  Object? contractType, [
+  enums.ContractType? defaultValue,
 ]) {
-  if (inquiryType == null) {
+  if (contractType == null) {
     return null;
   }
-  return enums.InquiryType.values
-          .firstWhereOrNull((e) => e.value == inquiryType) ??
+  return enums.ContractType.values
+          .firstWhereOrNull((e) => e.value == contractType) ??
       defaultValue;
 }
 
-String inquiryTypeExplodedListToJson(List<enums.InquiryType>? inquiryType) {
-  return inquiryType?.map((e) => e.value!).join(',') ?? '';
+String contractTypeExplodedListToJson(List<enums.ContractType>? contractType) {
+  return contractType?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> inquiryTypeListToJson(List<enums.InquiryType>? inquiryType) {
-  if (inquiryType == null) {
+List<String> contractTypeListToJson(List<enums.ContractType>? contractType) {
+  if (contractType == null) {
     return [];
   }
 
-  return inquiryType.map((e) => e.value!).toList();
+  return contractType.map((e) => e.value!).toList();
 }
 
-List<enums.InquiryType> inquiryTypeListFromJson(
-  List? inquiryType, [
-  List<enums.InquiryType>? defaultValue,
+List<enums.ContractType> contractTypeListFromJson(
+  List? contractType, [
+  List<enums.ContractType>? defaultValue,
 ]) {
-  if (inquiryType == null) {
+  if (contractType == null) {
     return defaultValue ?? [];
   }
 
-  return inquiryType.map((e) => inquiryTypeFromJson(e.toString())).toList();
+  return contractType.map((e) => contractTypeFromJson(e.toString())).toList();
 }
 
-List<enums.InquiryType>? inquiryTypeNullableListFromJson(
-  List? inquiryType, [
-  List<enums.InquiryType>? defaultValue,
+List<enums.ContractType>? contractTypeNullableListFromJson(
+  List? contractType, [
+  List<enums.ContractType>? defaultValue,
 ]) {
-  if (inquiryType == null) {
+  if (contractType == null) {
     return defaultValue;
   }
 
-  return inquiryType.map((e) => inquiryTypeFromJson(e.toString())).toList();
+  return contractType.map((e) => contractTypeFromJson(e.toString())).toList();
 }
 
-String? taskStatusNullableToJson(enums.TaskStatus? taskStatus) {
-  return taskStatus?.value;
+String? inquiryStatusNullableToJson(enums.InquiryStatus? inquiryStatus) {
+  return inquiryStatus?.value;
 }
 
-String? taskStatusToJson(enums.TaskStatus taskStatus) {
-  return taskStatus.value;
+String? inquiryStatusToJson(enums.InquiryStatus inquiryStatus) {
+  return inquiryStatus.value;
 }
 
-enums.TaskStatus taskStatusFromJson(
-  Object? taskStatus, [
-  enums.TaskStatus? defaultValue,
+enums.InquiryStatus inquiryStatusFromJson(
+  Object? inquiryStatus, [
+  enums.InquiryStatus? defaultValue,
 ]) {
-  return enums.TaskStatus.values
-          .firstWhereOrNull((e) => e.value == taskStatus) ??
+  return enums.InquiryStatus.values
+          .firstWhereOrNull((e) => e.value == inquiryStatus) ??
       defaultValue ??
-      enums.TaskStatus.swaggerGeneratedUnknown;
+      enums.InquiryStatus.swaggerGeneratedUnknown;
 }
 
-enums.TaskStatus? taskStatusNullableFromJson(
-  Object? taskStatus, [
-  enums.TaskStatus? defaultValue,
+enums.InquiryStatus? inquiryStatusNullableFromJson(
+  Object? inquiryStatus, [
+  enums.InquiryStatus? defaultValue,
 ]) {
-  if (taskStatus == null) {
+  if (inquiryStatus == null) {
     return null;
   }
-  return enums.TaskStatus.values
-          .firstWhereOrNull((e) => e.value == taskStatus) ??
+  return enums.InquiryStatus.values
+          .firstWhereOrNull((e) => e.value == inquiryStatus) ??
       defaultValue;
 }
 
-String taskStatusExplodedListToJson(List<enums.TaskStatus>? taskStatus) {
-  return taskStatus?.map((e) => e.value!).join(',') ?? '';
+String inquiryStatusExplodedListToJson(
+    List<enums.InquiryStatus>? inquiryStatus) {
+  return inquiryStatus?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> taskStatusListToJson(List<enums.TaskStatus>? taskStatus) {
-  if (taskStatus == null) {
+List<String> inquiryStatusListToJson(List<enums.InquiryStatus>? inquiryStatus) {
+  if (inquiryStatus == null) {
     return [];
   }
 
-  return taskStatus.map((e) => e.value!).toList();
+  return inquiryStatus.map((e) => e.value!).toList();
 }
 
-List<enums.TaskStatus> taskStatusListFromJson(
-  List? taskStatus, [
-  List<enums.TaskStatus>? defaultValue,
+List<enums.InquiryStatus> inquiryStatusListFromJson(
+  List? inquiryStatus, [
+  List<enums.InquiryStatus>? defaultValue,
 ]) {
-  if (taskStatus == null) {
+  if (inquiryStatus == null) {
     return defaultValue ?? [];
   }
 
-  return taskStatus.map((e) => taskStatusFromJson(e.toString())).toList();
+  return inquiryStatus.map((e) => inquiryStatusFromJson(e.toString())).toList();
 }
 
-List<enums.TaskStatus>? taskStatusNullableListFromJson(
-  List? taskStatus, [
-  List<enums.TaskStatus>? defaultValue,
+List<enums.InquiryStatus>? inquiryStatusNullableListFromJson(
+  List? inquiryStatus, [
+  List<enums.InquiryStatus>? defaultValue,
 ]) {
-  if (taskStatus == null) {
+  if (inquiryStatus == null) {
     return defaultValue;
   }
 
-  return taskStatus.map((e) => taskStatusFromJson(e.toString())).toList();
-}
-
-String? inquiryDtoStatusNullableToJson(
-    enums.InquiryDtoStatus? inquiryDtoStatus) {
-  return inquiryDtoStatus?.value;
-}
-
-String? inquiryDtoStatusToJson(enums.InquiryDtoStatus inquiryDtoStatus) {
-  return inquiryDtoStatus.value;
-}
-
-enums.InquiryDtoStatus inquiryDtoStatusFromJson(
-  Object? inquiryDtoStatus, [
-  enums.InquiryDtoStatus? defaultValue,
-]) {
-  return enums.InquiryDtoStatus.values
-          .firstWhereOrNull((e) => e.value == inquiryDtoStatus) ??
-      defaultValue ??
-      enums.InquiryDtoStatus.swaggerGeneratedUnknown;
-}
-
-enums.InquiryDtoStatus? inquiryDtoStatusNullableFromJson(
-  Object? inquiryDtoStatus, [
-  enums.InquiryDtoStatus? defaultValue,
-]) {
-  if (inquiryDtoStatus == null) {
-    return null;
-  }
-  return enums.InquiryDtoStatus.values
-          .firstWhereOrNull((e) => e.value == inquiryDtoStatus) ??
-      defaultValue;
-}
-
-String inquiryDtoStatusExplodedListToJson(
-    List<enums.InquiryDtoStatus>? inquiryDtoStatus) {
-  return inquiryDtoStatus?.map((e) => e.value!).join(',') ?? '';
-}
-
-List<String> inquiryDtoStatusListToJson(
-    List<enums.InquiryDtoStatus>? inquiryDtoStatus) {
-  if (inquiryDtoStatus == null) {
-    return [];
-  }
-
-  return inquiryDtoStatus.map((e) => e.value!).toList();
-}
-
-List<enums.InquiryDtoStatus> inquiryDtoStatusListFromJson(
-  List? inquiryDtoStatus, [
-  List<enums.InquiryDtoStatus>? defaultValue,
-]) {
-  if (inquiryDtoStatus == null) {
-    return defaultValue ?? [];
-  }
-
-  return inquiryDtoStatus
-      .map((e) => inquiryDtoStatusFromJson(e.toString()))
-      .toList();
-}
-
-List<enums.InquiryDtoStatus>? inquiryDtoStatusNullableListFromJson(
-  List? inquiryDtoStatus, [
-  List<enums.InquiryDtoStatus>? defaultValue,
-]) {
-  if (inquiryDtoStatus == null) {
-    return defaultValue;
-  }
-
-  return inquiryDtoStatus
-      .map((e) => inquiryDtoStatusFromJson(e.toString()))
-      .toList();
+  return inquiryStatus.map((e) => inquiryStatusFromJson(e.toString())).toList();
 }
 
 String? tenantDtoContactMethodNullableToJson(
@@ -6039,81 +7413,6 @@ List<enums.TenantDtoContactMethod>? tenantDtoContactMethodNullableListFromJson(
 
   return tenantDtoContactMethod
       .map((e) => tenantDtoContactMethodFromJson(e.toString()))
-      .toList();
-}
-
-String? tenantProfileDtoContactMethodNullableToJson(
-    enums.TenantProfileDtoContactMethod? tenantProfileDtoContactMethod) {
-  return tenantProfileDtoContactMethod?.value;
-}
-
-String? tenantProfileDtoContactMethodToJson(
-    enums.TenantProfileDtoContactMethod tenantProfileDtoContactMethod) {
-  return tenantProfileDtoContactMethod.value;
-}
-
-enums.TenantProfileDtoContactMethod tenantProfileDtoContactMethodFromJson(
-  Object? tenantProfileDtoContactMethod, [
-  enums.TenantProfileDtoContactMethod? defaultValue,
-]) {
-  return enums.TenantProfileDtoContactMethod.values
-          .firstWhereOrNull((e) => e.value == tenantProfileDtoContactMethod) ??
-      defaultValue ??
-      enums.TenantProfileDtoContactMethod.swaggerGeneratedUnknown;
-}
-
-enums.TenantProfileDtoContactMethod?
-    tenantProfileDtoContactMethodNullableFromJson(
-  Object? tenantProfileDtoContactMethod, [
-  enums.TenantProfileDtoContactMethod? defaultValue,
-]) {
-  if (tenantProfileDtoContactMethod == null) {
-    return null;
-  }
-  return enums.TenantProfileDtoContactMethod.values
-          .firstWhereOrNull((e) => e.value == tenantProfileDtoContactMethod) ??
-      defaultValue;
-}
-
-String tenantProfileDtoContactMethodExplodedListToJson(
-    List<enums.TenantProfileDtoContactMethod>? tenantProfileDtoContactMethod) {
-  return tenantProfileDtoContactMethod?.map((e) => e.value!).join(',') ?? '';
-}
-
-List<String> tenantProfileDtoContactMethodListToJson(
-    List<enums.TenantProfileDtoContactMethod>? tenantProfileDtoContactMethod) {
-  if (tenantProfileDtoContactMethod == null) {
-    return [];
-  }
-
-  return tenantProfileDtoContactMethod.map((e) => e.value!).toList();
-}
-
-List<enums.TenantProfileDtoContactMethod>
-    tenantProfileDtoContactMethodListFromJson(
-  List? tenantProfileDtoContactMethod, [
-  List<enums.TenantProfileDtoContactMethod>? defaultValue,
-]) {
-  if (tenantProfileDtoContactMethod == null) {
-    return defaultValue ?? [];
-  }
-
-  return tenantProfileDtoContactMethod
-      .map((e) => tenantProfileDtoContactMethodFromJson(e.toString()))
-      .toList();
-}
-
-List<enums.TenantProfileDtoContactMethod>?
-    tenantProfileDtoContactMethodNullableListFromJson(
-  List? tenantProfileDtoContactMethod, [
-  List<enums.TenantProfileDtoContactMethod>? defaultValue,
-]) {
-  if (tenantProfileDtoContactMethod == null) {
-    return defaultValue;
-  }
-
-  return tenantProfileDtoContactMethod
-      .map((e) => tenantProfileDtoContactMethodFromJson(e.toString()))
       .toList();
 }
 
@@ -6194,6 +7493,274 @@ List<enums.ResolvedTenantDtoContactMethod>?
       .toList();
 }
 
+String? salutationNullableToJson(enums.Salutation? salutation) {
+  return salutation?.value;
+}
+
+String? salutationToJson(enums.Salutation salutation) {
+  return salutation.value;
+}
+
+enums.Salutation salutationFromJson(
+  Object? salutation, [
+  enums.Salutation? defaultValue,
+]) {
+  return enums.Salutation.values
+          .firstWhereOrNull((e) => e.value == salutation) ??
+      defaultValue ??
+      enums.Salutation.swaggerGeneratedUnknown;
+}
+
+enums.Salutation? salutationNullableFromJson(
+  Object? salutation, [
+  enums.Salutation? defaultValue,
+]) {
+  if (salutation == null) {
+    return null;
+  }
+  return enums.Salutation.values
+          .firstWhereOrNull((e) => e.value == salutation) ??
+      defaultValue;
+}
+
+String salutationExplodedListToJson(List<enums.Salutation>? salutation) {
+  return salutation?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> salutationListToJson(List<enums.Salutation>? salutation) {
+  if (salutation == null) {
+    return [];
+  }
+
+  return salutation.map((e) => e.value!).toList();
+}
+
+List<enums.Salutation> salutationListFromJson(
+  List? salutation, [
+  List<enums.Salutation>? defaultValue,
+]) {
+  if (salutation == null) {
+    return defaultValue ?? [];
+  }
+
+  return salutation.map((e) => salutationFromJson(e.toString())).toList();
+}
+
+List<enums.Salutation>? salutationNullableListFromJson(
+  List? salutation, [
+  List<enums.Salutation>? defaultValue,
+]) {
+  if (salutation == null) {
+    return defaultValue;
+  }
+
+  return salutation.map((e) => salutationFromJson(e.toString())).toList();
+}
+
+String? contactMethodNullableToJson(enums.ContactMethod? contactMethod) {
+  return contactMethod?.value;
+}
+
+String? contactMethodToJson(enums.ContactMethod contactMethod) {
+  return contactMethod.value;
+}
+
+enums.ContactMethod contactMethodFromJson(
+  Object? contactMethod, [
+  enums.ContactMethod? defaultValue,
+]) {
+  return enums.ContactMethod.values
+          .firstWhereOrNull((e) => e.value == contactMethod) ??
+      defaultValue ??
+      enums.ContactMethod.swaggerGeneratedUnknown;
+}
+
+enums.ContactMethod? contactMethodNullableFromJson(
+  Object? contactMethod, [
+  enums.ContactMethod? defaultValue,
+]) {
+  if (contactMethod == null) {
+    return null;
+  }
+  return enums.ContactMethod.values
+          .firstWhereOrNull((e) => e.value == contactMethod) ??
+      defaultValue;
+}
+
+String contactMethodExplodedListToJson(
+    List<enums.ContactMethod>? contactMethod) {
+  return contactMethod?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> contactMethodListToJson(List<enums.ContactMethod>? contactMethod) {
+  if (contactMethod == null) {
+    return [];
+  }
+
+  return contactMethod.map((e) => e.value!).toList();
+}
+
+List<enums.ContactMethod> contactMethodListFromJson(
+  List? contactMethod, [
+  List<enums.ContactMethod>? defaultValue,
+]) {
+  if (contactMethod == null) {
+    return defaultValue ?? [];
+  }
+
+  return contactMethod.map((e) => contactMethodFromJson(e.toString())).toList();
+}
+
+List<enums.ContactMethod>? contactMethodNullableListFromJson(
+  List? contactMethod, [
+  List<enums.ContactMethod>? defaultValue,
+]) {
+  if (contactMethod == null) {
+    return defaultValue;
+  }
+
+  return contactMethod.map((e) => contactMethodFromJson(e.toString())).toList();
+}
+
+String? tenantProfileDtoContactMethodNullableToJson(
+    enums.TenantProfileDtoContactMethod? tenantProfileDtoContactMethod) {
+  return tenantProfileDtoContactMethod?.value;
+}
+
+String? tenantProfileDtoContactMethodToJson(
+    enums.TenantProfileDtoContactMethod tenantProfileDtoContactMethod) {
+  return tenantProfileDtoContactMethod.value;
+}
+
+enums.TenantProfileDtoContactMethod tenantProfileDtoContactMethodFromJson(
+  Object? tenantProfileDtoContactMethod, [
+  enums.TenantProfileDtoContactMethod? defaultValue,
+]) {
+  return enums.TenantProfileDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == tenantProfileDtoContactMethod) ??
+      defaultValue ??
+      enums.TenantProfileDtoContactMethod.swaggerGeneratedUnknown;
+}
+
+enums.TenantProfileDtoContactMethod?
+    tenantProfileDtoContactMethodNullableFromJson(
+  Object? tenantProfileDtoContactMethod, [
+  enums.TenantProfileDtoContactMethod? defaultValue,
+]) {
+  if (tenantProfileDtoContactMethod == null) {
+    return null;
+  }
+  return enums.TenantProfileDtoContactMethod.values
+          .firstWhereOrNull((e) => e.value == tenantProfileDtoContactMethod) ??
+      defaultValue;
+}
+
+String tenantProfileDtoContactMethodExplodedListToJson(
+    List<enums.TenantProfileDtoContactMethod>? tenantProfileDtoContactMethod) {
+  return tenantProfileDtoContactMethod?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> tenantProfileDtoContactMethodListToJson(
+    List<enums.TenantProfileDtoContactMethod>? tenantProfileDtoContactMethod) {
+  if (tenantProfileDtoContactMethod == null) {
+    return [];
+  }
+
+  return tenantProfileDtoContactMethod.map((e) => e.value!).toList();
+}
+
+List<enums.TenantProfileDtoContactMethod>
+    tenantProfileDtoContactMethodListFromJson(
+  List? tenantProfileDtoContactMethod, [
+  List<enums.TenantProfileDtoContactMethod>? defaultValue,
+]) {
+  if (tenantProfileDtoContactMethod == null) {
+    return defaultValue ?? [];
+  }
+
+  return tenantProfileDtoContactMethod
+      .map((e) => tenantProfileDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+List<enums.TenantProfileDtoContactMethod>?
+    tenantProfileDtoContactMethodNullableListFromJson(
+  List? tenantProfileDtoContactMethod, [
+  List<enums.TenantProfileDtoContactMethod>? defaultValue,
+]) {
+  if (tenantProfileDtoContactMethod == null) {
+    return defaultValue;
+  }
+
+  return tenantProfileDtoContactMethod
+      .map((e) => tenantProfileDtoContactMethodFromJson(e.toString()))
+      .toList();
+}
+
+String? taskStatusNullableToJson(enums.TaskStatus? taskStatus) {
+  return taskStatus?.value;
+}
+
+String? taskStatusToJson(enums.TaskStatus taskStatus) {
+  return taskStatus.value;
+}
+
+enums.TaskStatus taskStatusFromJson(
+  Object? taskStatus, [
+  enums.TaskStatus? defaultValue,
+]) {
+  return enums.TaskStatus.values
+          .firstWhereOrNull((e) => e.value == taskStatus) ??
+      defaultValue ??
+      enums.TaskStatus.swaggerGeneratedUnknown;
+}
+
+enums.TaskStatus? taskStatusNullableFromJson(
+  Object? taskStatus, [
+  enums.TaskStatus? defaultValue,
+]) {
+  if (taskStatus == null) {
+    return null;
+  }
+  return enums.TaskStatus.values
+          .firstWhereOrNull((e) => e.value == taskStatus) ??
+      defaultValue;
+}
+
+String taskStatusExplodedListToJson(List<enums.TaskStatus>? taskStatus) {
+  return taskStatus?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> taskStatusListToJson(List<enums.TaskStatus>? taskStatus) {
+  if (taskStatus == null) {
+    return [];
+  }
+
+  return taskStatus.map((e) => e.value!).toList();
+}
+
+List<enums.TaskStatus> taskStatusListFromJson(
+  List? taskStatus, [
+  List<enums.TaskStatus>? defaultValue,
+]) {
+  if (taskStatus == null) {
+    return defaultValue ?? [];
+  }
+
+  return taskStatus.map((e) => taskStatusFromJson(e.toString())).toList();
+}
+
+List<enums.TaskStatus>? taskStatusNullableListFromJson(
+  List? taskStatus, [
+  List<enums.TaskStatus>? defaultValue,
+]) {
+  if (taskStatus == null) {
+    return defaultValue;
+  }
+
+  return taskStatus.map((e) => taskStatusFromJson(e.toString())).toList();
+}
+
 String? roleNullableToJson(enums.Role? role) {
   return role?.value;
 }
@@ -6254,6 +7821,70 @@ List<enums.Role>? roleNullableListFromJson(
   }
 
   return role.map((e) => roleFromJson(e.toString())).toList();
+}
+
+String? taskPriorityNullableToJson(enums.TaskPriority? taskPriority) {
+  return taskPriority?.value;
+}
+
+String? taskPriorityToJson(enums.TaskPriority taskPriority) {
+  return taskPriority.value;
+}
+
+enums.TaskPriority taskPriorityFromJson(
+  Object? taskPriority, [
+  enums.TaskPriority? defaultValue,
+]) {
+  return enums.TaskPriority.values
+          .firstWhereOrNull((e) => e.value == taskPriority) ??
+      defaultValue ??
+      enums.TaskPriority.swaggerGeneratedUnknown;
+}
+
+enums.TaskPriority? taskPriorityNullableFromJson(
+  Object? taskPriority, [
+  enums.TaskPriority? defaultValue,
+]) {
+  if (taskPriority == null) {
+    return null;
+  }
+  return enums.TaskPriority.values
+          .firstWhereOrNull((e) => e.value == taskPriority) ??
+      defaultValue;
+}
+
+String taskPriorityExplodedListToJson(List<enums.TaskPriority>? taskPriority) {
+  return taskPriority?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> taskPriorityListToJson(List<enums.TaskPriority>? taskPriority) {
+  if (taskPriority == null) {
+    return [];
+  }
+
+  return taskPriority.map((e) => e.value!).toList();
+}
+
+List<enums.TaskPriority> taskPriorityListFromJson(
+  List? taskPriority, [
+  List<enums.TaskPriority>? defaultValue,
+]) {
+  if (taskPriority == null) {
+    return defaultValue ?? [];
+  }
+
+  return taskPriority.map((e) => taskPriorityFromJson(e.toString())).toList();
+}
+
+List<enums.TaskPriority>? taskPriorityNullableListFromJson(
+  List? taskPriority, [
+  List<enums.TaskPriority>? defaultValue,
+]) {
+  if (taskPriority == null) {
+    return defaultValue;
+  }
+
+  return taskPriority.map((e) => taskPriorityFromJson(e.toString())).toList();
 }
 
 String? createTaskDtoStatusNullableToJson(
@@ -6535,6 +8166,141 @@ List<enums.DocumentType>? documentTypeNullableListFromJson(
   }
 
   return documentType.map((e) => documentTypeFromJson(e.toString())).toList();
+}
+
+String? inquiryTypeNullableToJson(enums.InquiryType? inquiryType) {
+  return inquiryType?.value;
+}
+
+String? inquiryTypeToJson(enums.InquiryType inquiryType) {
+  return inquiryType.value;
+}
+
+enums.InquiryType inquiryTypeFromJson(
+  Object? inquiryType, [
+  enums.InquiryType? defaultValue,
+]) {
+  return enums.InquiryType.values
+          .firstWhereOrNull((e) => e.value == inquiryType) ??
+      defaultValue ??
+      enums.InquiryType.swaggerGeneratedUnknown;
+}
+
+enums.InquiryType? inquiryTypeNullableFromJson(
+  Object? inquiryType, [
+  enums.InquiryType? defaultValue,
+]) {
+  if (inquiryType == null) {
+    return null;
+  }
+  return enums.InquiryType.values
+          .firstWhereOrNull((e) => e.value == inquiryType) ??
+      defaultValue;
+}
+
+String inquiryTypeExplodedListToJson(List<enums.InquiryType>? inquiryType) {
+  return inquiryType?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> inquiryTypeListToJson(List<enums.InquiryType>? inquiryType) {
+  if (inquiryType == null) {
+    return [];
+  }
+
+  return inquiryType.map((e) => e.value!).toList();
+}
+
+List<enums.InquiryType> inquiryTypeListFromJson(
+  List? inquiryType, [
+  List<enums.InquiryType>? defaultValue,
+]) {
+  if (inquiryType == null) {
+    return defaultValue ?? [];
+  }
+
+  return inquiryType.map((e) => inquiryTypeFromJson(e.toString())).toList();
+}
+
+List<enums.InquiryType>? inquiryTypeNullableListFromJson(
+  List? inquiryType, [
+  List<enums.InquiryType>? defaultValue,
+]) {
+  if (inquiryType == null) {
+    return defaultValue;
+  }
+
+  return inquiryType.map((e) => inquiryTypeFromJson(e.toString())).toList();
+}
+
+String? inquiryDtoStatusNullableToJson(
+    enums.InquiryDtoStatus? inquiryDtoStatus) {
+  return inquiryDtoStatus?.value;
+}
+
+String? inquiryDtoStatusToJson(enums.InquiryDtoStatus inquiryDtoStatus) {
+  return inquiryDtoStatus.value;
+}
+
+enums.InquiryDtoStatus inquiryDtoStatusFromJson(
+  Object? inquiryDtoStatus, [
+  enums.InquiryDtoStatus? defaultValue,
+]) {
+  return enums.InquiryDtoStatus.values
+          .firstWhereOrNull((e) => e.value == inquiryDtoStatus) ??
+      defaultValue ??
+      enums.InquiryDtoStatus.swaggerGeneratedUnknown;
+}
+
+enums.InquiryDtoStatus? inquiryDtoStatusNullableFromJson(
+  Object? inquiryDtoStatus, [
+  enums.InquiryDtoStatus? defaultValue,
+]) {
+  if (inquiryDtoStatus == null) {
+    return null;
+  }
+  return enums.InquiryDtoStatus.values
+          .firstWhereOrNull((e) => e.value == inquiryDtoStatus) ??
+      defaultValue;
+}
+
+String inquiryDtoStatusExplodedListToJson(
+    List<enums.InquiryDtoStatus>? inquiryDtoStatus) {
+  return inquiryDtoStatus?.map((e) => e.value!).join(',') ?? '';
+}
+
+List<String> inquiryDtoStatusListToJson(
+    List<enums.InquiryDtoStatus>? inquiryDtoStatus) {
+  if (inquiryDtoStatus == null) {
+    return [];
+  }
+
+  return inquiryDtoStatus.map((e) => e.value!).toList();
+}
+
+List<enums.InquiryDtoStatus> inquiryDtoStatusListFromJson(
+  List? inquiryDtoStatus, [
+  List<enums.InquiryDtoStatus>? defaultValue,
+]) {
+  if (inquiryDtoStatus == null) {
+    return defaultValue ?? [];
+  }
+
+  return inquiryDtoStatus
+      .map((e) => inquiryDtoStatusFromJson(e.toString()))
+      .toList();
+}
+
+List<enums.InquiryDtoStatus>? inquiryDtoStatusNullableListFromJson(
+  List? inquiryDtoStatus, [
+  List<enums.InquiryDtoStatus>? defaultValue,
+]) {
+  if (inquiryDtoStatus == null) {
+    return defaultValue;
+  }
+
+  return inquiryDtoStatus
+      .map((e) => inquiryDtoStatusFromJson(e.toString()))
+      .toList();
 }
 
 typedef $JsonFactory<T> = T Function(Map<String, dynamic> json);

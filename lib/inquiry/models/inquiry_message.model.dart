@@ -28,7 +28,8 @@ class InquiryMessageModel {
       id: dto.id,
       content: dto.content,
       authorLabel: dto.authorLabel,
-      documents: (dto.attachments ?? []).map((e) => DocumentModel.fromDto(e)).toList(),
+      documents:
+          (dto.attachments ?? []).map((e) => DocumentModel.fromDto(e)).toList(),
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
       showLeft: dto.isAIGenerated ?? false,

@@ -13,14 +13,20 @@ part 'notifications_state.dart';
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   final NotificationsRepository _notificationsRepository;
 
-  NotificationsBloc(this._notificationsRepository) : super(const NotificationsInitial()) {
+  NotificationsBloc(this._notificationsRepository)
+      : super(const NotificationsInitial()) {
     on<UpdateFCMTokenEvent>(_onUpdateFCMToken);
     on<InitNotificationsEvent>(_onInitNotifications);
   }
 
   Future<void> _onInitNotifications(
       InitNotificationsEvent event, Emitter<NotificationsState> emit) async {
-    _requestPermissions();
+    try {
+      final settings = await _requestPermissions();
+      print(settings.authorizationStatus.toString());
+    } catch (e) {
+      print("Notifications Error: " + e.toString());
+    }
 
     if (Platform.isIOS) {
 // For apple platforms, ensure the APNS token is available before making any FCM plugin API calls
@@ -48,8 +54,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     }
   }
 
-  void _requestPermissions() async {
-    await FirebaseMessaging.instance.requestPermission(
+  Future<NotificationSettings> _requestPermissions() async {
+    return FirebaseMessaging.instance.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -69,12 +75,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   @pragma('vm:entry-point')
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     // TODO: Handle background message
     print("Handling a background message: ${message.messageId}");
   }
 
-  Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingForegroundHandler(
+      RemoteMessage message) async {
     // TODO: Handle foreground message
     print("Handling a foreground message: ${message.messageId}");
   }

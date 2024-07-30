@@ -6,7 +6,6 @@ import 'package:estate_ops_tenant/inquiry/widgets/missing_service_details.dart';
 import 'package:estate_ops_tenant/inquiry/widgets/name_change_details.dart';
 import 'package:estate_ops_tenant/util/widgets/success_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -74,9 +73,11 @@ class _NewInquiryPageState extends State<NewInquiryPage> {
           inquiry != null &&
           inquiry.messages.isNotEmpty) {
         // ignore: use_build_context_synchronously
-        await context
-            .read<DocumentsRepository>()
-            .uploadAttachments([inquiry.messages.first.id], attachments);
+        final isDemo = context.read<AuthBloc>().state.isDemo;
+        // ignore: use_build_context_synchronously
+        await context.read<DocumentsRepository>().uploadAttachments(
+            [inquiry.messages.first.id], attachments,
+            isDemo: isDemo);
       }
       _goToDoneScreen();
     } catch (e) {

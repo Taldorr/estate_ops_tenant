@@ -1,4 +1,5 @@
 import 'package:estate_ops_tenant/auth/auth.dart';
+import 'package:estate_ops_tenant/auth/pages/signup_page.dart';
 import 'package:estate_ops_tenant/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,7 +28,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void _complete() {
     context.read<AuthBloc>().add(const OnboardingCompletedEvent());
-    Navigator.of(context).pop();
+    Navigator.of(context).popAndPushNamed(SignupPage.route);
   }
 
   Widget _buildNavElement() {

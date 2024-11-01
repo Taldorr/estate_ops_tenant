@@ -1,7 +1,12 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:estate_ops_tenant/app.dart';
+import 'package:estate_ops_tenant/dashboard/pages/dashboard_page.dart';
+import 'package:estate_ops_tenant/util/widgets/success_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../api/outputs/swagger.swagger.dart';
 import '../models/inquiry.model.dart';
@@ -50,6 +55,7 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
       if (newInquiry != null) {
         final inquirys = [...state.inquirys, newInquiry];
         emit(state.copyWith(inquirys: inquirys, current: inquirys.last));
+        _goToDoneScreen();
       }
     } catch (e) {
       print(e);
@@ -91,6 +97,22 @@ class InquiryBloc extends Bloc<InquiryEvent, InquiryState> {
       DocumentRequestDto(
         documentType: event.documentType,
         notes: event.notes,
+      ),
+    );
+  }
+
+  void _goToDoneScreen() {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (context) => SuccessPage(
+          title: AppLocalizations.of(context)!.concernReported,
+          content: AppLocalizations.of(context)!.concernReportedText,
+          primaryLabel: AppLocalizations.of(context)!.backToDashboard,
+          primaryAction: () {
+            navigatorKey.currentState
+                ?.popUntil(ModalRoute.withName(DashboardPage.route));
+          },
+        ),
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:chopper/chopper.dart';
-import 'package:estate_ops_tenant/util/constants.dart';
+import 'package:estate_ops_tenant/util/demo_helper.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 
 import '../api/outputs/swagger.swagger.dart';
@@ -17,7 +17,7 @@ class ApiService {
   static Future<ApiService> init(
       {required Auth0 auth0Client, bool isDemo = false}) async {
     final baseUrl = Uri.parse(isDemo
-        ? Constants.demoApiBaseUrl
+        ? DemoHelper.demoApiUrl
         : FlavorConfig.instance.variables["api-base-url"]);
 
     _instance.apiClient = Swagger.create(

@@ -38,8 +38,7 @@ void _initFlavors() {
     variables: {
       "auth0-domain": "dev-estate-ops.eu.auth0.com",
       "auth0-client-id": "xOZJUbe1lfb1tK8zZriMmTnKcI7MkqKB",
-      "api-base-url":
-          "http://localhost:3000", // "http://10.0.2.2:3000", // "https://app.estate-ops.com",
+      "api-base-url": "http://localhost:3000",
       "api-audience": "estate-ops-api",
     },
   );

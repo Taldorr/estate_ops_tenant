@@ -8,7 +8,7 @@ part of 'swagger.swagger.dart';
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-final class _$Swagger extends Swagger {
+class _$Swagger extends Swagger {
   _$Swagger([ChopperClient? client]) {
     if (client == null) return;
     this.client = client;

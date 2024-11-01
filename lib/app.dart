@@ -83,6 +83,7 @@ class TenantApp extends StatelessWidget {
           builder: (ctx, state) {
             return MaterialApp(
               theme: ThemeData(
+                scaffoldBackgroundColor: Colors.white,
                 useMaterial3: true,
                 fontFamily: 'Quicksand',
                 primaryColor: Constants.primary,
@@ -204,7 +205,7 @@ class TenantApp extends StatelessWidget {
                   ),
                 ),
               ),
-              home: const LoginPage(),
+              home: const OnboardingPage(),
               navigatorKey: navigatorKey,
               routes: {
                 OnboardingPage.route: (_) => const OnboardingPage(),

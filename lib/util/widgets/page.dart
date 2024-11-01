@@ -1,4 +1,4 @@
-import 'package:estate_ops_tenant/util/constants.dart';
+import 'package:estate_ops_tenant/util/widgets/gradient_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'navbar.dart';
@@ -24,35 +24,33 @@ class EOPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: gradientBackground
-          ? const BoxDecoration(
-              gradient: Constants.backgroundGradient,
+    return Scaffold(
+      appBar: title != null
+          ? AppBar(
+              centerTitle: false,
+              automaticallyImplyLeading: !hideBackButton,
+              title: Text(
+                title!,
+                textAlign: TextAlign.start,
+              ),
             )
           : null,
-      child: Scaffold(
-        backgroundColor: gradientBackground ? Colors.transparent : null,
-        appBar: title != null
-            ? AppBar(
-                centerTitle: false,
-                automaticallyImplyLeading: !hideBackButton,
-                title: Text(
-                  title!,
-                  textAlign: TextAlign.start,
-                ),
-              )
-            : null,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(padding),
-            child: child,
-          ),
-        ),
-        bottomNavigationBar: hideNavbar
-            ? null
-            : EONavbar(
-                selectedIndex: navIndex,
-              ),
+      body: gradientBackground
+          ? GradientWrapper(child: _innerBody())
+          : _innerBody(),
+      bottomNavigationBar: hideNavbar
+          ? null
+          : EONavbar(
+              selectedIndex: navIndex,
+            ),
+    );
+  }
+
+  Widget _innerBody() {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.all(padding),
+        child: child,
       ),
     );
   }

@@ -34,8 +34,7 @@ class _MailboxPageState extends State<MailboxPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             EOSectionHeader(title: AppLocalizations.of(context)!.lastMessages),
-            const EOMailboxOverview(),
-            const Spacer(),
+            const Expanded(child: EOMailboxOverview()),
             ElevatedButton(
               onPressed: () => navigatorKey.currentState
                   ?.pushNamed(SelectInquiryTypePage.route),

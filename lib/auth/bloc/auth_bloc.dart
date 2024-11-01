@@ -7,7 +7,7 @@ import 'package:estate_ops_tenant/app.dart';
 import 'package:estate_ops_tenant/auth/auth.dart';
 import 'package:estate_ops_tenant/auth/pages/activation_page.dart';
 import 'package:estate_ops_tenant/util/api_service.dart';
-import 'package:estate_ops_tenant/util/constants.dart';
+import 'package:estate_ops_tenant/util/demo_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -61,7 +61,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       emit(state.copyWith(credentials: credentials));
 
       // If the user is a demo user, we need to send the requests to the demo API
-      if (event.email == Constants.demoEmailAddress) {
+      if (DemoHelper.isDemoAccount(event.email)) {
         emit(state.copyWith(isDemo: true));
         ApiService.init(auth0Client: GetIt.instance<Auth0>(), isDemo: true);
       }
@@ -93,7 +93,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       GetProfileEvent event, Emitter<AuthState> emit) async {
     try {
       if (state.profile?.email != null &&
-          state.profile?.email == Constants.demoEmailAddress) {
+          DemoHelper.isDemoAccount(state.profile!.email!)) {
         emit(state.copyWith(isDemo: true));
         ApiService.init(auth0Client: GetIt.instance<Auth0>(), isDemo: true);
       }

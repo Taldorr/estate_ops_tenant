@@ -3,16 +3,25 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:estate_ops_tenant/api/outputs/swagger.swagger.dart';
 import 'package:estate_ops_tenant/app.dart';
+import 'package:estate_ops_tenant/util/demo_helper.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../util/api_service.dart';
 
 class AuthRepository {
-  final Auth0 auth0Client;
+  Auth0 auth0Client;
 
   AuthRepository({required this.auth0Client});
 
   Future<DatabaseUser> signUp(String email, String password) async {
+    if (DemoHelper.isDemoAccount(email)) {
+      GetIt.I.unregister<Auth0>();
+      GetIt.I.registerSingleton<Auth0>(
+        Auth0(DemoHelper.demoAuthDomain, DemoHelper.demoAuthClientId),
+      );
+      auth0Client = GetIt.I.get<Auth0>();
+    }
     return auth0Client.api.signup(
       email: email,
       password: password,
@@ -31,8 +40,17 @@ class AuthRepository {
   }
 
   Future<Credentials> logIn(String email, String password) {
+    String audience = FlavorConfig.instance.variables["api-audience"]!;
+    if (DemoHelper.isDemoAccount(email)) {
+      GetIt.I.unregister<Auth0>();
+      GetIt.I.registerSingleton<Auth0>(
+        Auth0(DemoHelper.demoAuthDomain, DemoHelper.demoAuthClientId),
+      );
+      auth0Client = GetIt.I.get<Auth0>();
+      audience = DemoHelper.demoAuthAudience;
+    }
     return auth0Client.api.login(
-      audience: FlavorConfig.instance.variables["api-audience"]!,
+      audience: audience,
       usernameOrEmail: email,
       password: password,
       connectionOrRealm: "Username-Password-Authentication",

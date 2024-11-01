@@ -31,7 +31,7 @@ class _ChatPageState extends State<ChatPage> {
       content: AppLocalizations.of(context)!.helloHowCanIHelpYou,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      authorLabel: "EstateOps AI",
+      authorLabel: "Immocelia AI",
       showLeft: false,
       isAIGenerated: true,
     );
@@ -79,6 +79,8 @@ class _ChatPageState extends State<ChatPage> {
             ]),
           );
     }
+
+    formKey.currentState!.reset();
   }
 
   @override

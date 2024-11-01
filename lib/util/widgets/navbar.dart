@@ -15,53 +15,59 @@ class EONavbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: Constants.backgroundGradient,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+    return NavigationBar(
+      backgroundColor: Constants.terciary,
+      indicatorColor: Constants.whitey.withOpacity(0.5),
+      indicatorShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: NavigationBar(
-        backgroundColor: Constants.whitey.withOpacity(0.5),
-        indicatorColor: Constants.whitey.withOpacity(0.5),
-        indicatorShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+      elevation: 0,
+      selectedIndex: selectedIndex,
+      onDestinationSelected: (idx) {
+        if (idx == 0) {
+          navigatorKey.currentState?.pushNamed(ProfilePage.route);
+        } else if (idx == 1) {
+          navigatorKey.currentState?.pushNamed(DashboardPage.route);
+        } else if (idx == 2) {
+          navigatorKey.currentState?.pushNamed(MailboxPage.route);
+        }
+      },
+      destinations: [
+        NavigationDestination(
+          icon: Icon(
+            Icons.account_circle_outlined,
+            color: selectedIndex == 0 ? Constants.secondary : null,
+          ),
+          label: AppLocalizations.of(context)!.profile,
         ),
-        elevation: 0,
-        selectedIndex: selectedIndex,
-        onDestinationSelected: (idx) {
-          if (idx == 0) {
-            navigatorKey.currentState?.pushNamed(ProfilePage.route);
-          } else if (idx == 1) {
-            navigatorKey.currentState?.pushNamed(DashboardPage.route);
-          } else if (idx == 2) {
-            navigatorKey.currentState?.pushNamed(MailboxPage.route);
-          }
-        },
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.account_circle_outlined),
-            label: AppLocalizations.of(context)!.profile,
-          ),
-          NavigationDestination(
-              icon: const Icon(Icons.home_outlined),
-              label: AppLocalizations.of(context)!.dashboard),
-          NavigationDestination(
-            icon: BlocBuilder<MailboxBloc, MailboxState>(
-              builder: (context, state) {
-                if (state.unreadMessages.isEmpty) {
-                  return const Icon(Icons.mail_outline_rounded);
-                }
-                return Badge(
-                  backgroundColor: Constants.primary,
-                  label: Text(state.unreadMessages.length.toString()),
-                  child: const Icon(Icons.mail_outline_rounded),
-                );
-              },
+        NavigationDestination(
+            icon: Icon(
+              Icons.home_outlined,
+              color: selectedIndex == 1 ? Constants.secondary : null,
             ),
-            label: AppLocalizations.of(context)!.mailbox,
+            label: AppLocalizations.of(context)!.dashboard),
+        NavigationDestination(
+          icon: BlocBuilder<MailboxBloc, MailboxState>(
+            builder: (context, state) {
+              if (state.unreadMessages.isEmpty) {
+                return Icon(
+                  Icons.mail_outline_rounded,
+                  color: selectedIndex == 2 ? Constants.secondary : null,
+                );
+              }
+              return Badge(
+                backgroundColor: Constants.secondary,
+                label: Text(state.unreadMessages.length.toString()),
+                child: Icon(
+                  Icons.mail_outline_rounded,
+                  color: selectedIndex == 2 ? Constants.secondary : null,
+                ),
+              );
+            },
           ),
-        ],
-      ),
+          label: AppLocalizations.of(context)!.mailbox,
+        ),
+      ],
     );
   }
 }

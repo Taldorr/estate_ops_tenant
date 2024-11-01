@@ -36,10 +36,10 @@ void _initFlavors() {
     name: "PROD",
     color: Colors.red,
     variables: {
-      "auth0-domain": "estate-ops.eu.auth0.com",
-      "auth0-client-id": "NMDx6UDzvmfsc453RLjS4EmyoyC79iph",
+      "auth0-domain": "dev-estate-ops.eu.auth0.com",
+      "auth0-client-id": "xOZJUbe1lfb1tK8zZriMmTnKcI7MkqKB",
       "api-base-url": "https://api-demo.estate-ops.de",
-      "api-audience": "https://api.estate-ops.de",
+      "api-audience": "estate-ops-api",
     },
   );
 }

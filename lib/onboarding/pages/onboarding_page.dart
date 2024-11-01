@@ -1,6 +1,7 @@
 import 'package:estate_ops_tenant/auth/auth.dart';
 import 'package:estate_ops_tenant/auth/pages/signup_page.dart';
 import 'package:estate_ops_tenant/util/constants.dart';
+import 'package:estate_ops_tenant/util/widgets/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -49,9 +50,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           padding: const EdgeInsets.all(5),
           child: CircleAvatar(
             radius: 5,
-            backgroundColor: _index == index
-                ? Theme.of(context).primaryColor
-                : Constants.whitey,
+            backgroundColor:
+                _index == index ? Constants.secondary : Constants.whitey,
           ),
         ),
       ),
@@ -94,40 +94,32 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: Constants.backgroundGradient,
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      itemCount: texts.length,
-                      onPageChanged: (value) => setState(() => _index = value),
-                      itemBuilder: (context, index) => _buildContent(index),
-                    ),
-                  ),
-                  _buildNavElement(),
-                  const SizedBox(height: 30),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      side: BorderSide.none,
-                      foregroundColor: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () => _complete(),
-                    child: Text(AppLocalizations.of(context)!.skip),
-                  ),
-                ],
+      child: EOPage(
+        gradientBackground: true,
+        hideNavbar: true,
+        padding: 0,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: PageView.builder(
+                itemCount: texts.length,
+                onPageChanged: (value) => setState(() => _index = value),
+                itemBuilder: (context, index) => _buildContent(index),
               ),
             ),
-          ),
+            _buildNavElement(),
+            const SizedBox(height: 30),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                side: BorderSide.none,
+                foregroundColor: Theme.of(context).primaryColor,
+              ),
+              onPressed: () => _complete(),
+              child: Text(AppLocalizations.of(context)!.skip),
+            ),
+          ],
         ),
       ),
     );

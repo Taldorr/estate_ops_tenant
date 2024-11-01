@@ -24,51 +24,46 @@ class SuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: Constants.backgroundGradient,
-      ),
-      child: EOPage(
-        gradientBackground: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Spacer(),
-            EOCard(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30),
-                    child: Icon(Icons.check_rounded,
-                        color: Constants.success, size: 40),
-                  ),
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.labelLarge,
-                    textAlign: TextAlign.start,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    content,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
+    return EOPage(
+      gradientBackground: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Spacer(),
+          EOCard(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 30),
+                  child: Icon(Icons.check_rounded,
+                      color: Constants.success, size: 40),
+                ),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.labelLarge,
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  content,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: primaryAction,
-              child: Text(primaryLabel),
+          ),
+          const Spacer(),
+          ElevatedButton(
+            onPressed: primaryAction,
+            child: Text(primaryLabel),
+          ),
+          if (secondaryLabel != null)
+            TextButton(
+              onPressed: secondaryAction,
+              child: Text(secondaryLabel!),
             ),
-            if (secondaryLabel != null)
-              TextButton(
-                onPressed: secondaryAction,
-                child: Text(secondaryLabel!),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

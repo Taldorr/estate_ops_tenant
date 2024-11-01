@@ -2,14 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Estate Ops Tenant</string>
+	<string>Immocelia</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,20 +24,27 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>MvA Mieter benötigt Zugriff auf deine Kamera, damit du deiner Anfrage Fotos hinzufügen kannst.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>MvA Mieter benötigt Zugriff auf deine Fotos, damit du diese zu einer Anfrage hinzufügen kannst.</string>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>MvA Mieter benötigt Zugriff auf deine Fotos, damit du diese zu einer Anfrage hinzufügen kannst.</string>
+	<string>Immocelia benötigt Zugriff auf deine Fotos, damit du diese zu einer Anfrage hinzufügen kannst.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Immocelia benötigt Zugriff auf deine Kamera, damit du deiner Anfrage Fotos hinzufügen kannst.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Immocelia benötigt Zugriff auf deine Fotos, damit du diese zu einer Anfrage hinzufügen kannst.</string>
 	<key>PermissionGroupNotification</key>
-	<string>MvA Mieter möchte dir Push-Nachrichten senden, damit du immer auf dem Laufenden bleibst.</string>
+	<string>Immocelia möchte dir Push-Nachrichten senden, damit du immer auf dem Laufenden bleibst.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

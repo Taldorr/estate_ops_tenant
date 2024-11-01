@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:chopper/chopper.dart';
 import 'package:cross_file/cross_file.dart';
-import 'package:estate_ops_tenant/util/constants.dart';
+import 'package:estate_ops_tenant/util/demo_helper.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -52,7 +52,7 @@ class DocumentsRepository {
 
       await ApiService.getInstance().apiClient.client.post(
         Uri.parse((isDemo
-                ? Constants.demoApiBaseUrl
+                ? DemoHelper.demoApiUrl
                 : FlavorConfig.instance.variables["api-base-url"]) +
             '/attachment'),
         multipart: true,
